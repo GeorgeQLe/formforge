@@ -36,7 +36,7 @@ export const billingRouter = router({
             id: subscription.id,
             status: subscription.status,
             currentPeriodEnd: new Date(
-              subscription.current_period_end * 1000
+              subscription.items.data[0].current_period_end * 1000
             ).toISOString(),
             cancelAtPeriodEnd: subscription.cancel_at_period_end,
           }

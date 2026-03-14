@@ -222,7 +222,7 @@ export const responseRouter = router({
       const [updated] = await ctx.db
         .update(formResponses)
         .set({ status: input.status })
-        .where(eq(formResponses.id, input.id))
+        .where(and(eq(formResponses.id, input.id), eq(formResponses.formId, input.formId)))
         .returning();
 
       return updated!;
@@ -253,7 +253,7 @@ export const responseRouter = router({
           ctx.db
             .update(formResponses)
             .set({ status: input.status })
-            .where(eq(formResponses.id, id))
+            .where(and(eq(formResponses.id, id), eq(formResponses.formId, input.formId)))
         )
       );
 
@@ -276,7 +276,7 @@ export const responseRouter = router({
 
       await ctx.db
         .delete(formResponses)
-        .where(eq(formResponses.id, input.id));
+        .where(and(eq(formResponses.id, input.id), eq(formResponses.formId, input.formId)));
 
       return { success: true };
     }),

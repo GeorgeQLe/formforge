@@ -7,6 +7,22 @@ import { evaluateConditionalLogic } from "@/lib/conditional-logic";
 import { sendNotificationEmail } from "@/server/email/send-notification";
 
 // ---------------------------------------------------------------------------
+// In-memory rate limiter (10 req/min/IP)
+// ---------------------------------------------------------------------------
+const rateLimit = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimit.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimit.set(ip, { count: 1, resetAt: now + 60_000 });
+    return true;
+  }
+  entry.count++;
+  return entry.count <= 10;
+}
+
+// ---------------------------------------------------------------------------
 // Verify Cloudflare Turnstile token
 // ---------------------------------------------------------------------------
 async function verifyTurnstile(token: string): Promise<boolean> {
@@ -37,6 +53,15 @@ export async function POST(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    // 0. Rate limit
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+    if (!checkRateLimit(ip)) {
+      return NextResponse.json(
+        { error: "Too many requests" },
+        { status: 429 }
+      );
+    }
+
     const { slug } = await params;
     const body = await request.json();
 

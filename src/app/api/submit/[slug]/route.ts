@@ -11,7 +11,10 @@ import { sendNotificationEmail } from "@/server/email/send-notification";
 // ---------------------------------------------------------------------------
 async function verifyTurnstile(token: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true; // skip if not configured
+  if (!secret) {
+    console.warn("[Turnstile] TURNSTILE_SECRET_KEY not set — bot verification disabled");
+    return true;
+  }
 
   const response = await fetch(
     "https://challenges.cloudflare.com/turnstile/v0/siteverify",

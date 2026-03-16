@@ -133,7 +133,14 @@ export const formRouter = router({
         id: z.string().uuid(),
         title: z.string().min(1).max(200).optional(),
         description: z.string().max(2000).optional(),
-        settings: z.any().optional(),
+        settings: z.object({
+          notificationEmails: z.string().optional(),
+          responseLimit: z.number().int().positive().optional(),
+          closeDate: z.string().datetime().optional(),
+          redirectUrl: z.string().url().optional(),
+          successMessage: z.string().max(500).optional(),
+          gdprConsentEnabled: z.boolean().optional(),
+        }).strict().optional(),
         themeId: z.string().uuid().nullable().optional(),
       })
     )

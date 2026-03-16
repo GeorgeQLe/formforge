@@ -303,14 +303,16 @@ export const responseRouter = router({
         .orderBy(formFields.sortOrder);
 
       // Get all responses
+      const MAX_EXPORT_ROWS = 10_000;
       const responses = await ctx.db
         .select()
         .from(formResponses)
         .where(eq(formResponses.formId, input.formId))
-        .orderBy(desc(formResponses.submittedAt));
+        .orderBy(desc(formResponses.submittedAt))
+        .limit(MAX_EXPORT_ROWS);
 
       if (responses.length === 0) {
-        return { csv: "" };
+        return { csv: "", truncated: false };
       }
 
       // Get all field responses
@@ -363,6 +365,6 @@ export const responseRouter = router({
         ...rows.map((row) => row.map(escapeCsv).join(",")),
       ];
 
-      return { csv: csvLines.join("\n") };
+      return { csv: csvLines.join("\n"), truncated: responses.length >= MAX_EXPORT_ROWS };
     }),
 });

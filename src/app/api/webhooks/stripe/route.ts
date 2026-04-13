@@ -1,21 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
-import { stripe } from "@/server/billing/stripe";
+import { stripe, resolvePlanFromPrice } from "@/server/billing/stripe";
 import { db } from "@/server/db";
 import { users } from "@/server/db/schema";
 import type Stripe from "stripe";
-
-// ---------------------------------------------------------------------------
-// Map Stripe price IDs to plan names
-// ---------------------------------------------------------------------------
-function planFromPriceId(priceId: string): string {
-  const proPriceId = process.env.STRIPE_PRO_PRICE_ID ?? "price_pro";
-  const businessPriceId = process.env.STRIPE_BUSINESS_PRICE_ID ?? "price_business";
-
-  if (priceId === proPriceId) return "pro";
-  if (priceId === businessPriceId) return "business";
-  return "free";
-}
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -49,8 +37,10 @@ export async function POST(request: NextRequest) {
 
         // Get subscription details to determine plan
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-        const priceId = subscription.items.data[0]?.price?.id ?? "";
-        const plan = planFromPriceId(priceId);
+        const price = subscription.items.data[0]?.price;
+        const plan = price
+          ? await resolvePlanFromPrice(price)
+          : "free";
 
         await db
           .update(users)
@@ -71,8 +61,10 @@ export async function POST(request: NextRequest) {
       case "customer.subscription.updated": {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
-        const priceId = subscription.items.data[0]?.price?.id ?? "";
-        const plan = planFromPriceId(priceId);
+        const price = subscription.items.data[0]?.price;
+        const plan = price
+          ? await resolvePlanFromPrice(price)
+          : "free";
 
         if (subscription.status === "active") {
           await db

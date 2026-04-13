@@ -7,9 +7,11 @@ import {
   stripe,
   PLANS,
   getOrCreateStripeCustomer,
+  getStripePriceForPlan,
   createCheckoutSession,
   createPortalSession,
   type PlanKey,
+  type PaidPlanKey,
 } from "@/server/billing/stripe";
 
 export const billingRouter = router({
@@ -50,13 +52,9 @@ export const billingRouter = router({
   createCheckout: protectedProcedure
     .input(z.object({ plan: z.enum(["pro", "business"]) }))
     .mutation(async ({ ctx, input }) => {
+      // Resolve price from Stripe via lookup key
+      const stripePrice = await getStripePriceForPlan(input.plan as PaidPlanKey);
       const planConfig = PLANS[input.plan];
-      if (!planConfig.stripePriceId) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Invalid plan",
-        });
-      }
 
       // Get or create Stripe customer
       let customerId = ctx.user.stripeCustomerId;
@@ -76,7 +74,9 @@ export const billingRouter = router({
       const appUrl = process.env.NEXT_PUBLIC_APP_URL!;
       const session = await createCheckoutSession({
         customerId,
-        priceId: planConfig.stripePriceId,
+        priceId: stripePrice.id,
+        userId: ctx.user.id,
+        lookupKey: planConfig.lookupKey!,
         successUrl: `${appUrl}/billing?success=true`,
         cancelUrl: `${appUrl}/billing?canceled=true`,
       });

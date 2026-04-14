@@ -1,16 +1,26 @@
-# Manual Todo — FormForge
+# Manual Tasks — FormForge
 
-> Context: LexCorp Phase 7 — Portfolio Billing Operating Model
+> Updated: 2026-04-14
+> Source of truth for Stripe config: `stripe-registry.yaml` in lexcorp-war-room
 
-## Stripe Migration (Phase 7.7)
+## Phase 7: Portfolio Billing Operating Model (LexCorp)
 
-- [ ] Migrate `STRIPE_PRO_PRICE_ID` env var to `formforge.pro.monthly` lookup key
-- [ ] Migrate `STRIPE_BUSINESS_PRICE_ID` env var to `formforge.business.monthly` lookup key
-- [ ] Add metadata contract to checkout sessions: `project`, `environment`, `entityType`, `entityId`, `appUrl`, `priceLookupKey`
-- [ ] Add `metadata.project: "formforge"` to Customer creation
-- [ ] Standardize metadata key from `customerId` to `userId`
+### Completed (code migration)
+- [x] Migrated `STRIPE_PRO_PRICE_ID` env var to `formforge.pro.monthly` lookup key
+- [x] Migrated `STRIPE_BUSINESS_PRICE_ID` env var to `formforge.business.monthly` lookup key
+- [x] Added metadata contract to checkout sessions: `project`, `environment`, `entityType`, `entityId`, `plan`, `appUrl`, `priceLookupKey`
+- [x] Added `metadata.project: "formforge"` to Customer creation
+- [x] Standardized metadata key from `customerId` to `userId`
 
-## Stripe Dashboard
-
-- [ ] Create products with namespaced lookup keys per registry
-- [ ] Configure webhook endpoint restricted to required events
+### Remaining — Stripe Dashboard
+- [ ] Create "FormForge Pro" product in Stripe Dashboard
+  - [ ] Add price with lookup key `formforge.pro.monthly` ($10.00/mo)
+  - [ ] Add price with lookup key `formforge.pro.yearly` ($96.00/yr)
+- [ ] Create "FormForge Business" product in Stripe Dashboard
+  - [ ] Add price with lookup key `formforge.business.monthly` ($30.00/mo)
+  - [ ] Add price with lookup key `formforge.business.yearly` ($288.00/yr)
+- [ ] Configure webhook endpoint: `https://formforge.dev/api/webhooks/stripe`
+  - Events: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
+  - Payload: snapshot, API version: `2025-03-31.basil`
+- [ ] Pin Stripe API version to `2025-03-31.basil`
+- [ ] Remove `STRIPE_PRO_PRICE_ID` and `STRIPE_BUSINESS_PRICE_ID` from env config (replaced by lookup keys)

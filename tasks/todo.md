@@ -90,7 +90,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - If component testing is too costly, extract a small pure helper such as `validateGdprConsent(enabled, accepted)` and cover it directly, plus add a static assertion that the renderer wires the checkbox and helper.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required Clerk env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
   - Completed 2026-05-18: added client-side GDPR consent validation, rendered a required checkbox for public fill mode when `form.settings.gdprConsentEnabled` is true, and covered the helper plus renderer wiring with Vitest.
-- [ ] **Redirect after submit:** Honor `redirectUrl` and `successMessage` settings post-submission
+- [x] **Redirect after submit:** Honor `redirectUrl` and `successMessage` settings post-submission
   - Current context:
     - `src/app/api/submit/[slug]/route.ts` already returns `form.settings?.successMessage ?? "Thank you for your response!"` and `form.settings?.redirectUrl ?? null` in the successful JSON response.
     - `src/app/f/[slug]/client.tsx` already redirects with `window.location.href = data.redirectUrl` in `handleSubmitSuccess`.
@@ -101,9 +101,23 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add a focused helper or static assertion for `PublicFormClient` redirect wiring if a browser/component harness is not available.
     - If behavior is incomplete, make the smallest source change needed to preserve the returned success message and trigger redirects only after a successful submission.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required Clerk env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
+  - Completed 2026-05-18: added route-level regression coverage proving successful submissions return configured/default `successMessage` and `redirectUrl`, plus static client/renderer wiring coverage proving redirects are triggered only after successful submissions that include a redirect URL.
 
 ### Medium Priority
 - [ ] **CSV export:** Add a response export endpoint (the landing page advertises this feature)
+  - Current context:
+    - Response data is stored in `formResponses` and `fieldResponses`; response list/detail surfaces already exist under dashboard routes.
+    - Existing router tests include response-router coverage, so prefer adding export behavior near the existing response access patterns instead of creating a disconnected API path unless the codebase already has route conventions for downloads.
+  - Implementation approach:
+    - Inspect `src/server/trpc/routers/response.ts`, dashboard response pages, and schema relationships to find the narrowest authenticated export surface.
+    - Add an owner-scoped CSV export procedure or endpoint for a single form's responses.
+    - Include stable headers from form field labels, one row per response, and escape CSV values correctly for commas, quotes, and newlines.
+    - Ensure export rejects unauthenticated users and forms not owned by the current user.
+    - If adding a browser download route is simpler than tRPC for file semantics, keep the authorization logic shared or colocated with existing response access code.
+  - Tests first where practical:
+    - Add focused tests for CSV escaping, header generation, owner authorization, empty-response export, and at least one populated response row.
+    - Reuse existing router test patterns and mocks rather than introducing a database dependency.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
 - [ ] **Analytics dashboard:** Submission counts over time, completion rates, average completion time
 - [ ] **Theme CRUD:** Users can currently assign themes but there's no UI to create/edit custom themes
 - [ ] **Form duplication:** Clone an existing form with all its fields

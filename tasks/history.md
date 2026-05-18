@@ -1,5 +1,25 @@
 # History
 
+## 2026-05-18 — Redirect and success-message submission coverage
+
+- Added route-level coverage proving successful public submissions return configured success messages and redirect URLs, with defaults when settings are absent.
+- Added static wiring coverage proving the renderer forwards successful submit metadata and the public form client redirects only when a redirect URL is present.
+- Marked the redirect-after-submit task complete and expanded the CSV export task into the next executable plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was honoring `redirectUrl` and `successMessage` settings post-submission.
+- **Changed files:** `src/app/api/submit/__tests__/response-settings.test.ts`, `src/app/f/[slug]/__tests__/public-submit-redirect.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `response-settings.test.ts` now covers configured and default success response metadata; `public-submit-redirect.test.ts` covers renderer-to-client redirect wiring; task docs record completion and the next executable plan.
+- **User-goal mapping:** The tests prove the existing submit route and public client honor the post-submission settings without changing runtime behavior.
+- **Tests run:** `pnpm test src/app/api/submit/__tests__/response-settings.test.ts 'src/app/f/[slug]/__tests__/public-submit-redirect.test.ts'` passed: 2 files, 8 tests. `pnpm test` passed: 12 files, 44 tests. `pnpm lint` passed. `pnpm build` compiled successfully and ran TypeScript before failing during prerender on missing Clerk configuration.
+- **Skipped tests:** No browser redirect flow was run because the current Vitest setup is node-focused; the route-level tests and static client wiring assertion cover the behavior this step targeted. Full production build completion is blocked by the environment missing Clerk publishable key.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands. `pnpm build` also emitted Next.js's middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked that redirect metadata is only returned after persistence succeeds, defaults remain stable when settings are absent, and the client only mutates `window.location.href` when the success callback receives a redirect URL.
+- **Residual risk:** The browser navigation side effect is covered by source-level wiring rather than a real DOM/browser submission test.
+- **Rollback note:** Revert the added redirect tests and the two task-doc updates.
+- **Next command:** `$run`
+
 ## 2026-05-18 — GDPR consent checkbox rendering
 
 - Added a client-side GDPR consent helper and required consent checkbox for public fill-mode forms when `gdprConsentEnabled` is true.

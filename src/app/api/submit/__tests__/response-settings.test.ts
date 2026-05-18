@@ -119,6 +119,62 @@ describe("submit response settings", () => {
     expect(dbMocks.insert).toHaveBeenCalledTimes(2);
   });
 
+  it("returns configured success message and redirect URL after successful persistence", async () => {
+    dbMocks.select
+      .mockReturnValueOnce(
+        chainReturning([
+          {
+            ...publishedForm,
+            settings: {
+              successMessage: "We received your request.",
+              redirectUrl: "https://example.com/thanks",
+            },
+          },
+        ])
+      )
+      .mockReturnValueOnce(chainReturning([textField]));
+    dbMocks.insert
+      .mockReturnValueOnce(insertReturning([{ id: "response-1" }]))
+      .mockReturnValueOnce(insertValuesOnly());
+
+    const response = await submit({
+      _turnstileToken: "token",
+      "field-1": "Ada Lovelace",
+    });
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload).toEqual({
+      success: true,
+      message: "We received your request.",
+      redirectUrl: "https://example.com/thanks",
+    });
+    expect(dbMocks.insert).toHaveBeenCalledTimes(2);
+  });
+
+  it("returns the default success message and null redirect URL when not configured", async () => {
+    dbMocks.select
+      .mockReturnValueOnce(chainReturning([publishedForm]))
+      .mockReturnValueOnce(chainReturning([textField]));
+    dbMocks.insert
+      .mockReturnValueOnce(insertReturning([{ id: "response-1" }]))
+      .mockReturnValueOnce(insertValuesOnly());
+
+    const response = await submit({
+      _turnstileToken: "token",
+      "field-1": "Grace Hopper",
+    });
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload).toEqual({
+      success: true,
+      message: "Thank you for your response!",
+      redirectUrl: null,
+    });
+    expect(dbMocks.insert).toHaveBeenCalledTimes(2);
+  });
+
   it("rejects and does not store when the response limit has been reached", async () => {
     dbMocks.select
       .mockReturnValueOnce(chainReturning([{ ...publishedForm, settings: { responseLimit: 2 } }]))

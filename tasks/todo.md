@@ -46,7 +46,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
 
 ### High Priority
 - [x] **Testing:** No test files exist yet -- add unit tests for field validation logic and integration tests for tRPC routers
-- [ ] **Error handling:** Add global error boundaries and tRPC error formatting for user-facing messages
+- [x] **Error handling:** Add global error boundaries and tRPC error formatting for user-facing messages
   - Add App Router error boundaries where user-facing failures currently fall through to framework defaults:
     - `src/app/error.tsx` for global app errors.
     - `src/app/(dashboard)/error.tsx` for authenticated dashboard routes.
@@ -59,6 +59,12 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add static or component-level tests for the new error boundary files if the current test harness can cover them without adding a browser environment.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk env, record the exact blocker.
 - [ ] **Form submission validation:** Wire up Turnstile verification server-side in the submit route
+  - Add server-side Turnstile verification to `src/app/api/submit/[slug]/route.ts` before accepting a public submission.
+  - Use the posted Turnstile token already passed from the public form client/renderer. Reject missing or failed tokens with a user-facing `400` response.
+  - Read the secret through the existing env helper in `src/env.ts`; do not read raw `process.env` directly in the route if the helper already exposes the value.
+  - Keep local/test behavior deterministic: unit-test the verification helper with mocked `fetch` instead of calling Cloudflare.
+  - Add or update tests under `src/app/api/submit/__tests__/turnstile.test.ts` for missing token, failed verification, and successful verification flow.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required Clerk env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
 - [ ] **Response limits:** Enforce `responseLimit` and `closeDate` settings when accepting submissions
 - [ ] **GDPR consent:** Render the consent checkbox when `gdprConsentEnabled` is true in the form renderer
 - [ ] **Redirect after submit:** Honor `redirectUrl` and `successMessage` settings post-submission

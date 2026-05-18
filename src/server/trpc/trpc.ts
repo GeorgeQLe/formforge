@@ -4,9 +4,13 @@ import { eq } from "drizzle-orm";
 import { users } from "@/server/db/schema";
 import { PLAN_LIMITS } from "@/server/billing/stripe";
 import type { Context } from "./context";
+import { formatTRPCErrorShape } from "./error-formatting";
 
 const t = initTRPC.context<Context>().create({
   transformer: superjson,
+  errorFormatter({ shape, error }) {
+    return formatTRPCErrorShape({ shape, error });
+  },
 });
 
 export const router = t.router;

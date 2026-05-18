@@ -45,8 +45,19 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
 ## Next Steps
 
 ### High Priority
-- [ ] **Testing:** No test files exist yet -- add unit tests for field validation logic and integration tests for tRPC routers
+- [x] **Testing:** No test files exist yet -- add unit tests for field validation logic and integration tests for tRPC routers
 - [ ] **Error handling:** Add global error boundaries and tRPC error formatting for user-facing messages
+  - Add App Router error boundaries where user-facing failures currently fall through to framework defaults:
+    - `src/app/error.tsx` for global app errors.
+    - `src/app/(dashboard)/error.tsx` for authenticated dashboard routes.
+    - `src/app/f/[slug]/error.tsx` or route-local handling for public form-fill failures.
+  - Keep pages usable and concise: show a clear title, short explanation, retry action where `reset()` is available, and navigation back to the safest relevant route.
+  - Add tRPC server error formatting in `src/server/trpc/trpc.ts` so callers receive normalized messages without leaking implementation details. Preserve useful validation details for `BAD_REQUEST`/Zod input errors.
+  - Update client-facing tRPC usage only where needed to surface the normalized messages in existing dashboard/form flows.
+  - Tests first where practical:
+    - Add unit tests for any extracted error-formatting helper.
+    - Add static or component-level tests for the new error boundary files if the current test harness can cover them without adding a browser environment.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk env, record the exact blocker.
 - [ ] **Form submission validation:** Wire up Turnstile verification server-side in the submit route
 - [ ] **Response limits:** Enforce `responseLimit` and `closeDate` settings when accepting submissions
 - [ ] **GDPR consent:** Render the consent checkbox when `gdprConsentEnabled` is true in the form renderer

@@ -4,7 +4,6 @@ import {
   createContext,
   useContext,
   useState,
-  useCallback,
   type ReactNode,
   type HTMLAttributes,
   useEffect,
@@ -49,7 +48,7 @@ export function DialogTrigger({
 }: HTMLAttributes<HTMLButtonElement> & { asChild?: boolean }) {
   const { setOpen } = useContext(DialogContext);
   return (
-    <button onClick={() => setOpen(true)} {...props}>
+    <button data-as-child={asChild ? "" : undefined} onClick={() => setOpen(true)} {...props}>
       {children}
     </button>
   );

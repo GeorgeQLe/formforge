@@ -61,7 +61,7 @@ export default function BillingPage() {
   const handleUpgrade = async (plan: "pro" | "business") => {
     try {
       const { url } = await createCheckoutMutation.mutateAsync({ plan });
-      if (url) window.location.href = url;
+      if (url) window.location.assign(url);
     } catch {
       toast({ title: "Failed to start checkout", variant: "destructive" });
     }
@@ -70,7 +70,7 @@ export default function BillingPage() {
   const handleManageBilling = async () => {
     try {
       const { url } = await createPortalMutation.mutateAsync();
-      if (url) window.location.href = url;
+      if (url) window.location.assign(url);
     } catch {
       toast({ title: "Failed to open billing portal", variant: "destructive" });
     }

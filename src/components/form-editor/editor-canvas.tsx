@@ -17,7 +17,6 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { nanoid } from "nanoid";
 import { useEditor } from "./editor-provider";
 import { SortableField } from "./sortable-field";
 import { FIELD_TYPES, type FieldType } from "@/lib/field-types";

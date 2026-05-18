@@ -1,7 +1,6 @@
 "use client";
 
 import { use, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { trpc } from "@/lib/trpc/client";
 import { EditorProvider, useEditor } from "@/components/form-editor/editor-provider";
@@ -17,7 +16,6 @@ import { useToast } from "@/components/ui/toast";
 function EditorTopBar() {
   const { state, dispatch } = useEditor();
   const { toast } = useToast();
-  const router = useRouter();
   const [isPreview, setIsPreview] = useState(false);
 
   const updateFormMutation = trpc.form.update.useMutation();
@@ -46,10 +44,10 @@ function EditorTopBar() {
         description: "Your form is now live and accepting responses.",
         variant: "success",
       });
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Publish failed",
-        description: error?.message ?? "Could not publish form",
+        description: error instanceof Error ? error.message : "Could not publish form",
         variant: "destructive",
       });
     }

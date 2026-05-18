@@ -12,6 +12,7 @@ import {
 } from "react";
 import { trpc } from "@/lib/trpc/client";
 import type { formFields, forms } from "@/server/db/schema";
+import type { FieldType } from "@/lib/field-types";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -145,7 +146,7 @@ interface EditorContextValue {
   saveForm: () => void;
 }
 
-const EditorContext = createContext<EditorContextValue>(null as any);
+const EditorContext = createContext<EditorContextValue | null>(null);
 
 export function useEditor() {
   const ctx = useContext(EditorContext);
@@ -177,10 +178,7 @@ export function EditorProvider({
 
   const formQuery = trpc.form.getById.useQuery({ id: formId });
   const fieldsQuery = trpc.field.list.useQuery({ formId });
-  const updateFormMutation = trpc.form.update.useMutation();
-  const createFieldMutation = trpc.field.create.useMutation();
   const updateFieldMutation = trpc.field.update.useMutation();
-  const deleteFieldMutation = trpc.field.delete.useMutation();
   const reorderFieldsMutation = trpc.field.reorder.useMutation();
 
   // Load form data
@@ -216,7 +214,7 @@ export function EditorProvider({
           await updateFieldMutation.mutateAsync({
             id: field.id,
             formId: state.form!.id,
-            type: field.type as any,
+            type: field.type as FieldType,
             label: field.label,
             placeholder: field.placeholder ?? undefined,
             helpText: field.helpText ?? undefined,

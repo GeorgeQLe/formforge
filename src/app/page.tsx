@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
+import Link from "next/link";
 
 export default async function RootPage() {
   const { userId } = await auth();
@@ -24,15 +25,15 @@ export default async function RootPage() {
             <span className="text-lg font-bold text-gray-900">FormForge</span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="/sign-in" className="text-sm text-gray-600 hover:text-gray-900">
+            <Link href="/sign-in" className="text-sm text-gray-600 hover:text-gray-900">
               Sign In
-            </a>
-            <a
+            </Link>
+            <Link
               href="/sign-up"
               className="text-sm font-medium bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
             >
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
       </header>
@@ -47,7 +48,7 @@ export default async function RootPage() {
             Describe the form you need, and AI builds it instantly.
             Drag-and-drop editing, conditional logic, file uploads, and more.
           </p>
-          <a
+          <Link
             href="/sign-up"
             className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors text-lg"
           >
@@ -55,7 +56,7 @@ export default async function RootPage() {
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
-          </a>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-16">

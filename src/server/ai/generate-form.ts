@@ -4,7 +4,6 @@ import { nanoid } from "nanoid";
 import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
 import { forms, formFields } from "@/server/db/schema";
-import type { FieldType } from "@/lib/field-types";
 
 // ---------------------------------------------------------------------------
 // AI response schema

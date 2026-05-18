@@ -48,7 +48,7 @@ export default function NewFormPage() {
 
       const data = await response.json();
       setGeneratedForm(data);
-    } catch (error) {
+    } catch {
       toast({
         title: "Generation failed",
         description: "Could not generate form. Try again or create manually.",
@@ -83,10 +83,10 @@ export default function NewFormPage() {
       await publishMutation.mutateAsync({ id: generatedForm.id });
       toast({ title: "Published!", description: "Your form is now live.", variant: "success" });
       router.push(`/forms/${generatedForm.id}/responses`);
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Publish failed",
-        description: error?.message ?? "Could not publish form",
+        description: error instanceof Error ? error.message : "Could not publish form",
         variant: "destructive",
       });
     }

@@ -6,7 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { FIELD_TYPES, type FieldType } from "@/lib/field-types";
-import type { FieldOption, ConditionalLogic } from "@/server/db/schema";
+import type { formFields, FieldOption } from "@/server/db/schema";
+
+type FieldUpdates = Partial<typeof formFields.$inferSelect>;
 
 export function FieldProperties() {
   const { state, dispatch } = useEditor();
@@ -29,8 +31,8 @@ export function FieldProperties() {
   const fieldMeta = FIELD_TYPES[field.type as FieldType];
   const hasOptions = fieldMeta?.hasOptions ?? false;
 
-  const update = (updates: Record<string, unknown>) => {
-    dispatch({ type: "UPDATE_FIELD", fieldId: field.id, updates: updates as any });
+  const update = (updates: FieldUpdates) => {
+    dispatch({ type: "UPDATE_FIELD", fieldId: field.id, updates });
   };
 
   const addOption = () => {

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import { FormRenderer } from "@/components/form-renderer/form-renderer";
 import type { forms, formFields, ThemeColors } from "@/server/db/schema";
 
@@ -18,7 +17,6 @@ export function PublicFormClient({
   themeColors,
   turnstileSiteKey,
 }: PublicFormClientProps) {
-  const router = useRouter();
   const [turnstileToken, setTurnstileToken] = useState<string>("");
   const [startTime] = useState(() => Date.now());
   const turnstileRef = useRef<HTMLDivElement>(null);

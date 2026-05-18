@@ -21,7 +21,7 @@ interface NotificationEmailParams {
 }
 
 export async function sendNotificationEmail(params: NotificationEmailParams) {
-  const { to, formTitle, responseId, fieldValues, dashboardUrl } = params;
+  const { to, formTitle, fieldValues, dashboardUrl } = params;
 
   const fieldsHtml = fieldValues
     .map(

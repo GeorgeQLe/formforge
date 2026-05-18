@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { eq, and, desc, sql, count } from "drizzle-orm";
+import { eq, and, desc, count } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
 import { router, protectedProcedure, publicProcedure } from "../trpc";
-import { forms, formFields, formResponses, users } from "@/server/db/schema";
+import { forms, formFields, formResponses } from "@/server/db/schema";
 import { getPlanLimits } from "@/server/billing/stripe";
 
 function slugify(text: string): string {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
-import { users, formFields } from "@/server/db/schema";
+import { users } from "@/server/db/schema";
 import { generateFormFromAI } from "@/server/ai/generate-form";
 
 export async function POST(request: NextRequest) {

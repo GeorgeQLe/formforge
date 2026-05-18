@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState, useEffect } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/toast";
-import type { FormSettings } from "@/server/db/schema";
+import type { FormSettings, forms } from "@/server/db/schema";
 
 export default function FormSettingsPage({
   params,
@@ -17,25 +17,47 @@ export default function FormSettingsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id: formId } = use(params);
-  const { toast } = useToast();
 
   const formQuery = trpc.form.getById.useQuery({ id: formId });
+
+  const form = formQuery.data;
+
+  if (!form) {
+    return (
+      <div className="animate-pulse space-y-4">
+        <div className="h-8 bg-gray-200 rounded w-1/3" />
+        <div className="h-64 bg-gray-100 rounded" />
+      </div>
+    );
+  }
+
+  return (
+    <FormSettingsContent
+      form={form}
+      formId={formId}
+      refetchForm={() => void formQuery.refetch()}
+    />
+  );
+}
+
+function FormSettingsContent({
+  form,
+  formId,
+  refetchForm,
+}: {
+  form: typeof forms.$inferSelect;
+  formId: string;
+  refetchForm: () => void;
+}) {
+  const { toast } = useToast();
   const updateMutation = trpc.form.update.useMutation();
   const closeMutation = trpc.form.close.useMutation();
   const publishMutation = trpc.form.publish.useMutation();
   const deleteMutation = trpc.form.delete.useMutation();
-
-  const [settings, setSettings] = useState<FormSettings>({});
-  const [notificationEmailInput, setNotificationEmailInput] = useState("");
-
-  useEffect(() => {
-    if (formQuery.data?.settings) {
-      setSettings(formQuery.data.settings);
-      setNotificationEmailInput(
-        formQuery.data.settings.notificationEmails?.join(", ") ?? ""
-      );
-    }
-  }, [formQuery.data]);
+  const [settings, setSettings] = useState<FormSettings>(form.settings);
+  const [notificationEmailInput, setNotificationEmailInput] = useState(
+    form.settings.notificationEmails?.join(", ") ?? ""
+  );
 
   const handleSave = async () => {
     try {
@@ -50,22 +72,11 @@ export default function FormSettingsPage({
       });
 
       toast({ title: "Settings saved", variant: "success" });
-      formQuery.refetch();
+      refetchForm();
     } catch {
       toast({ title: "Failed to save", variant: "destructive" });
     }
   };
-
-  const form = formQuery.data;
-
-  if (!form) {
-    return (
-      <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-gray-200 rounded w-1/3" />
-        <div className="h-64 bg-gray-100 rounded" />
-      </div>
-    );
-  }
 
   return (
     <div className="max-w-2xl">
@@ -224,12 +235,12 @@ export default function FormSettingsPage({
                   onClick={async () => {
                     try {
                       await publishMutation.mutateAsync({ id: formId });
-                      formQuery.refetch();
+                      refetchForm();
                       toast({ title: "Form published!", variant: "success" });
-                    } catch (err: any) {
+                    } catch (err) {
                       toast({
                         title: "Publish failed",
-                        description: err?.message,
+                        description: err instanceof Error ? err.message : undefined,
                         variant: "destructive",
                       });
                     }
@@ -243,7 +254,7 @@ export default function FormSettingsPage({
                   variant="outline"
                   onClick={async () => {
                     await closeMutation.mutateAsync({ id: formId });
-                    formQuery.refetch();
+                    refetchForm();
                     toast({ title: "Form closed", variant: "default" });
                   }}
                 >
@@ -291,7 +302,7 @@ export default function FormSettingsPage({
               onClick={async () => {
                 if (!confirm("Are you sure? This cannot be undone.")) return;
                 await deleteMutation.mutateAsync({ id: formId });
-                window.location.href = "/";
+                window.location.assign("/");
               }}
             >
               Delete Form

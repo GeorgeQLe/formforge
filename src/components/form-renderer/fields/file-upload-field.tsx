@@ -45,8 +45,8 @@ export function FileUploadField({ field, value, onChange, error, readonly }: Fie
 
       setFileName(file.name);
       onChange(cdnUrl);
-    } catch (err: any) {
-      setUploadError(err.message ?? "Upload failed");
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setUploading(false);
     }

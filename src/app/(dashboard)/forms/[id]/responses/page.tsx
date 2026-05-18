@@ -10,6 +10,8 @@ import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
 import { formatDate, formatSeconds } from "@/lib/utils";
 
+type ResponseStatus = "new" | "read" | "starred" | "archived";
+
 export default function ResponsesPage({
   params,
 }: {
@@ -28,7 +30,7 @@ export default function ResponsesPage({
     formId,
     page,
     pageSize: 25,
-    status: statusFilter ? (statusFilter as any) : undefined,
+    status: statusFilter ? (statusFilter as ResponseStatus) : undefined,
   });
 
   const bulkUpdateMutation = trpc.response.bulkUpdateStatus.useMutation();

@@ -3,6 +3,7 @@ import { eq, and, asc } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { router, protectedProcedure } from "../trpc";
 import { forms, formFields } from "@/server/db/schema";
+import type { Database } from "@/server/db";
 
 const fieldInputSchema = z.object({
   type: z.enum([
@@ -59,7 +60,7 @@ const fieldInputSchema = z.object({
 
 /** Verify the form belongs to the current user */
 async function verifyFormOwnership(
-  db: any,
+  db: Database,
   formId: string,
   userId: string
 ) {
@@ -133,6 +134,7 @@ export const fieldRouter = router({
       await verifyFormOwnership(ctx.db, input.formId, ctx.user.id);
 
       const { id, formId, ...data } = input;
+      void formId;
       const updateData: Record<string, unknown> = {};
 
       if (data.type !== undefined) updateData.type = data.type;

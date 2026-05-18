@@ -4,12 +4,13 @@ import { use } from "react";
 import Link from "next/link";
 import { trpc } from "@/lib/trpc/client";
 import { FormRenderer } from "@/components/form-renderer/form-renderer";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
 import { formatDate, formatSeconds } from "@/lib/utils";
+
+type ResponseStatus = "new" | "read" | "starred" | "archived";
 
 export default function ResponseDetailPage({
   params,
@@ -28,12 +29,12 @@ export default function ResponseDetailPage({
 
   const updateStatusMutation = trpc.response.updateStatus.useMutation();
 
-  const handleStatusChange = async (status: string) => {
+  const handleStatusChange = async (status: ResponseStatus) => {
     try {
       await updateStatusMutation.mutateAsync({
         id: responseId,
         formId,
-        status: status as any,
+        status,
       });
       responseQuery.refetch();
       toast({ title: "Status updated", variant: "success" });
@@ -87,7 +88,7 @@ export default function ResponseDetailPage({
         <div className="flex items-center gap-3">
           <Select
             value={response.status}
-            onChange={(e) => handleStatusChange(e.target.value)}
+            onChange={(e) => handleStatusChange(e.target.value as ResponseStatus)}
             className="w-32"
           >
             <option value="new">New</option>

@@ -22,7 +22,7 @@ export function CheckboxField({ field, value, onChange, error, readonly }: Field
       {field.helpText && (
         <p className="text-xs text-gray-500 mb-2">{field.helpText}</p>
       )}
-      <div className="space-y-2" role="group" aria-required={field.required}>
+      <div className="space-y-2" role="group">
         {(field.options ?? []).map((option) => (
           <label
             key={option.value}

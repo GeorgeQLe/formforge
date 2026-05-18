@@ -8,6 +8,7 @@ import {
   formResponses,
   fieldResponses,
 } from "@/server/db/schema";
+import { buildResponsesCsv } from "@/server/responses/csv-export";
 
 export const responseRouter = router({
   // -----------------------------------------------------------------------
@@ -311,60 +312,26 @@ export const responseRouter = router({
         .orderBy(desc(formResponses.submittedAt))
         .limit(MAX_EXPORT_ROWS);
 
-      if (responses.length === 0) {
-        return { csv: "", truncated: false };
-      }
-
       // Get all field responses
       const responseIds = responses.map((r) => r.id);
-      const allFieldResponses = await ctx.db
-        .select()
-        .from(fieldResponses)
-        .where(
-          sql`${fieldResponses.responseId} IN (${sql.join(
-            responseIds.map((id) => sql`${id}`),
-            sql`, `
-          )})`
-        );
+      const allFieldResponses =
+        responseIds.length > 0
+          ? await ctx.db
+              .select()
+              .from(fieldResponses)
+              .where(
+                sql`${fieldResponses.responseId} IN (${sql.join(
+                  responseIds.map((id) => sql`${id}`),
+                  sql`, `
+                )})`
+              )
+          : [];
 
-      // Build CSV
-      const headers = [
-        "Response ID",
-        "Status",
-        "Submitted At",
-        "Completion Time (s)",
-        ...fields.map((f) => f.label),
-      ];
-
-      const frMap = new Map<string, Map<string, string>>();
-      for (const fr of allFieldResponses) {
-        if (!frMap.has(fr.responseId)) frMap.set(fr.responseId, new Map());
-        frMap.get(fr.responseId)!.set(fr.fieldId, fr.value ?? "");
-      }
-
-      const rows = responses.map((r) => {
-        const values = frMap.get(r.id) ?? new Map();
-        return [
-          r.id,
-          r.status,
-          r.submittedAt.toISOString(),
-          String(r.completionTime ?? ""),
-          ...fields.map((f) => values.get(f.id) ?? ""),
-        ];
+      return buildResponsesCsv({
+        fields,
+        responses,
+        fieldResponses: allFieldResponses,
+        truncated: responses.length >= MAX_EXPORT_ROWS,
       });
-
-      const escapeCsv = (val: string) => {
-        if (val.includes(",") || val.includes('"') || val.includes("\n")) {
-          return `"${val.replace(/"/g, '""')}"`;
-        }
-        return val;
-      };
-
-      const csvLines = [
-        headers.map(escapeCsv).join(","),
-        ...rows.map((row) => row.map(escapeCsv).join(",")),
-      ];
-
-      return { csv: csvLines.join("\n"), truncated: responses.length >= MAX_EXPORT_ROWS };
     }),
 });

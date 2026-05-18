@@ -2,6 +2,7 @@
 
 import { useState, useCallback, type ComponentType } from "react";
 import { ThemeProvider } from "./theme-provider";
+import { validateGdprConsent } from "./gdpr-consent";
 import { evaluateConditionalLogic } from "@/lib/conditional-logic";
 import { buildFormValidator, type FieldDef, type FieldType } from "@/lib/field-types";
 import { Button } from "@/components/ui/button";
@@ -90,6 +91,7 @@ export function FormRenderer({
   const [values, setValues] = useState<Record<string, string>>(
     initialValues ?? {}
   );
+  const [gdprConsentAccepted, setGdprConsentAccepted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
@@ -98,6 +100,7 @@ export function FormRenderer({
   } | null>(null);
 
   const readonly = mode === "readonly" || mode === "preview";
+  const requiresGdprConsent = mode === "fill" && form.settings.gdprConsentEnabled === true;
 
   const handleChange = useCallback((fieldId: string, value: string) => {
     setValues((prev) => ({ ...prev, [fieldId]: value }));
@@ -110,6 +113,18 @@ export function FormRenderer({
       }
       return prev;
     });
+  }, []);
+
+  const handleGdprConsentChange = useCallback((accepted: boolean) => {
+    setGdprConsentAccepted(accepted);
+    if (accepted) {
+      setErrors((prev) => {
+        if (!prev._gdprConsent) return prev;
+        const next = { ...prev };
+        delete next._gdprConsent;
+        return next;
+      });
+    }
   }, []);
 
   // Determine visible fields based on conditional logic
@@ -138,6 +153,10 @@ export function FormRenderer({
     }
 
     const result = validator.safeParse(validationData);
+    const gdprConsentError = validateGdprConsent(
+      requiresGdprConsent,
+      gdprConsentAccepted
+    );
     if (!result.success) {
       const newErrors: Record<string, string> = {};
       for (const issue of result.error.issues) {
@@ -146,7 +165,14 @@ export function FormRenderer({
           newErrors[fieldId] = issue.message;
         }
       }
+      if (gdprConsentError) {
+        newErrors._gdprConsent = gdprConsentError;
+      }
       setErrors(newErrors);
+      return;
+    }
+    if (gdprConsentError) {
+      setErrors({ _gdprConsent: gdprConsentError });
       return;
     }
 
@@ -235,6 +261,35 @@ export function FormRenderer({
 
           {mode === "fill" && visibleFields.length > 0 && (
             <div className="pt-4">
+              {requiresGdprConsent && (
+                <div className="mb-4">
+                  <label className="flex items-start gap-3 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={gdprConsentAccepted}
+                      onChange={(event) =>
+                        handleGdprConsentChange(event.target.checked)
+                      }
+                      className="mt-1 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      aria-describedby={
+                        errors._gdprConsent ? "gdpr-consent-error" : undefined
+                      }
+                    />
+                    <span>
+                      I consent to this form collecting and processing my
+                      submitted information.
+                    </span>
+                  </label>
+                  {errors._gdprConsent && (
+                    <p
+                      id="gdpr-consent-error"
+                      className="mt-2 text-sm text-red-600"
+                    >
+                      {errors._gdprConsent}
+                    </p>
+                  )}
+                </div>
+              )}
               <Button
                 type="submit"
                 disabled={isSubmitting}

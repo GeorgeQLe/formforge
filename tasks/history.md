@@ -1,5 +1,25 @@
 # History
 
+## 2026-05-18 — GDPR consent checkbox rendering
+
+- Added a client-side GDPR consent helper and required consent checkbox for public fill-mode forms when `gdprConsentEnabled` is true.
+- Blocked submission locally with a user-facing consent error when required consent is unchecked, without adding consent persistence as a field response.
+- Added focused Vitest coverage for consent validation and static renderer wiring, then marked the GDPR consent task complete and expanded the redirect/success-message task into the next execution plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was rendering and enforcing GDPR consent in the public form renderer.
+- **Changed files:** `src/components/form-renderer/gdpr-consent.ts`, `src/components/form-renderer/form-renderer.tsx`, `src/components/form-renderer/__tests__/gdpr-consent.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `gdpr-consent.ts` centralizes consent validation; `form-renderer.tsx` renders the required checkbox and blocks submit when consent is missing; the test file covers helper behavior and renderer wiring; task docs record completion and the next executable plan.
+- **User-goal mapping:** The source change directly renders the consent checkbox from the form setting and prevents public submissions until the respondent accepts it.
+- **Tests run:** `pnpm test src/components/form-renderer/__tests__/gdpr-consent.test.ts` passed: 1 file, 4 tests. `pnpm test` passed: 11 files, 40 tests. `pnpm lint` passed. `pnpm build` compiled successfully and ran TypeScript before failing during prerender on missing Clerk configuration.
+- **Skipped tests:** No browser/component submission flow was run because the current Vitest setup is node-focused; the helper test plus static wiring assertion cover the consent decision and renderer connection. Full production build completion is blocked by the environment missing Clerk publishable key.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands. `pnpm build` also emitted Next.js's middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked that consent is required only for `mode === "fill"` with `gdprConsentEnabled === true`, that preview/readonly modes stay unchanged, and that consent is not persisted as a field response without a schema-backed form-level audit record.
+- **Residual risk:** The checkbox UI was validated by source-level tests and lint/build type checks rather than a browser interaction test, so DOM event behavior still depends on React runtime behavior.
+- **Rollback note:** Revert the consent helper, renderer checkbox/state changes, consent test file, and the two task-doc updates.
+- **Next command:** `$run`
+
 ## 2026-05-18 — Response limit and close date submission coverage
 
 - Added route-level submit endpoint coverage for response-limit and close-date settings.

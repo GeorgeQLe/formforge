@@ -75,7 +75,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - If the route test harness is too expensive, extract narrow pure helpers for `isResponseLimitReached` and `isFormClosed` and cover those directly, then keep one route-level static/behavioral assertion that the helpers run before persistence.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required Clerk env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
 - Completed 2026-05-18: added route-level coverage for below-limit, limit-reached, before-close-date, and after-close-date submission behavior with mocked Turnstile and database boundaries; rejected submissions assert no persistence calls are made.
-- [ ] **GDPR consent:** Render the consent checkbox when `gdprConsentEnabled` is true in the form renderer
+- [x] **GDPR consent:** Render the consent checkbox when `gdprConsentEnabled` is true in the form renderer
   - Current renderer context:
     - Public form page `src/app/f/[slug]/page.tsx` passes `form.settings` into `FormPageClient`.
     - Client wrapper `src/app/f/[slug]/client.tsx` passes Turnstile props into `FormRenderer`, but it does not appear to pass or render GDPR consent settings yet.
@@ -89,7 +89,18 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add focused component/helper tests if the current Vitest setup can cover the consent validation without adding a browser environment.
     - If component testing is too costly, extract a small pure helper such as `validateGdprConsent(enabled, accepted)` and cover it directly, plus add a static assertion that the renderer wires the checkbox and helper.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required Clerk env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
+  - Completed 2026-05-18: added client-side GDPR consent validation, rendered a required checkbox for public fill mode when `form.settings.gdprConsentEnabled` is true, and covered the helper plus renderer wiring with Vitest.
 - [ ] **Redirect after submit:** Honor `redirectUrl` and `successMessage` settings post-submission
+  - Current context:
+    - `src/app/api/submit/[slug]/route.ts` already returns `form.settings?.successMessage ?? "Thank you for your response!"` and `form.settings?.redirectUrl ?? null` in the successful JSON response.
+    - `src/app/f/[slug]/client.tsx` already redirects with `window.location.href = data.redirectUrl` in `handleSubmitSuccess`.
+    - `src/components/form-renderer/form-renderer.tsx` displays the success message locally before invoking `onSubmitSuccess`, but redirect behavior may make the message unobservable when a redirect URL exists.
+  - Implementation approach:
+    - Verify the existing API and client behavior with focused tests instead of duplicating code.
+    - Add route-level coverage under `src/app/api/submit/__tests__/` proving custom `successMessage` and `redirectUrl` are returned after successful persistence.
+    - Add a focused helper or static assertion for `PublicFormClient` redirect wiring if a browser/component harness is not available.
+    - If behavior is incomplete, make the smallest source change needed to preserve the returned success message and trigger redirects only after a successful submission.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required Clerk env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
 
 ### Medium Priority
 - [ ] **CSV export:** Add a response export endpoint (the landing page advertises this feature)

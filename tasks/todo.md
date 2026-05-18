@@ -66,7 +66,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
   - Add or update tests under `src/app/api/submit/__tests__/turnstile.test.ts` for missing token, failed verification, and successful verification flow.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required Clerk env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
   - Completed 2026-05-18: extracted `src/server/security/turnstile.ts`, required `_turnstileToken` before accepting public submissions, verified tokens server-side through Cloudflare with mocked-fetch unit coverage, and used the env helper for the Turnstile secret.
-- [ ] **Response limits:** Enforce `responseLimit` and `closeDate` settings when accepting submissions
+- [x] **Response limits:** Enforce `responseLimit` and `closeDate` settings when accepting submissions
   - Current route context: `src/app/api/submit/[slug]/route.ts` already checks `form.settings?.responseLimit` against `formResponses` count and checks `form.settings?.closeDate` before validating and storing responses.
   - Next execution should verify and harden that existing behavior instead of duplicating logic:
     - Add focused coverage under `src/app/api/submit/__tests__/` for accepting a submission below the response limit, rejecting when `total >= responseLimit`, accepting before `closeDate`, and rejecting after `closeDate`.
@@ -74,7 +74,21 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Confirm the route returns user-facing `400` errors and does not insert into `formResponses` or `fieldResponses` on rejected submissions.
     - If the route test harness is too expensive, extract narrow pure helpers for `isResponseLimitReached` and `isFormClosed` and cover those directly, then keep one route-level static/behavioral assertion that the helpers run before persistence.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required Clerk env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
+- Completed 2026-05-18: added route-level coverage for below-limit, limit-reached, before-close-date, and after-close-date submission behavior with mocked Turnstile and database boundaries; rejected submissions assert no persistence calls are made.
 - [ ] **GDPR consent:** Render the consent checkbox when `gdprConsentEnabled` is true in the form renderer
+  - Current renderer context:
+    - Public form page `src/app/f/[slug]/page.tsx` passes `form.settings` into `FormPageClient`.
+    - Client wrapper `src/app/f/[slug]/client.tsx` passes Turnstile props into `FormRenderer`, but it does not appear to pass or render GDPR consent settings yet.
+    - Form submission route `src/app/api/submit/[slug]/route.ts` validates fields from `formFields`; consent is a form-level setting, so the renderer can enforce required local consent without adding a database field response unless the product decision changes.
+  - Implementation approach:
+    - Thread `gdprConsentEnabled` from the public form settings into `src/components/form-renderer/form-renderer.tsx`.
+    - Render a required consent checkbox near the submit controls when the setting is true, using existing form styling and avoiding nested card UI.
+    - Block submit client-side with a clear field-level/user-facing error if consent is required but unchecked.
+    - Include the consent state in the request body only if useful for future auditing; do not persist it as a field response unless the existing schema already supports a clear form-level consent record.
+  - Tests first where practical:
+    - Add focused component/helper tests if the current Vitest setup can cover the consent validation without adding a browser environment.
+    - If component testing is too costly, extract a small pure helper such as `validateGdprConsent(enabled, accepted)` and cover it directly, plus add a static assertion that the renderer wires the checkbox and helper.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required Clerk env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
 - [ ] **Redirect after submit:** Honor `redirectUrl` and `successMessage` settings post-submission
 
 ### Medium Priority

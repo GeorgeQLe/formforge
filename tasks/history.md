@@ -1,5 +1,25 @@
 # History
 
+## 2026-05-18 — Response limit and close date submission coverage
+
+- Added route-level submit endpoint coverage for response-limit and close-date settings.
+- Verified submissions below the response limit and before the close date are stored, while limit-reached and closed-form submissions return user-facing `400` responses without inserting responses.
+- Marked the response-limits task complete and expanded the next GDPR consent task into a fresh-session implementation plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was hardening response-limit and close-date enforcement for public form submissions.
+- **Changed files:** `src/app/api/submit/__tests__/response-settings.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The new route test file mocks Turnstile and database boundaries to cover accepted/rejected submission settings behavior; `tasks/todo.md` records completion and the next executable plan; `tasks/history.md` records the ship boundary.
+- **User-goal mapping:** The test coverage directly proves the existing submit route enforces `responseLimit` and `closeDate` before persistence on rejected submissions.
+- **Tests run:** `pnpm test src/app/api/submit/__tests__/response-settings.test.ts` passed: 1 file, 4 tests. `pnpm test` passed: 10 files, 36 tests. `pnpm lint` passed. `pnpm build` compiled successfully and ran TypeScript before failing during prerender on missing Clerk configuration.
+- **Skipped tests:** No browser submission flow was run because this step targets server route behavior and the route-level mocked database test covers the acceptance/rejection branches. Full production build completion is blocked by the environment missing Clerk publishable key.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands. `pnpm build` also emitted Next.js's middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked that rejected settings branches stop before field loading and persistence, and that accepted branches still reach both `formResponses` and `fieldResponses` inserts.
+- **Residual risk:** The database is mocked, so the tests validate route decision order and persistence intent rather than real Drizzle SQL execution.
+- **Rollback note:** Remove `src/app/api/submit/__tests__/response-settings.test.ts` and revert the two task-doc updates.
+- **Next command:** `$run`
+
 ## 2026-05-18 — Server-side Turnstile submission validation
 
 - Added a server-side Turnstile helper that extracts submitted tokens, reads the secret through `getEnv()`, posts verification requests to Cloudflare, and returns deterministic boolean results for tests.

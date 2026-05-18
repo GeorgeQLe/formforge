@@ -5,6 +5,7 @@ import { forms, formFields, formResponses, fieldResponses } from "@/server/db/sc
 import { buildFormValidator, type FieldDef } from "@/lib/field-types";
 import { evaluateConditionalLogic } from "@/lib/conditional-logic";
 import { sendNotificationEmail } from "@/server/email/send-notification";
+import { getTurnstileToken, verifyTurnstileToken } from "@/server/security/turnstile";
 
 // ---------------------------------------------------------------------------
 // In-memory rate limiter (10 req/min/IP)
@@ -20,29 +21,6 @@ function checkRateLimit(ip: string): boolean {
   }
   entry.count++;
   return entry.count <= 10;
-}
-
-// ---------------------------------------------------------------------------
-// Verify Cloudflare Turnstile token
-// ---------------------------------------------------------------------------
-async function verifyTurnstile(token: string): Promise<boolean> {
-  const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) {
-    console.warn("[Turnstile] TURNSTILE_SECRET_KEY not set — bot verification disabled");
-    return true;
-  }
-
-  const response = await fetch(
-    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ secret, response: token }),
-    }
-  );
-
-  const data = (await response.json()) as { success: boolean };
-  return data.success;
 }
 
 // ---------------------------------------------------------------------------
@@ -66,15 +44,23 @@ export async function POST(
     const body = await request.json();
 
     // 1. Verify Turnstile
-    const turnstileToken = body._turnstileToken as string | undefined;
-    if (turnstileToken) {
-      const valid = await verifyTurnstile(turnstileToken);
-      if (!valid) {
-        return NextResponse.json(
-          { error: "Bot verification failed" },
-          { status: 403 }
-        );
-      }
+    const turnstileToken = getTurnstileToken(body);
+    if (!turnstileToken) {
+      return NextResponse.json(
+        { error: "Bot verification is required" },
+        { status: 400 }
+      );
+    }
+
+    const validTurnstile = await verifyTurnstileToken({
+      token: turnstileToken,
+      remoteIp: ip === "unknown" ? undefined : ip,
+    });
+    if (!validTurnstile) {
+      return NextResponse.json(
+        { error: "Bot verification failed" },
+        { status: 400 }
+      );
     }
 
     // 2. Load form + fields

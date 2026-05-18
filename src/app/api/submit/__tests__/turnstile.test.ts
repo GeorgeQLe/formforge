@@ -1,24 +1,71 @@
-import { describe, it, expect } from "vitest";
-import { readFileSync } from "fs";
-import { resolve } from "path";
+import { describe, expect, it, vi } from "vitest";
+import {
+  getTurnstileToken,
+  verifyTurnstileToken,
+} from "@/server/security/turnstile";
 
-const routeSource = readFileSync(
-  resolve(__dirname, "../[slug]/route.ts"),
-  "utf-8"
-);
-
-describe("Turnstile skip-path logging (CR-010)", () => {
-  // Extract the !secret block for targeted assertions
-  const secretBlockMatch = routeSource.match(
-    /if\s*\(\s*!secret\s*\)\s*\{([^}]+)\}/
-  );
-  const secretBlock = secretBlockMatch?.[1] ?? "";
-
-  it("logs a console.warn when TURNSTILE_SECRET_KEY is not set", () => {
-    expect(secretBlock).toContain("console.warn");
+describe("Turnstile verification", () => {
+  it("treats missing or blank Turnstile tokens as absent", () => {
+    expect(getTurnstileToken({})).toBeNull();
+    expect(getTurnstileToken({ _turnstileToken: "" })).toBeNull();
+    expect(getTurnstileToken({ _turnstileToken: "   " })).toBeNull();
+    expect(getTurnstileToken({ _turnstileToken: 123 })).toBeNull();
   });
 
-  it("warn message describes the missing key", () => {
-    expect(secretBlock).toMatch(/TURNSTILE_SECRET_KEY/);
+  it("extracts a submitted Turnstile token", () => {
+    expect(getTurnstileToken({ _turnstileToken: " token-123 " })).toBe(
+      "token-123"
+    );
+  });
+
+  it("returns false when Cloudflare rejects the token", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ success: false }), { status: 200 })
+    );
+
+    await expect(
+      verifyTurnstileToken({
+        token: "bad-token",
+        secret: "test-secret",
+        fetchImpl,
+      })
+    ).resolves.toBe(false);
+  });
+
+  it("returns true when Cloudflare accepts the token", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ success: true }), { status: 200 })
+    );
+
+    await expect(
+      verifyTurnstileToken({
+        token: "good-token",
+        remoteIp: "203.0.113.10",
+        secret: "test-secret",
+        fetchImpl,
+      })
+    ).resolves.toBe(true);
+
+    const request = fetchImpl.mock.calls[0]?.[1] as RequestInit;
+    expect(request.method).toBe("POST");
+    expect(request.body).toBeInstanceOf(URLSearchParams);
+    expect((request.body as URLSearchParams).get("response")).toBe("good-token");
+    expect((request.body as URLSearchParams).get("remoteip")).toBe(
+      "203.0.113.10"
+    );
+  });
+
+  it("returns false when the verification request fails", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ success: true }), { status: 500 })
+    );
+
+    await expect(
+      verifyTurnstileToken({
+        token: "token",
+        secret: "test-secret",
+        fetchImpl,
+      })
+    ).resolves.toBe(false);
   });
 });

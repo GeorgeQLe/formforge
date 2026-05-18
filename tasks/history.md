@@ -1,5 +1,26 @@
 # History
 
+## 2026-05-18 — Server-side Turnstile submission validation
+
+- Added a server-side Turnstile helper that extracts submitted tokens, reads the secret through `getEnv()`, posts verification requests to Cloudflare, and returns deterministic boolean results for tests.
+- Updated the public submit route to reject missing or failed Turnstile verification with user-facing `400` responses before loading or storing form submissions.
+- Replaced static Turnstile route assertions with mocked-fetch unit coverage for missing tokens, failed verification, successful verification, remote IP forwarding, and Cloudflare request failures.
+- Marked the form submission validation task complete.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was wiring server-side Turnstile verification into the submit route.
+- **Changed files:** `src/server/security/turnstile.ts`, `src/app/api/submit/[slug]/route.ts`, `src/app/api/submit/__tests__/turnstile.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `turnstile.ts` centralizes token extraction and Cloudflare verification; the submit route enforces bot verification before accepting submissions; the Turnstile test file covers missing-token and mocked verification behavior; task docs record completion and the next executable item.
+- **User-goal mapping:** The source changes directly enforce the posted Turnstile token on public submissions and prevent missing or failed tokens from reaching submission persistence.
+- **Tests run:** `pnpm test src/app/api/submit/__tests__/turnstile.test.ts` passed: 1 file, 5 tests. `pnpm test` passed: 9 files, 32 tests. `pnpm lint` passed. `pnpm build` compiled successfully and type-checked before failing during prerender on missing Clerk configuration.
+- **Skipped tests:** No browser submission flow was run because this step is covered at the server helper boundary and the build environment lacks a Clerk publishable key. The build blocker was `@clerk/clerk-react: Missing publishableKey` while prerendering `/forms/new`.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands. `pnpm build` also emitted Next.js's middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked the previous bypass where absent `_turnstileToken` skipped verification, verified the route now exits before database work on missing or failed tokens, and kept Cloudflare calls injectable so tests cannot accidentally hit the network.
+- **Residual risk:** Route-level persistence behavior is not exercised with a mocked database in this change; coverage focuses on the new verification helper and the route gate relies on compile/lint validation.
+- **Rollback note:** Revert `src/server/security/turnstile.ts`, the submit route Turnstile gate/import changes, the updated Turnstile tests, and the task-doc entries.
+- **Next command:** `$run`
+
 ## 2026-05-18 — Error boundaries and tRPC error formatting
 
 - Added App Router error boundaries for the root app, dashboard routes, and public form route with retry and safe navigation actions.

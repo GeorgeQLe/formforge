@@ -35,7 +35,7 @@ describe("CR-006: Settings validation rejects arbitrary JSON", () => {
     expect(formRouterSrc).not.toContain(".passthrough()");
 
     // Look for .strict() on an object schema near settings
-    const strictPattern = /settings.*\.strict\(\)|\.strict\(\).*settings/s;
+    const strictPattern = /settings[\s\S]*\.strict\(\)|\.strict\(\)[\s\S]*settings/;
     expect(formRouterSrc).toMatch(strictPattern);
   });
 });

@@ -134,7 +134,7 @@ export const formRouter = router({
         title: z.string().min(1).max(200).optional(),
         description: z.string().max(2000).optional(),
         settings: z.object({
-          notificationEmails: z.string().optional(),
+          notificationEmails: z.array(z.string().email()).optional(),
           responseLimit: z.number().int().positive().optional(),
           closeDate: z.string().datetime().optional(),
           redirectUrl: z.string().url().optional(),

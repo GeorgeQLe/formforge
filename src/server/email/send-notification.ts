@@ -1,6 +1,16 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resendClient: Resend | undefined;
+
+function getResendClient(): Resend {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error("RESEND_API_KEY is required for email notifications");
+  }
+
+  resendClient ??= new Resend(apiKey);
+  return resendClient;
+}
 
 interface NotificationEmailParams {
   to: string[];
@@ -43,7 +53,7 @@ export async function sendNotificationEmail(params: NotificationEmailParams) {
     </div>
   `;
 
-  await resend.emails.send({
+  await getResendClient().emails.send({
     from: "FormForge <notifications@formforge.app>",
     to,
     subject: `New response: ${formTitle}`,

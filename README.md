@@ -38,8 +38,8 @@ FormForge is a drag-and-drop form builder with analytics, conditional logic, and
 ## Development
 
 ```bash
-npm install
+pnpm install
 cp .env.example .env.local
-npm run db:push
-npm run dev
+pnpm run db:push
+pnpm dev
 ```

@@ -6,8 +6,6 @@ import { db } from "@/server/db";
 import { forms, formFields } from "@/server/db/schema";
 import type { FieldType } from "@/lib/field-types";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
-
 // ---------------------------------------------------------------------------
 // AI response schema
 // ---------------------------------------------------------------------------
@@ -91,6 +89,7 @@ export async function generateFormFromAI(
   prompt: string,
   userId: string
 ): Promise<{ form: typeof forms.$inferSelect; fields: (typeof formFields.$inferSelect)[] }> {
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   const response = await openai.chat.completions.create({
     model: "gpt-4o",
     response_format: { type: "json_object" },

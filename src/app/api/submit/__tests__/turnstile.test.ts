@@ -10,7 +10,7 @@ const routeSource = readFileSync(
 describe("Turnstile skip-path logging (CR-010)", () => {
   // Extract the !secret block for targeted assertions
   const secretBlockMatch = routeSource.match(
-    /if\s*\(\s*!secret\s*\)\s*\{([^}]+)\}/s
+    /if\s*\(\s*!secret\s*\)\s*\{([^}]+)\}/
   );
   const secretBlock = secretBlockMatch?.[1] ?? "";
 

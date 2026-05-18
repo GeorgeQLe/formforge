@@ -67,6 +67,13 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required Clerk env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
   - Completed 2026-05-18: extracted `src/server/security/turnstile.ts`, required `_turnstileToken` before accepting public submissions, verified tokens server-side through Cloudflare with mocked-fetch unit coverage, and used the env helper for the Turnstile secret.
 - [ ] **Response limits:** Enforce `responseLimit` and `closeDate` settings when accepting submissions
+  - Current route context: `src/app/api/submit/[slug]/route.ts` already checks `form.settings?.responseLimit` against `formResponses` count and checks `form.settings?.closeDate` before validating and storing responses.
+  - Next execution should verify and harden that existing behavior instead of duplicating logic:
+    - Add focused coverage under `src/app/api/submit/__tests__/` for accepting a submission below the response limit, rejecting when `total >= responseLimit`, accepting before `closeDate`, and rejecting after `closeDate`.
+    - Mock Turnstile verification or pass through the helper boundary so response-limit and close-date assertions are not coupled to Cloudflare.
+    - Confirm the route returns user-facing `400` errors and does not insert into `formResponses` or `fieldResponses` on rejected submissions.
+    - If the route test harness is too expensive, extract narrow pure helpers for `isResponseLimitReached` and `isFormClosed` and cover those directly, then keep one route-level static/behavioral assertion that the helpers run before persistence.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required Clerk env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
 - [ ] **GDPR consent:** Render the consent checkbox when `gdprConsentEnabled` is true in the form renderer
 - [ ] **Redirect after submit:** Honor `redirectUrl` and `successMessage` settings post-submission
 

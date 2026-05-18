@@ -1,5 +1,25 @@
 # History
 
+## 2026-05-18 — CSV response export hardening
+
+- Extracted CSV response formatting into a deterministic helper used by the existing owner-scoped `response.exportCsv` tRPC mutation.
+- Preserved stable CSV headers, proper escaping for commas/quotes/newlines, one row per response, missing field value blanks, and truncation metadata for the existing 10,000-row export cap.
+- Changed empty exports to return a header-only CSV instead of an empty string, then marked the CSV export task complete and expanded the analytics dashboard task into the next executable plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was adding/hardening response CSV export.
+- **Changed files:** `src/server/responses/csv-export.ts`, `src/server/trpc/routers/response.ts`, `src/server/trpc/routers/__tests__/response-export.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `csv-export.ts` centralizes CSV headers, escaping, row shaping, and truncation metadata; `response.ts` keeps owner-scoped database access and delegates formatting; `response-export.test.ts` covers CSV behavior directly; task docs record completion and the next executable plan.
+- **User-goal mapping:** The source changes complete the advertised CSV export path with stable output and focused regression coverage for empty and populated exports.
+- **Tests run:** `pnpm test src/server/trpc/routers/__tests__/response-export.test.ts` passed: 1 file, 4 tests. `pnpm test` passed: 12 files, 46 tests. `pnpm lint` passed. `pnpm build` compiled successfully and ran TypeScript before failing during prerender on missing Clerk configuration.
+- **Skipped tests:** No browser download smoke test was run because this step targets the server export data contract and the existing UI already invokes `response.exportCsv`; production build completion is blocked by missing Clerk publishable key.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands. `pnpm build` also emitted Next.js's middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked that auth and form ownership remain in the protected tRPC procedure, empty exports no longer trigger an invalid field-response `IN ()` query, CSV values are escaped according to common CSV rules, and the row cap continues to report `truncated`.
+- **Residual risk:** The router export path is covered through the formatting helper and source review rather than a full mocked tRPC database integration test for CSV export.
+- **Rollback note:** Revert the CSV helper, the `response.exportCsv` delegation change, the response export test rewrite, and the two task-doc updates.
+- **Next command:** `$run`
+
 ## 2026-05-18 — Redirect and success-message submission coverage
 
 - Added route-level coverage proving successful public submissions return configured success messages and redirect URLs, with defaults when settings are absent.

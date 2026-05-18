@@ -104,7 +104,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
   - Completed 2026-05-18: added route-level regression coverage proving successful submissions return configured/default `successMessage` and `redirectUrl`, plus static client/renderer wiring coverage proving redirects are triggered only after successful submissions that include a redirect URL.
 
 ### Medium Priority
-- [ ] **CSV export:** Add a response export endpoint (the landing page advertises this feature)
+- [x] **CSV export:** Add a response export endpoint (the landing page advertises this feature)
   - Current context:
     - Response data is stored in `formResponses` and `fieldResponses`; response list/detail surfaces already exist under dashboard routes.
     - Existing router tests include response-router coverage, so prefer adding export behavior near the existing response access patterns instead of creating a disconnected API path unless the codebase already has route conventions for downloads.
@@ -118,7 +118,21 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add focused tests for CSV escaping, header generation, owner authorization, empty-response export, and at least one populated response row.
     - Reuse existing router test patterns and mocks rather than introducing a database dependency.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
+  - Completed 2026-05-18: hardened the existing owner-scoped `response.exportCsv` procedure by extracting deterministic CSV formatting, returning stable header rows for empty exports, preserving the 10,000-row cap/truncation signal, and covering escaping, headers, populated rows, empty exports, and truncation metadata with Vitest.
 - [ ] **Analytics dashboard:** Submission counts over time, completion rates, average completion time
+  - Current context:
+    - `src/server/trpc/routers/response.ts` already exposes `stats` with total, new, today, and average completion time for a single form.
+    - `src/app/(dashboard)/forms/[id]/responses/page.tsx` renders summary cards for the existing stats above the response table.
+    - `formResponses` stores `submittedAt`, `status`, and nullable `completionTime`, but there is no explicit started/submitted funnel model for true completion-rate calculation.
+  - Implementation approach:
+    - Add a narrow analytics procedure near the existing response router stats for a single owner-scoped form.
+    - Return submission counts grouped by day over a bounded default range, average completion time, and a clearly defined completion-rate placeholder derived only from available stored data unless a real started-view tracking model already exists.
+    - Render the analytics on the response dashboard without introducing durable tracking infrastructure or new database tables in this step.
+    - Prefer simple accessible table/list or lightweight CSS visualization over adding a chart dependency unless the codebase already has one.
+  - Tests first where practical:
+    - Add focused helper tests for day bucketing, average completion-time math, zero-response output, and completion-rate semantics.
+    - Add router/static coverage that the analytics procedure performs the same form ownership check pattern as list/stats/export.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
 - [ ] **Theme CRUD:** Users can currently assign themes but there's no UI to create/edit custom themes
 - [ ] **Form duplication:** Clone an existing form with all its fields
 - [ ] **AI regeneration:** Allow editing a generated form's prompt and re-running AI

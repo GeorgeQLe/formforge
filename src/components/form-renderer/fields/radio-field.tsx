@@ -1,16 +1,25 @@
 "use client";
 
 import type { FieldComponentProps } from "../form-renderer";
+import { getDescribedBy, getFieldAccessibilityIds } from "../accessibility";
 
 export function RadioField({ field, value, onChange, error, readonly }: FieldComponentProps) {
+  const { helpId, errorId } = getFieldAccessibilityIds(field.id);
+  const describedBy = getDescribedBy({
+    helpText: field.helpText,
+    helpId,
+    error,
+    errorId,
+  });
+
   return (
-    <fieldset>
+    <fieldset aria-describedby={describedBy} aria-invalid={!!error}>
       <legend className="block text-sm font-medium mb-1.5">
         {field.label}
         {field.required && <span className="text-red-500 ml-1">*</span>}
       </legend>
       {field.helpText && (
-        <p className="text-xs text-gray-500 mb-2">{field.helpText}</p>
+        <p id={helpId} className="text-xs text-gray-500 mb-2">{field.helpText}</p>
       )}
       <div className="space-y-2" role="radiogroup" aria-required={field.required}>
         {(field.options ?? []).map((option) => (
@@ -32,7 +41,7 @@ export function RadioField({ field, value, onChange, error, readonly }: FieldCom
         ))}
       </div>
       {error && (
-        <p id={`${field.id}-error`} className="text-xs text-red-500 mt-1">
+        <p id={errorId} className="text-xs text-red-500 mt-1">
           {error}
         </p>
       )}

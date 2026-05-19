@@ -1,5 +1,26 @@
 # History
 
+## 2026-05-19 — Form renderer accessibility audit
+
+- Added shared accessible description ID helpers for form field help/error wiring.
+- Connected help text and validation errors with `aria-describedby` across text, email, number, textarea, dropdown, date, file upload, radio, checkbox, and rating fields.
+- Improved grouped control semantics for choice/rating inputs, made file upload keyboard-accessible through the native file input, and announced submit success/error states with live regions.
+- Marked the Accessibility audit task complete and expanded the next i18n item into an executable prototype-first plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was auditing the public form renderer for WCAG 2.1 AA-oriented source-level accessibility gaps.
+- **Changed files:** `src/components/form-renderer/accessibility.ts`, `src/components/form-renderer/__tests__/accessibility.test.ts`, `src/components/form-renderer/form-renderer.tsx`, all field components under `src/components/form-renderer/fields/`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The helper centralizes stable help/error IDs and `aria-describedby` composition; the test file locks the accessibility contract; the renderer announces submit states and GDPR consent errors; field components expose labels, help text, invalid state, grouped semantics, and keyboard-accessible upload behavior; task docs record completion and next work.
+- **User-goal mapping:** Public form respondents now get stronger accessible names/descriptions, error associations, grouped control context, native keyboard file selection, and live submit feedback without a renderer redesign.
+- **Tests run:** `pnpm test src/components/form-renderer/__tests__/accessibility.test.ts` passed: 1 file, 4 tests. `pnpm test` passed: 24 files, 96 tests. `pnpm lint` passed after removing unsupported ARIA attributes. `pnpm build` failed before compilation on project-owned public env validation because `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_APP_URL`, and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` are unset.
+- **Skipped tests:** Full production build completion is blocked by missing required public build env vars. No browser/screen-reader audit was run because the task explicitly started with source-level WCAG fixes and focused static assertions before adding new browser accessibility tooling.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands.
+- **Adversarial review:** Checked lint output for unsupported ARIA usage and corrected it instead of accepting warnings. Reviewed the final diff for overreach and kept changes scoped to the public renderer/fields plus task docs, with no new dependencies or storage/auth changes.
+- **Residual risk:** Static/source tests cannot prove full WCAG 2.1 AA compliance or real assistive-technology behavior; a later browser accessibility pass with axe/manual keyboard and screen-reader checks is still needed before making a formal compliance claim.
+- **Rollback note:** Revert the accessibility helper/test, renderer live-region/GDPR ARIA changes, field component ARIA/file-upload changes, and task-doc entries.
+- **Next command:** `$run`
+
 ## 2026-05-19 — Form versioning
 
 - Added immutable published form snapshots through `formVersions`, including form metadata, settings, theme reference, and ordered field definitions.

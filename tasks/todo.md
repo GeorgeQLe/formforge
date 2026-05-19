@@ -273,7 +273,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add regression coverage for editing fields after publish without changing an already-rendered/submitted version snapshot.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by real external credentials, record the exact blocker.
   - Completed 2026-05-19: added immutable `formVersions` snapshots with ordered field JSON, stored `formVersionId` on responses, created a new snapshot on publish, rendered public forms from the latest published snapshot, submitted `_formVersionId`, validated/stored submissions against the submitted snapshot, and covered snapshot helper, publish, public wiring, and submit behavior with Vitest/static tests.
-- [ ] **Accessibility audit:** Ensure form renderer meets WCAG 2.1 AA
+- [x] **Accessibility audit:** Ensure form renderer meets WCAG 2.1 AA
   - Current context:
     - Public form rendering is centralized in `src/components/form-renderer/form-renderer.tsx` and individual field components under `src/components/form-renderer/fields/`.
     - The renderer now supports fill/preview/readonly modes, conditional field visibility, GDPR consent, Turnstile, themes, and versioned public field snapshots.
@@ -287,7 +287,25 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add focused static/source tests for label associations, error/help `aria-describedby`, grouped radio/checkbox semantics, GDPR consent accessibility, and live-region wiring.
     - Add helper tests only if logic is extracted for accessible description IDs or state mapping.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by invalid/missing Clerk publishable key, record the exact blocker.
+  - Completed 2026-05-19: added shared accessible description ID helpers, connected help/error text across all public field controls, improved grouped choice/rating semantics, made file upload keyboard-accessible through the native file input, announced submit success/error states with live regions, and covered the renderer accessibility contract with Vitest/static tests.
 - [ ] **i18n:** Multi-language support for form labels and validation messages
+  - Current context:
+    - Public form labels, help text, options, validation errors, submit states, GDPR consent copy, and system messages are currently rendered in one language.
+    - User-authored field labels/options are stored directly on form fields and immutable version snapshots, while validation messages come from `src/lib/field-types.ts` and renderer/API submit paths.
+    - No translation framework, locale routing, or durable per-form locale schema is configured yet.
+  - Prototype-first constraint:
+    - Do not introduce a full i18n platform, database translation tables, locale middleware, or paid translation service in this step.
+    - Keep the first step focused on a small local translation contract for system/validation messages and a fixture or form-setting-driven locale path that can be evaluated without changing production storage.
+  - Implementation approach:
+    - Inspect `src/lib/field-types.ts`, `src/components/form-renderer/form-renderer.tsx`, `src/components/form-renderer/gdpr-consent.ts`, and `src/app/api/submit/[slug]/route.ts` for user-facing system strings.
+    - Add a narrow i18n helper/catalog for renderer and validation system messages with at least English plus one additional locale.
+    - Thread locale through the public renderer using an existing non-durable source if available, or a local default/fixture path if not.
+    - Keep user-authored labels/options untouched unless a clear existing schema field already supports translated labels.
+    - Document deferred infrastructure: per-form locale selection, translated custom labels/options, locale-aware public URLs, email notification localization, dashboard authoring UI, and server/client locale negotiation.
+  - Tests first where practical:
+    - Add helper tests for locale fallback and translated validation/system messages.
+    - Add static/source tests proving renderer and submit validation use the catalog for system strings where touched.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by missing public env vars, record the exact blocker.
 - [ ] **Webhook integrations:** Let users forward submissions to Zapier, Slack, etc.
 - [ ] **Partial responses / save & resume:** Allow respondents to save progress on long forms
 

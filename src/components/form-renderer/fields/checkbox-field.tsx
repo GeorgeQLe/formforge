@@ -1,9 +1,17 @@
 "use client";
 
 import type { FieldComponentProps } from "../form-renderer";
+import { getDescribedBy, getFieldAccessibilityIds } from "../accessibility";
 
 export function CheckboxField({ field, value, onChange, error, readonly }: FieldComponentProps) {
   const selectedValues = value ? value.split(",").map((v) => v.trim()).filter(Boolean) : [];
+  const { helpId, errorId } = getFieldAccessibilityIds(field.id);
+  const describedBy = getDescribedBy({
+    helpText: field.helpText,
+    helpId,
+    error,
+    errorId,
+  });
 
   const handleToggle = (optionValue: string) => {
     if (readonly) return;
@@ -14,13 +22,13 @@ export function CheckboxField({ field, value, onChange, error, readonly }: Field
   };
 
   return (
-    <fieldset>
+    <fieldset aria-describedby={describedBy} aria-invalid={!!error}>
       <legend className="block text-sm font-medium mb-1.5">
         {field.label}
         {field.required && <span className="text-red-500 ml-1">*</span>}
       </legend>
       {field.helpText && (
-        <p className="text-xs text-gray-500 mb-2">{field.helpText}</p>
+        <p id={helpId} className="text-xs text-gray-500 mb-2">{field.helpText}</p>
       )}
       <div className="space-y-2" role="group">
         {(field.options ?? []).map((option) => (
@@ -34,6 +42,7 @@ export function CheckboxField({ field, value, onChange, error, readonly }: Field
               checked={selectedValues.includes(option.value)}
               onChange={() => handleToggle(option.value)}
               disabled={readonly}
+              aria-invalid={!!error}
               className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
             />
             <span className="text-sm">{option.label}</span>
@@ -41,7 +50,7 @@ export function CheckboxField({ field, value, onChange, error, readonly }: Field
         ))}
       </div>
       {error && (
-        <p id={`${field.id}-error`} className="text-xs text-red-500 mt-1">
+        <p id={errorId} className="text-xs text-red-500 mt-1">
           {error}
         </p>
       )}

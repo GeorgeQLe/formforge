@@ -2,12 +2,20 @@
 
 import { useState } from "react";
 import type { FieldComponentProps } from "../form-renderer";
+import { getDescribedBy, getFieldAccessibilityIds } from "../accessibility";
 
 export function RatingField({ field, value, onChange, error, readonly }: FieldComponentProps) {
   const maxRating = field.validation?.max ?? 5;
   const minRating = field.validation?.min ?? 1;
   const currentValue = value ? parseInt(value, 10) : 0;
   const [hoverValue, setHoverValue] = useState(0);
+  const { helpId, errorId } = getFieldAccessibilityIds(field.id);
+  const describedBy = getDescribedBy({
+    helpText: field.helpText,
+    helpId,
+    error,
+    errorId,
+  });
 
   const stars = Array.from(
     { length: maxRating - minRating + 1 },
@@ -15,18 +23,19 @@ export function RatingField({ field, value, onChange, error, readonly }: FieldCo
   );
 
   return (
-    <div>
-      <label className="block text-sm font-medium mb-1.5">
+    <fieldset aria-describedby={describedBy} aria-invalid={!!error}>
+      <legend className="block text-sm font-medium mb-1.5">
         {field.label}
         {field.required && <span className="text-red-500 ml-1">*</span>}
-      </label>
+      </legend>
       {field.helpText && (
-        <p className="text-xs text-gray-500 mb-2">{field.helpText}</p>
+        <p id={helpId} className="text-xs text-gray-500 mb-2">{field.helpText}</p>
       )}
       <div
         className="flex gap-1 star-rating"
         role="radiogroup"
         aria-label={`Rating from ${minRating} to ${maxRating}`}
+        aria-required={field.required}
       >
         {stars.map((star) => {
           const filled = star <= (hoverValue || currentValue);
@@ -40,6 +49,8 @@ export function RatingField({ field, value, onChange, error, readonly }: FieldCo
               onMouseEnter={() => !readonly && setHoverValue(star)}
               onMouseLeave={() => setHoverValue(0)}
               disabled={readonly}
+              role="radio"
+              aria-checked={currentValue === star}
               aria-label={`${star} star${star > 1 ? "s" : ""}`}
               className="p-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded disabled:cursor-not-allowed"
             >
@@ -68,10 +79,10 @@ export function RatingField({ field, value, onChange, error, readonly }: FieldCo
         )}
       </div>
       {error && (
-        <p id={`${field.id}-error`} className="text-xs text-red-500 mt-1">
+        <p id={errorId} className="text-xs text-red-500 mt-1">
           {error}
         </p>
       )}
-    </div>
+    </fieldset>
   );
 }

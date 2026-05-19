@@ -1,13 +1,22 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import type { FieldComponentProps } from "../form-renderer";
+import { getDescribedBy, getFieldAccessibilityIds } from "../accessibility";
 
 export function FileUploadField({ field, value, onChange, error, readonly }: FieldComponentProps) {
   const [uploading, setUploading] = useState(false);
   const [fileName, setFileName] = useState<string>("");
   const [uploadError, setUploadError] = useState<string>("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputId = `${field.id}-input`;
+  const { helpId, errorId } = getFieldAccessibilityIds(field.id);
+  const activeError = error || uploadError || undefined;
+  const describedBy = getDescribedBy({
+    helpText: field.helpText,
+    helpId,
+    error: activeError,
+    errorId,
+  });
 
   const handleUpload = async (file: File) => {
     setUploading(true);
@@ -54,16 +63,16 @@ export function FileUploadField({ field, value, onChange, error, readonly }: Fie
 
   return (
     <div>
-      <label className="block text-sm font-medium mb-1.5">
+      <label htmlFor={inputId} className="block text-sm font-medium mb-1.5">
         {field.label}
         {field.required && <span className="text-red-500 ml-1">*</span>}
       </label>
       {field.helpText && (
-        <p className="text-xs text-gray-500 mb-1.5">{field.helpText}</p>
+        <p id={helpId} className="text-xs text-gray-500 mb-1.5">{field.helpText}</p>
       )}
 
       {value ? (
-        <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+        <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-lg" role="status">
           <svg className="w-5 h-5 text-green-600 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -84,8 +93,8 @@ export function FileUploadField({ field, value, onChange, error, readonly }: Fie
           )}
         </div>
       ) : (
-        <div
-          onClick={() => !readonly && !uploading && inputRef.current?.click()}
+        <label
+          htmlFor={inputId}
           className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
             readonly
               ? "border-gray-200 bg-gray-50 cursor-not-allowed"
@@ -116,24 +125,27 @@ export function FileUploadField({ field, value, onChange, error, readonly }: Fie
               </p>
             </>
           )}
-        </div>
+        </label>
       )}
 
       <input
-        ref={inputRef}
+        id={inputId}
         type="file"
-        className="hidden"
+        className="sr-only"
         accept={field.validation?.fileTypes?.map((t) => `.${t}`).join(",") || undefined}
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) handleUpload(file);
         }}
         disabled={readonly || uploading}
+        aria-required={field.required}
+        aria-invalid={!!activeError}
+        aria-describedby={describedBy}
       />
 
-      {(error || uploadError) && (
-        <p id={`${field.id}-error`} className="text-xs text-red-500 mt-1">
-          {error || uploadError}
+      {activeError && (
+        <p id={errorId} className="text-xs text-red-500 mt-1">
+          {activeError}
         </p>
       )}
     </div>

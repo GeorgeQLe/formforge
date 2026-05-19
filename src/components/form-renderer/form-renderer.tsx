@@ -216,7 +216,7 @@ export function FormRenderer({
   if (submitResult?.success) {
     return (
       <ThemeProvider colors={themeColors}>
-        <div className="text-center py-12">
+        <div className="text-center py-12" role="status" aria-live="polite">
           <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
@@ -241,7 +241,11 @@ export function FormRenderer({
         </div>
 
         {submitResult && !submitResult.success && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+          <div
+            className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700"
+            role="alert"
+            aria-live="assertive"
+          >
             {submitResult.message}
           </div>
         )}
@@ -275,6 +279,8 @@ export function FormRenderer({
                         handleGdprConsentChange(event.target.checked)
                       }
                       className="mt-1 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      aria-required="true"
+                      aria-invalid={!!errors._gdprConsent}
                       aria-describedby={
                         errors._gdprConsent ? "gdpr-consent-error" : undefined
                       }

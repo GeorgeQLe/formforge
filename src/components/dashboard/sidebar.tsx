@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
-import { CreditCard, LayoutDashboard, Palette, Sparkles } from "lucide-react";
+import { CreditCard, FlaskConical, LayoutDashboard, Palette, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -16,6 +16,11 @@ const navItems = [
     label: "Themes",
     href: "/themes",
     icon: <Palette className="h-5 w-5" />,
+  },
+  {
+    label: "Experiments",
+    href: "/experiments/team-collaboration",
+    icon: <FlaskConical className="h-5 w-5" />,
   },
   {
     label: "Billing",

@@ -220,7 +220,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
   - Completed 2026-05-19: split build-time public env validation from lazy runtime secret validation, invoked the build check during Next config loading, added focused Vitest coverage, and verified missing build env now fails with a FormForge-owned message before Clerk prerendering.
 
 ### Lower Priority
-- [ ] **Team/collaboration features prototype:** Business plan advertises 10 team members but no calibrated team workflow exists yet
+- [x] **Team/collaboration features prototype:** Business plan advertises 10 team members but no calibrated team workflow exists yet
   - Current context:
     - The billing copy advertises Business-plan team seats, but the product currently has single-owner form management through Clerk user identity and owner-scoped database rows.
     - This step must not add durable organization/team tables, invitations, role assignments, billing seat enforcement, or multi-tenant authorization yet.
@@ -235,7 +235,22 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add focused helper tests for role labels/permission summaries or invite validation if any logic is extracted.
     - Add static/source coverage proving the experiment uses fixture/local data and does not import database schema, auth mutation procedures, or billing seat enforcement.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by missing real external credentials, record the exact blocker.
-- [ ] **API access:** Business plan includes API access -- design and expose a public REST or GraphQL API
+  - Completed 2026-05-19: added a reachable `/experiments/team-collaboration` dashboard prototype with fixture members/forms, local invite/role/removal interactions, deferred-infrastructure notes, sidebar navigation, and tests proving helper behavior plus local-only isolation from database/tRPC/Clerk/billing imports.
+- [ ] **API access design prototype:** Business plan includes API access, but the developer workflow and public contract are not calibrated yet
+  - Current context:
+    - The billing copy advertises API access for Business users, but there is no public API key model, external auth contract, rate-limit policy, versioning strategy, or developer documentation.
+    - This step must not add durable API-key storage, public production endpoints, billing enforcement, or external developer account infrastructure yet.
+    - Prototype-first constraint: define and test a clickable/readable developer experience before committing an API surface and persistence model.
+  - Implementation approach:
+    - Inspect existing form, response, and submission server routes/routers to identify the narrowest likely public API use cases.
+    - Add an isolated dashboard experiment route such as `/experiments/api-access` using fixture API keys, sample requests, scopes, and response previews.
+    - Include local-only interactions for key creation preview, scope selection, request examples, and error-state exploration.
+    - Keep all data fixture/local state and avoid importing database schema, tRPC mutation procedures, billing enforcement, or secret-generation code.
+    - Record deferred infrastructure explicitly: API key hashing/storage, token issuance and revocation, owner/business-plan authorization, public endpoint versioning, request signing or bearer auth, rate limits, audit logs, and developer documentation.
+  - Tests first where practical:
+    - Add focused helper tests for scope labels, sample request generation, or API key display masking.
+    - Add static/source coverage proving the experiment uses fixture/local data and does not import database schema, auth mutation procedures, billing enforcement, or route handlers.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by missing real external credentials, record the exact blocker.
 - [ ] **Form versioning:** Track published versions so field changes don't break in-progress submissions
 - [ ] **Accessibility audit:** Ensure form renderer meets WCAG 2.1 AA
 - [ ] **i18n:** Multi-language support for form labels and validation messages

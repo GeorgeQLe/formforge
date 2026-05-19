@@ -1,5 +1,26 @@
 # History
 
+## 2026-05-19 — Team collaboration prototype
+
+- Added a protected dashboard experiment at `/experiments/team-collaboration` for calibrating member invites, role changes, removals, and form-sharing expectations.
+- Kept the prototype fixture/local-state only and documented deferred team infrastructure in the UI.
+- Added an Experiments sidebar link plus helper/static tests proving local-only behavior and isolation from database, tRPC, Clerk, and billing imports.
+- Marked the team collaboration prototype complete and expanded the next API-access item into a prototype-first plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was a prototype-first team/collaboration workflow without durable infrastructure.
+- **Changed files:** `src/app/(dashboard)/experiments/team-collaboration/page.tsx`, `src/app/(dashboard)/experiments/team-collaboration/team-collaboration-prototype.ts`, `src/app/(dashboard)/experiments/team-collaboration/__tests__/team-collaboration-prototype.test.ts`, `src/components/dashboard/sidebar.tsx`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The experiment page provides the clickable local-state workflow; the helper file centralizes fixtures, role labels, invite validation, and access descriptions; the test file covers helper behavior and source isolation; the sidebar exposes the experiment; task docs record completion and the next executable plan.
+- **User-goal mapping:** The change lets the product team evaluate Business-plan collaboration concepts before adding team schema, invitations, multi-tenant auth, seat billing, audit logs, or email delivery.
+- **Tests run:** `pnpm test 'src/app/(dashboard)/experiments/team-collaboration/__tests__/team-collaboration-prototype.test.ts'` passed: 1 file, 4 tests. `pnpm test` passed: 21 files, 83 tests. `pnpm lint` passed. `pnpm build` with required public build env passed and prerendered `/experiments/team-collaboration`.
+- **Skipped tests:** A full authenticated browser interaction smoke was not completed because the dashboard route is protected by Clerk middleware and unauthenticated local HTTP access rewrites to Clerk's signed-out flow. Production build and source-level local-only checks cover compile/renderability and infrastructure isolation for this prototype.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}`. `pnpm build` emitted Next.js's existing middleware-to-proxy deprecation warning.
+- **Adversarial review:** Confirmed the experiment imports no database, tRPC, Clerk, or billing modules, performs no persistence, and uses only fixture data plus React local state for invite, role, and removal interactions.
+- **Residual risk:** Interaction behavior was validated by helper/static tests and production build rather than a signed-in browser session; visual polish and authenticated click behavior should be reviewed manually before using the prototype for stakeholder feedback.
+- **Rollback note:** Remove the team-collaboration experiment directory, revert the sidebar Experiments link, and revert the task-doc entries.
+- **Next command:** `$run`
+
 ## 2026-05-19 — Build-time environment validation
 
 - Split environment validation into build-time public variable checks and full lazy runtime secret validation.

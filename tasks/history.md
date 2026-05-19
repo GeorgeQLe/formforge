@@ -1,5 +1,26 @@
 # History
 
+## 2026-05-19 — Form versioning
+
+- Added immutable published form snapshots through `formVersions`, including form metadata, settings, theme reference, and ordered field definitions.
+- Updated publish to create an incrementing version snapshot while draft edits continue to use mutable `forms` and `formFields`.
+- Updated public rendering and submission to use the published version snapshot, submit `_formVersionId`, validate against the submitted snapshot, and store `formVersionId` on accepted responses.
+- Marked the Form versioning task complete and expanded the next Accessibility audit item into an executable plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was tracking published versions so field changes do not break in-progress submissions.
+- **Changed files:** `src/server/db/schema.ts`, `src/server/forms/versioning.ts`, `src/server/forms/__tests__/versioning.test.ts`, `src/server/trpc/routers/form.ts`, `src/server/trpc/routers/__tests__/integration.test.ts`, `src/app/f/[slug]/page.tsx`, `src/app/f/[slug]/client.tsx`, `src/app/f/[slug]/__tests__/public-submit-redirect.test.ts`, `src/components/form-renderer/form-renderer.tsx`, `src/app/api/submit/[slug]/route.ts`, `src/app/api/submit/__tests__/response-settings.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** Schema adds version storage and response references; versioning helper creates deterministic snapshots; form router creates snapshots on publish; public page/client/renderer render and submit version IDs; submit route validates and persists against the snapshot; tests cover helper, publish, render wiring, and submit behavior; task docs record completion and next work.
+- **User-goal mapping:** Published respondents now use immutable title/settings/theme/field snapshots, and accepted responses are tied to the exact version used for validation, so later field edits do not change an already-rendered submission contract.
+- **Tests run:** `pnpm test src/server/forms/__tests__/versioning.test.ts src/server/trpc/routers/__tests__/integration.test.ts src/app/api/submit/__tests__/response-settings.test.ts 'src/app/f/[slug]/__tests__/public-submit-redirect.test.ts'` passed: 4 files, 22 tests. `pnpm test` passed: 23 files, 92 tests. `pnpm lint` passed. `pnpm build` with dummy public build env compiled successfully and ran TypeScript, then failed during prerender on Clerk rejecting `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_dummy`.
+- **Skipped tests:** Full production build completion is blocked without a real Clerk publishable key for dashboard prerendering. No browser smoke test was run because this step changes server/schema/public-render contracts and is covered by Vitest plus TypeScript/lint; authenticated browser access remains Clerk-gated.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}`. `pnpm build` emitted Next.js's existing middleware-to-proxy deprecation warning.
+- **Adversarial review:** Corrected the first implementation so public title/settings/theme and submit success/close/notification behavior come from the immutable version snapshot, not the mutable form record. Confirmed the submit route scopes submitted version IDs to the live form before validation and stores the chosen version ID on the response.
+- **Residual risk:** The repo does not currently track Drizzle migration files, so the schema change still requires the existing target-environment `pnpm db:push` workflow before deployment. Version creation and form status update are not wrapped in an explicit transaction.
+- **Rollback note:** Revert the version schema/relation changes, versioning helper/tests, publish snapshot creation, public render/submit version wiring, response-settings test updates, and task-doc entries.
+- **Next command:** `$run`
+
 ## 2026-05-19 — API access design prototype
 
 - Added a protected dashboard experiment at `/experiments/api-access` for calibrating API key creation, scope selection, request examples, and response/error expectations.

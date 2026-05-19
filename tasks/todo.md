@@ -252,7 +252,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add static/source coverage proving the experiment uses fixture/local data and does not import database schema, auth mutation procedures, billing enforcement, or route handlers.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by missing real external credentials, record the exact blocker.
   - Completed 2026-05-19: added a reachable `/experiments/api-access` dashboard prototype with fixture API keys, local key draft/scope interactions, request/response previews, missing-scope error exploration, deferred-infrastructure notes, and tests proving helper behavior plus local-only isolation from database, tRPC, Clerk, billing, generated secrets, and real API routes.
-- [ ] **Form versioning:** Track published versions so field changes don't break in-progress submissions
+- [x] **Form versioning:** Track published versions so field changes don't break in-progress submissions
   - Current context:
     - `forms` stores the mutable draft/published form record, and `formFields` stores the current mutable field set.
     - Public form rendering and `src/app/api/submit/[slug]/route.ts` read the current form and fields by slug, so editing a published form can change validation/field IDs for a respondent who opened an older version.
@@ -272,7 +272,21 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add submit-route coverage proving submissions validate against the intended version and store the response version reference.
     - Add regression coverage for editing fields after publish without changing an already-rendered/submitted version snapshot.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by real external credentials, record the exact blocker.
+  - Completed 2026-05-19: added immutable `formVersions` snapshots with ordered field JSON, stored `formVersionId` on responses, created a new snapshot on publish, rendered public forms from the latest published snapshot, submitted `_formVersionId`, validated/stored submissions against the submitted snapshot, and covered snapshot helper, publish, public wiring, and submit behavior with Vitest/static tests.
 - [ ] **Accessibility audit:** Ensure form renderer meets WCAG 2.1 AA
+  - Current context:
+    - Public form rendering is centralized in `src/components/form-renderer/form-renderer.tsx` and individual field components under `src/components/form-renderer/fields/`.
+    - The renderer now supports fill/preview/readonly modes, conditional field visibility, GDPR consent, Turnstile, themes, and versioned public field snapshots.
+    - No browser accessibility tooling is configured yet, so start with source-level WCAG fixes and focused tests/static assertions before introducing a new dependency.
+  - Implementation approach:
+    - Audit labels, descriptions, error messages, required indicators, focus states, disabled states, and submit/result announcements across all field components and the main renderer.
+    - Ensure every input has a stable accessible name, help/error text is connected with `aria-describedby`, invalid fields set `aria-invalid`, grouped controls use `fieldset`/`legend` where appropriate, and submission errors/success use an appropriate live region.
+    - Keep visual changes consistent with existing Tailwind/UI primitives; do not redesign the renderer or add a new component library.
+    - Avoid adding browser-only accessibility infrastructure unless a source-level audit finds gaps that require runtime verification.
+  - Tests first where practical:
+    - Add focused static/source tests for label associations, error/help `aria-describedby`, grouped radio/checkbox semantics, GDPR consent accessibility, and live-region wiring.
+    - Add helper tests only if logic is extracted for accessible description IDs or state mapping.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by invalid/missing Clerk publishable key, record the exact blocker.
 - [ ] **i18n:** Multi-language support for form labels and validation messages
 - [ ] **Webhook integrations:** Let users forward submissions to Zapier, Slack, etc.
 - [ ] **Partial responses / save & resume:** Allow respondents to save progress on long forms

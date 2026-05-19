@@ -185,7 +185,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Cover the chosen replace/append semantics so regeneration cannot accidentally duplicate stale fields or mutate another user's form.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
   - Completed 2026-05-19: added an owner-scoped `form.regenerateWithAI` mutation, reusable AI form-definition helpers, explicit editor regeneration UI with replacement confirmation, and coverage for conditional logic mapping, router replacement behavior, and editor wiring.
-- [ ] **Rate limiting:** Add rate limits to public submission and AI generation endpoints
+- [x] **Rate limiting:** Add rate limits to public submission and AI generation endpoints
   - Current context:
     - `src/app/api/submit/[slug]/route.ts` accepts public form submissions and already validates Turnstile before persistence.
     - `src/app/api/ai/generate/route.ts` creates new AI-generated forms for authenticated users.
@@ -201,7 +201,22 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Cover allowed requests, blocked requests after the limit, window reset behavior, and separate keys not affecting each other.
     - Add route-level or static coverage proving both submit and AI generation routes call the limiter before expensive persistence or OpenAI work.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
+  - Completed 2026-05-19: extracted a deterministic in-memory rate-limit helper, applied form+IP limits to public submissions and user-scoped limits to AI generation before expensive work, and added helper plus route wiring coverage.
 - [ ] **Env validation at build time:** Currently lazy -- consider failing the build if vars are missing
+  - Current context:
+    - `src/env.ts` currently validates required environment variables lazily for server runtime access.
+    - `pnpm build` already fails during prerender when Clerk publishable configuration is missing, but not through a clear project-owned env validation contract.
+    - Existing validation runs consistently emit `.npmrc` warnings for missing `NODE_AUTH_TOKEN`; do not treat that package-manager warning as a FormForge runtime env requirement unless `src/env.ts` or deployment docs require it.
+  - Implementation approach:
+    - Inspect `src/env.ts`, Next config, and route/module import patterns to understand which variables are required at build time versus runtime-only server operations.
+    - Add a narrow build-time validation path that fails early with clear, grouped messages for required public/client build variables and any server variables truly needed during prerender/build.
+    - Preserve lazy server-only validation for secrets that are not needed to compile or prerender, so local test/lint workflows do not require production credentials.
+    - Prefer a reusable helper or script wired into the existing `build` command if importing env validation directly from Next config would force secrets too early.
+    - Update `.env.example` only if a required build-time variable is missing from the sample and the file exists or is created as part of this step.
+  - Tests first where practical:
+    - Add focused unit tests for the env validation helper using injected env maps.
+    - Add source/static coverage proving the build path invokes the helper before `next build` or during Next config loading.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build`. If build intentionally fails for missing env, verify the failure message is project-owned and clearer than the current Clerk prerender error.
 
 ### Lower Priority
 - [ ] **Team/collaboration features:** Business plan advertises 10 team members but no team model exists yet

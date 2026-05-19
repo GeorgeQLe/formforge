@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
 import { users } from "@/server/db/schema";
 import { generateFormFromAI } from "@/server/ai/generate-form";
+import { checkRateLimit } from "@/server/security/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,6 +21,18 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const rateLimitResult = checkRateLimit({
+      key: `ai-generate:${user.id}`,
+      limit: 5,
+      windowMs: 60_000,
+    });
+    if (!rateLimitResult.allowed) {
+      return NextResponse.json(
+        { error: "Too many AI generation requests. Please try again shortly." },
+        { status: 429 }
+      );
     }
 
     const body = await request.json();

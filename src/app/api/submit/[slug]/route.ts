@@ -6,22 +6,7 @@ import { buildFormValidator, type FieldDef } from "@/lib/field-types";
 import { evaluateConditionalLogic } from "@/lib/conditional-logic";
 import { sendNotificationEmail } from "@/server/email/send-notification";
 import { getTurnstileToken, verifyTurnstileToken } from "@/server/security/turnstile";
-
-// ---------------------------------------------------------------------------
-// In-memory rate limiter (10 req/min/IP)
-// ---------------------------------------------------------------------------
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimit.set(ip, { count: 1, resetAt: now + 60_000 });
-    return true;
-  }
-  entry.count++;
-  return entry.count <= 10;
-}
+import { checkRateLimit, getClientIp } from "@/server/security/rate-limit";
 
 // ---------------------------------------------------------------------------
 // POST /api/submit/[slug]
@@ -31,16 +16,22 @@ export async function POST(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const { slug } = await params;
+
     // 0. Rate limit
-    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-    if (!checkRateLimit(ip)) {
+    const ip = getClientIp(request);
+    const rateLimitResult = checkRateLimit({
+      key: `submit:${slug}:${ip}`,
+      limit: 10,
+      windowMs: 60_000,
+    });
+    if (!rateLimitResult.allowed) {
       return NextResponse.json(
-        { error: "Too many requests" },
+        { error: "Too many submissions. Please try again shortly." },
         { status: 429 }
       );
     }
 
-    const { slug } = await params;
     const body = await request.json();
 
     // 1. Verify Turnstile

@@ -1,5 +1,26 @@
 # History
 
+## 2026-05-19 — Public and AI rate limiting
+
+- Extracted public endpoint throttling into a reusable in-memory rate-limit helper with injectable store and clock support.
+- Applied a 10 requests/minute form+IP limit to public submissions before Turnstile, validation, and persistence work.
+- Applied a 5 requests/minute user-scoped limit to authenticated AI form generation before prompt parsing and OpenAI generation.
+- Replaced placeholder rate-limit assertions with helper coverage and route wiring checks, then marked the rate-limiting task complete and expanded the env-validation task into the next executable plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was adding rate limits to public submission and AI generation endpoints.
+- **Changed files:** `src/server/security/rate-limit.ts`, `src/server/security/__tests__/rate-limit.test.ts`, `src/app/api/submit/[slug]/route.ts`, `src/app/api/submit/__tests__/rate-limit.test.ts`, `src/app/api/ai/generate/route.ts`, `src/app/api/ai/generate/__tests__/rate-limit.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The rate-limit helper centralizes fixed-window throttling and client IP extraction; submit and AI routes enforce endpoint-specific limits; tests cover helper behavior and route ordering; task docs record completion and next work.
+- **User-goal mapping:** The source changes prevent rapid repeat public submissions by form/IP and rapid repeat AI generation by authenticated user before expensive or persistent work runs.
+- **Tests run:** `pnpm test src/server/security/__tests__/rate-limit.test.ts src/app/api/submit/__tests__/rate-limit.test.ts src/app/api/ai/generate/__tests__/rate-limit.test.ts` passed: 3 files, 9 tests. `pnpm test` passed: 19 files, 76 tests. `pnpm lint` passed. `pnpm build` compiled successfully and ran TypeScript before failing during prerender on missing Clerk configuration.
+- **Skipped tests:** Full production build completion is blocked by `@clerk/clerk-react: Missing publishableKey` while prerendering `/forms/new`. No browser smoke test was run because this step changes server route gates and is covered by helper and static route-order tests.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands. `pnpm build` emitted Next.js's middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked that public submit throttling is keyed by both slug and client IP so one form/IP pair cannot exhaust unrelated form limits, that AI throttling uses the authenticated app user id, and that 429 responses occur before request body parsing, Turnstile verification, persistence, or OpenAI work.
+- **Residual risk:** The limiter uses per-process memory, so limits reset on server restart and do not coordinate across multiple instances. A durable store such as Redis or Upstash is still needed before relying on these limits as production-grade abuse protection.
+- **Rollback note:** Revert the shared rate-limit helper, route imports/checks, new/updated rate-limit tests, and task-doc updates.
+- **Next command:** `$run`
+
 ## 2026-05-19 — AI form regeneration
 
 - Added reusable AI form-definition generation so existing forms can be regenerated from an edited prompt plus current form context.

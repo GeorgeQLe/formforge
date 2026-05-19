@@ -202,7 +202,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add route-level or static coverage proving both submit and AI generation routes call the limiter before expensive persistence or OpenAI work.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
   - Completed 2026-05-19: extracted a deterministic in-memory rate-limit helper, applied form+IP limits to public submissions and user-scoped limits to AI generation before expensive work, and added helper plus route wiring coverage.
-- [ ] **Env validation at build time:** Currently lazy -- consider failing the build if vars are missing
+- [x] **Env validation at build time:** Currently lazy -- consider failing the build if vars are missing
   - Current context:
     - `src/env.ts` currently validates required environment variables lazily for server runtime access.
     - `pnpm build` already fails during prerender when Clerk publishable configuration is missing, but not through a clear project-owned env validation contract.
@@ -217,9 +217,24 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add focused unit tests for the env validation helper using injected env maps.
     - Add source/static coverage proving the build path invokes the helper before `next build` or during Next config loading.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build`. If build intentionally fails for missing env, verify the failure message is project-owned and clearer than the current Clerk prerender error.
+  - Completed 2026-05-19: split build-time public env validation from lazy runtime secret validation, invoked the build check during Next config loading, added focused Vitest coverage, and verified missing build env now fails with a FormForge-owned message before Clerk prerendering.
 
 ### Lower Priority
-- [ ] **Team/collaboration features:** Business plan advertises 10 team members but no team model exists yet
+- [ ] **Team/collaboration features prototype:** Business plan advertises 10 team members but no calibrated team workflow exists yet
+  - Current context:
+    - The billing copy advertises Business-plan team seats, but the product currently has single-owner form management through Clerk user identity and owner-scoped database rows.
+    - This step must not add durable organization/team tables, invitations, role assignments, billing seat enforcement, or multi-tenant authorization yet.
+    - Prototype-first constraint: build a clickable dashboard experiment with fixture/local state to calibrate the collaboration journey before committing infrastructure.
+  - Implementation approach:
+    - Inspect dashboard navigation, form list/editor/settings layouts, and billing plan copy to choose the narrowest prototype surface.
+    - Add one or more `/experiments/team-collaboration` dashboard routes or an equivalent clearly isolated experiment route that uses fixture team members, invitations, and roles.
+    - Model the expected owner/admin/editor/viewer interactions with local state only: invite draft, pending invite row, role changes, member removal, and form-level sharing affordances if the existing UI suggests that flow.
+    - Keep the UI consistent with the existing dashboard primitives and avoid changing production authorization or persistence behavior.
+    - Record deferred infrastructure explicitly: team schema, invitation tokens, organization membership auth checks, billing seat limits, audit logs, and email invites.
+  - Tests first where practical:
+    - Add focused helper tests for role labels/permission summaries or invite validation if any logic is extracted.
+    - Add static/source coverage proving the experiment uses fixture/local data and does not import database schema, auth mutation procedures, or billing seat enforcement.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by missing real external credentials, record the exact blocker.
 - [ ] **API access:** Business plan includes API access -- design and expose a public REST or GraphQL API
 - [ ] **Form versioning:** Track published versions so field changes don't break in-progress submissions
 - [ ] **Accessibility audit:** Ensure form renderer meets WCAG 2.1 AA

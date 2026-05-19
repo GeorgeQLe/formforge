@@ -1,5 +1,25 @@
 # History
 
+## 2026-05-19 — Build-time environment validation
+
+- Split environment validation into build-time public variable checks and full lazy runtime secret validation.
+- Wired `next.config.ts` to fail early with a FormForge-owned build error when required public build variables are missing or invalid.
+- Added focused Vitest coverage for build/runtime env validation and expanded the next team-collaboration task into a prototype-first plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was adding build-time env validation while preserving lazy runtime secret validation.
+- **Changed files:** `src/env.ts`, `next.config.ts`, `src/__tests__/env.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `src/env.ts` defines separate build/runtime schemas and reusable validators; `next.config.ts` invokes the build validator before Next compilation; `env.test.ts` covers success and failure messages; task docs record completion and the next executable plan.
+- **User-goal mapping:** The build now fails through project-owned validation before Clerk prerender errors when required public build variables are missing, while server-only secrets remain lazily checked at runtime.
+- **Tests run:** `pnpm test` passed: 20 files, 79 tests. `pnpm lint` passed. `pnpm build` without env failed as expected with `FormForge build environment validation failed`. `pnpm build` with syntactically valid local public build env passed.
+- **Skipped tests:** No browser smoke test was run because this step changes build/env validation and has executable coverage through Vitest, lint, and production build.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}`. `pnpm build` emitted Next.js's existing middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked that build validation includes only public build variables, so database, Stripe secret, Resend, OpenAI, Turnstile secret, and AWS secrets are not forced during compile/prerender. Confirmed full runtime validation still rejects missing server secrets through `getEnv()`.
+- **Residual risk:** A syntactically valid local Clerk publishable key proves the build pipeline, but it does not authenticate against a real Clerk instance.
+- **Rollback note:** Revert the env validator split, the `next.config.ts` validation call, the env test file, and the task-doc entries.
+- **Next command:** `$run`
+
 ## 2026-05-19 — Public and AI rate limiting
 
 - Extracted public endpoint throttling into a reusable in-memory rate-limit helper with injectable store and clock support.

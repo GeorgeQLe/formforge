@@ -1,5 +1,9 @@
 import type { NextConfig } from "next";
 
+import { validateBuildEnv } from "./src/env";
+
+validateBuildEnv();
+
 const nextConfig: NextConfig = {
   // Required for tRPC + superjson
   serverExternalPackages: ["@neondatabase/serverless"],

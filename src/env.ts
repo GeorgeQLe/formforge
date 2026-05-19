@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const envSchema = z.object({
+const runtimeEnvSchema = z.object({
   // Database
   DATABASE_URL: z.string().min(1),
 
@@ -33,9 +33,47 @@ const envSchema = z.object({
   AWS_REGION: z.string().min(1),
 });
 
-export type Env = z.infer<typeof envSchema>;
+const buildEnvSchema = runtimeEnvSchema.pick({
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: true,
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: true,
+  NEXT_PUBLIC_APP_URL: true,
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: true,
+});
+
+export type Env = z.infer<typeof runtimeEnvSchema>;
+export type BuildEnv = z.infer<typeof buildEnvSchema>;
 
 let _env: Env | null = null;
+
+function formatEnvIssues(error: z.ZodError): string {
+  return error.issues
+    .map((issue) => `- ${issue.path.join(".")}: ${issue.message}`)
+    .join("\n");
+}
+
+export function validateBuildEnv(env: NodeJS.ProcessEnv = process.env): BuildEnv {
+  const parsed = buildEnvSchema.safeParse(env);
+
+  if (!parsed.success) {
+    throw new Error(
+      `FormForge build environment validation failed:\n${formatEnvIssues(parsed.error)}`
+    );
+  }
+
+  return parsed.data;
+}
+
+export function validateRuntimeEnv(env: NodeJS.ProcessEnv = process.env): Env {
+  const parsed = runtimeEnvSchema.safeParse(env);
+
+  if (!parsed.success) {
+    throw new Error(
+      `FormForge runtime environment validation failed:\n${formatEnvIssues(parsed.error)}`
+    );
+  }
+
+  return parsed.data;
+}
 
 /**
  * Lazily validated environment variables.
@@ -45,18 +83,6 @@ let _env: Env | null = null;
 export function getEnv(): Env {
   if (_env) return _env;
 
-  const parsed = envSchema.safeParse(process.env);
-
-  if (!parsed.success) {
-    console.error(
-      "Invalid environment variables:",
-      parsed.error.issues
-        .map((i) => `${i.path.join(".")}: ${i.message}`)
-        .join(", ")
-    );
-    throw new Error("Invalid environment variables");
-  }
-
-  _env = parsed.data;
+  _env = validateRuntimeEnv();
   return _env;
 }

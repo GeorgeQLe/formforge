@@ -1,5 +1,27 @@
 # History
 
+## 2026-05-19 — Theme CRUD
+
+- Added owner-scoped theme CRUD through a new `theme` tRPC router.
+- Added nullable `themes.userId` ownership in the schema so custom themes can be scoped to the authenticated user while system themes remain global/read-only.
+- Built a `/themes` dashboard page for creating, editing, duplicating, previewing, and deleting custom themes, plus sidebar navigation.
+- Added validation and source-level regression coverage for theme color tokens, router registration/scoping, delete-with-references behavior, and dashboard wiring.
+- Marked the Theme CRUD task complete and expanded Form duplication into the next executable plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was adding Theme CRUD.
+- **Changed files:** `src/server/db/schema.ts`, `src/server/themes/validation.ts`, `src/server/themes/__tests__/validation.test.ts`, `src/server/trpc/routers/theme.ts`, `src/server/trpc/routers/_app.ts`, `src/server/trpc/routers/__tests__/theme.test.ts`, `src/app/(dashboard)/themes/page.tsx`, `src/components/dashboard/sidebar.tsx`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `schema.ts` adds theme ownership; `validation.ts` centralizes theme token/name validation; the theme router exposes owner-scoped CRUD; `_app.ts` registers it; the themes dashboard provides the management UI; the sidebar exposes navigation; tests cover validation and wiring; task docs record completion and next work.
+- **User-goal mapping:** The source changes let authenticated users create, edit, list, duplicate, preview, and delete custom themes while preserving read-only system themes and blocking deletion while a user's form references the theme.
+- **Tests run:** `pnpm test` passed: 15 files, 62 tests. `pnpm lint` passed. `pnpm build` compiled successfully and ran TypeScript before failing during prerender on missing Clerk configuration.
+- **Skipped tests:** No browser screenshot was run because the existing test harness is Node/Vitest-focused and the production build cannot complete without Clerk configuration. Applying the database schema to a live environment was not run; use the existing `pnpm db:push` workflow with the target database when deploying this schema change.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands. `pnpm build` emitted Next.js's middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked that theme list visibility is limited to system themes plus the current user's themes, create stamps `ctx.user.id`, update/delete require both theme id and owner id, system themes cannot be edited or deleted, and delete checks current-user form references before removal.
+- **Residual risk:** The router behavior is covered by validation and source-level tests rather than a full mocked Drizzle caller integration. The schema change requires an explicit database push/migration in the deployed environment before the new router can persist custom theme ownership.
+- **Rollback note:** Revert the theme router/registration, schema ownership field, theme validation helper/tests, themes dashboard route, sidebar link, and task-doc updates.
+- **Next command:** `$run`
+
 ## 2026-05-19 — Response analytics dashboard
 
 - Added an owner-scoped `response.analytics` tRPC procedure for a bounded 14-day response analytics range.

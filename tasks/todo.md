@@ -134,7 +134,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add router/static coverage that the analytics procedure performs the same form ownership check pattern as list/stats/export.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
   - Completed 2026-05-19: added an owner-scoped `response.analytics` procedure, deterministic analytics helper coverage, and a dashboard analytics section with 14-day daily submission counts, range average completion time, and stored-submission completion-rate semantics.
-- [ ] **Theme CRUD:** Users can currently assign themes but there's no UI to create/edit custom themes
+- [x] **Theme CRUD:** Users can currently assign themes but there's no UI to create/edit custom themes
   - Current context:
     - Theme assignment already exists in form settings/editor flows, and themes are persisted in the existing database schema.
     - There is no dashboard UI for listing, creating, editing, or deleting custom themes.
@@ -148,7 +148,25 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add focused tests for theme input validation, owner scoping, create/update behavior, and delete-with-references semantics.
     - Add static or component-level coverage for the dashboard route if the current test harness can cover it without adding a browser environment.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
+  - Completed 2026-05-19: added owner-scoped theme CRUD procedures, a `/themes` dashboard management UI with token editing and preview, sidebar navigation, nullable custom-theme ownership in the schema, and tests covering validation, router scoping, delete-with-references semantics, and dashboard wiring.
 - [ ] **Form duplication:** Clone an existing form with all its fields
+  - Current context:
+    - Forms are managed through `src/server/trpc/routers/form.ts`.
+    - Fields are stored separately in `formFields` and ordered by `sortOrder`; existing field procedures already enforce form ownership.
+    - Form creation currently generates a new slug from a title and enforces plan limits.
+  - Implementation approach:
+    - Add an owner-scoped duplicate procedure near the existing form CRUD procedures.
+    - Load the source form by `id` and `ctx.user.id`; reject missing or unauthorized forms with `NOT_FOUND`.
+    - Reuse the same plan-limit check as `form.create` before cloning.
+    - Insert a new draft form with a distinct slug and a clear copied title such as `<source title> copy`.
+    - Copy description, settings, `themeId`, and all fields in their existing order, preserving field options, validation, conditional logic, labels, and required flags.
+    - Do not copy responses or published/closed status.
+    - Return the new form so the dashboard can navigate to the cloned editor.
+    - Add a dashboard action where users naturally expect it, likely the form list card/menu or form settings page, using existing UI primitives.
+  - Tests first where practical:
+    - Add focused router tests or static/source tests proving the duplicate procedure is owner-scoped, enforces plan limits, inserts a draft form, copies fields, and does not copy responses.
+    - Add static dashboard wiring coverage if the current Vitest setup cannot mount the client route.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
 - [ ] **AI regeneration:** Allow editing a generated form's prompt and re-running AI
 - [ ] **Rate limiting:** Add rate limits to public submission and AI generation endpoints
 - [ ] **Env validation at build time:** Currently lazy -- consider failing the build if vars are missing

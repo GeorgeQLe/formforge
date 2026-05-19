@@ -2,17 +2,23 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { FormRenderer } from "@/components/form-renderer/form-renderer";
-import type { forms, formFields, ThemeColors } from "@/server/db/schema";
+import type {
+  forms,
+  FormVersionFieldSnapshot,
+  ThemeColors,
+} from "@/server/db/schema";
 
 interface PublicFormClientProps {
   form: typeof forms.$inferSelect;
-  fields: (typeof formFields.$inferSelect)[];
+  versionId: string;
+  fields: FormVersionFieldSnapshot[];
   themeColors: ThemeColors | null;
   turnstileSiteKey: string;
 }
 
 export function PublicFormClient({
   form,
+  versionId,
   fields,
   themeColors,
   turnstileSiteKey,
@@ -58,6 +64,7 @@ export function PublicFormClient({
         mode="fill"
         form={form}
         fields={fields}
+        formVersionId={versionId}
         themeColors={themeColors}
         turnstileToken={turnstileToken}
         completionStartTime={startTime}

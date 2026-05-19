@@ -3,9 +3,10 @@ import { eq, and, desc, count, asc } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
 import { router, protectedProcedure, publicProcedure } from "../trpc";
-import { forms, formFields, formResponses } from "@/server/db/schema";
+import { forms, formFields, formResponses, formVersions } from "@/server/db/schema";
 import { getPlanLimits } from "@/server/billing/stripe";
 import { generateAIFormDefinition, resolveAIConditionalLogic } from "@/server/ai/generate-form";
+import { createFormVersionSnapshot } from "@/server/forms/versioning";
 import type { Context } from "../context";
 
 function slugify(text: string): string {
@@ -366,18 +367,30 @@ export const formRouter = router({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
-      // Make sure form has at least one field
-      const [{ fieldCount }] = await ctx.db
-        .select({ fieldCount: count() })
+      const fields = await ctx.db
+        .select()
         .from(formFields)
-        .where(eq(formFields.formId, input.id));
+        .where(eq(formFields.formId, input.id))
+        .orderBy(asc(formFields.sortOrder));
 
-      if (fieldCount === 0) {
+      if (fields.length === 0) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Cannot publish a form with no fields",
         });
       }
+
+      const [latestVersion] = await ctx.db
+        .select({ versionNumber: formVersions.versionNumber })
+        .from(formVersions)
+        .where(eq(formVersions.formId, input.id))
+        .orderBy(desc(formVersions.versionNumber))
+        .limit(1);
+
+      await ctx.db.insert(formVersions).values({
+        ...createFormVersionSnapshot(existing, fields),
+        versionNumber: (latestVersion?.versionNumber ?? 0) + 1,
+      });
 
       const [updated] = await ctx.db
         .update(forms)

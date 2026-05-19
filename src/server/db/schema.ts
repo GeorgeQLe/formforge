@@ -87,6 +87,7 @@ export const formsRelations = relations(forms, ({ one, many }) => ({
   user: one(users, { fields: [forms.userId], references: [users.id] }),
   theme: one(themes, { fields: [forms.themeId], references: [themes.id] }),
   fields: many(formFields),
+  versions: many(formVersions),
   responses: many(formResponses),
 }));
 
@@ -145,6 +146,44 @@ export const formFieldsRelations = relations(formFields, ({ one, many }) => ({
 }));
 
 // ---------------------------------------------------------------------------
+// Form Versions
+// ---------------------------------------------------------------------------
+export type FormVersionFieldSnapshot = {
+  id: string;
+  type: string;
+  label: string;
+  placeholder: string | null;
+  helpText: string | null;
+  required: boolean;
+  options: FieldOption[] | null;
+  validation: FieldValidation | null;
+  conditionalLogic: ConditionalLogic | null;
+  sortOrder: number;
+};
+
+export const formVersions = pgTable("form_versions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  formId: uuid("form_id")
+    .references(() => forms.id, { onDelete: "cascade" })
+    .notNull(),
+  versionNumber: integer("version_number").notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  settings: jsonb("settings").$type<FormSettings>().default({}).notNull(),
+  themeId: uuid("theme_id").references(() => themes.id, { onDelete: "set null" }),
+  fieldsSnapshot: jsonb("fields_snapshot")
+    .$type<FormVersionFieldSnapshot[]>()
+    .notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const formVersionsRelations = relations(formVersions, ({ one, many }) => ({
+  form: one(forms, { fields: [formVersions.formId], references: [forms.id] }),
+  theme: one(themes, { fields: [formVersions.themeId], references: [themes.id] }),
+  responses: many(formResponses),
+}));
+
+// ---------------------------------------------------------------------------
 // Form Responses
 // ---------------------------------------------------------------------------
 export const formResponses = pgTable("form_responses", {
@@ -152,6 +191,9 @@ export const formResponses = pgTable("form_responses", {
   formId: uuid("form_id")
     .references(() => forms.id, { onDelete: "cascade" })
     .notNull(),
+  formVersionId: uuid("form_version_id").references(() => formVersions.id, {
+    onDelete: "set null",
+  }),
   status: text("status").default("new").notNull(), // new | read | starred | archived
   completionTime: integer("completion_time"), // seconds
   submittedAt: timestamp("submitted_at", { withTimezone: true }).defaultNow().notNull(),
@@ -159,6 +201,10 @@ export const formResponses = pgTable("form_responses", {
 
 export const formResponsesRelations = relations(formResponses, ({ one, many }) => ({
   form: one(forms, { fields: [formResponses.formId], references: [forms.id] }),
+  formVersion: one(formVersions, {
+    fields: [formResponses.formVersionId],
+    references: [formVersions.id],
+  }),
   fieldResponses: many(fieldResponses),
 }));
 

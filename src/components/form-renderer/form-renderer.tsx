@@ -11,6 +11,7 @@ import type {
   formFields,
   FieldOption,
   FieldValidation,
+  FormVersionFieldSnapshot,
   ThemeColors,
 } from "@/server/db/schema";
 
@@ -65,12 +66,13 @@ const FIELD_COMPONENTS: Record<string, ComponentType<FieldComponentProps>> = {
 // Props
 // ---------------------------------------------------------------------------
 type FormData = typeof forms.$inferSelect;
-type FieldData = typeof formFields.$inferSelect;
+type FieldData = typeof formFields.$inferSelect | FormVersionFieldSnapshot;
 
 interface FormRendererProps {
   mode: "preview" | "fill" | "readonly";
   form: FormData;
   fields: FieldData[];
+  formVersionId?: string;
   themeColors?: ThemeColors | null;
   onSubmitSuccess?: (data: { message: string; redirectUrl?: string | null }) => void;
   turnstileToken?: string;
@@ -82,6 +84,7 @@ export function FormRenderer({
   mode,
   form,
   fields,
+  formVersionId,
   themeColors,
   onSubmitSuccess,
   turnstileToken,
@@ -184,6 +187,7 @@ export function FormRenderer({
         : null;
 
       const body: Record<string, unknown> = { ...values };
+      if (formVersionId) body._formVersionId = formVersionId;
       if (turnstileToken) body._turnstileToken = turnstileToken;
       if (completionTime) body._completionTime = String(completionTime);
 

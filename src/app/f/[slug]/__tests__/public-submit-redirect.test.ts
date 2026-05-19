@@ -3,6 +3,7 @@ import { resolve } from "path";
 import { describe, expect, it } from "vitest";
 
 const clientSource = readFileSync(resolve(__dirname, "../client.tsx"), "utf-8");
+const pageSource = readFileSync(resolve(__dirname, "../page.tsx"), "utf-8");
 const rendererSource = readFileSync(
   resolve(__dirname, "../../../../components/form-renderer/form-renderer.tsx"),
   "utf-8"
@@ -22,5 +23,14 @@ describe("public submit redirect wiring", () => {
     expect(rendererSource).toContain(
       "setSubmitResult({ success: true, message: data.message })"
     );
+  });
+
+  it("renders and submits the immutable published version id", () => {
+    expect(pageSource).toContain("from(formVersions)");
+    expect(pageSource).toContain("orderBy(desc(formVersions.versionNumber))");
+    expect(pageSource).toContain("fields={version.fieldsSnapshot}");
+    expect(pageSource).toContain("versionId={version.id}");
+    expect(clientSource).toContain("formVersionId={versionId}");
+    expect(rendererSource).toContain("body._formVersionId = formVersionId");
   });
 });

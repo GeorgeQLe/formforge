@@ -1,7 +1,7 @@
-import { eq, asc } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { db } from "@/server/db";
-import { forms, formFields, themes } from "@/server/db/schema";
+import { forms, formVersions, themes } from "@/server/db/schema";
 import { PublicFormClient } from "./client";
 
 export default async function PublicFormPage({
@@ -22,20 +22,33 @@ export default async function PublicFormPage({
     notFound();
   }
 
-  // Fetch fields
-  const fields = await db
+  // Fetch the latest immutable published version for rendering.
+  const [version] = await db
     .select()
-    .from(formFields)
-    .where(eq(formFields.formId, form.id))
-    .orderBy(asc(formFields.sortOrder));
+    .from(formVersions)
+    .where(eq(formVersions.formId, form.id))
+    .orderBy(desc(formVersions.versionNumber))
+    .limit(1);
+
+  if (!version) {
+    notFound();
+  }
+
+  const versionedForm = {
+    ...form,
+    title: version.title,
+    description: version.description,
+    settings: version.settings,
+    themeId: version.themeId,
+  };
 
   // Fetch theme
   let themeColors = null;
-  if (form.themeId) {
+  if (version.themeId) {
     const [theme] = await db
       .select()
       .from(themes)
-      .where(eq(themes.id, form.themeId))
+      .where(eq(themes.id, version.themeId))
       .limit(1);
     themeColors = theme?.colors ?? null;
   }
@@ -44,8 +57,9 @@ export default async function PublicFormPage({
     <div className="min-h-screen bg-gray-50 flex items-start justify-center py-8 px-4">
       <div className="w-full max-w-2xl">
         <PublicFormClient
-          form={form}
-          fields={fields}
+          form={versionedForm}
+          versionId={version.id}
+          fields={version.fieldsSnapshot}
           themeColors={themeColors}
           turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ""}
         />

@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { eq, asc, count } from "drizzle-orm";
+import { and, desc, eq, count } from "drizzle-orm";
 import { db } from "@/server/db";
-import { forms, formFields, formResponses, fieldResponses } from "@/server/db/schema";
+import {
+  forms,
+  formVersions,
+  formResponses,
+  fieldResponses,
+} from "@/server/db/schema";
 import { buildFormValidator, type FieldDef } from "@/lib/field-types";
 import { evaluateConditionalLogic } from "@/lib/conditional-logic";
 import { sendNotificationEmail } from "@/server/email/send-notification";
@@ -72,14 +77,37 @@ export async function POST(
       );
     }
 
+    // 3. Load the immutable version snapshot this respondent submitted.
+    const submittedVersionId =
+      typeof body._formVersionId === "string" ? body._formVersionId : null;
+    const [version] = submittedVersionId
+      ? await db
+          .select()
+          .from(formVersions)
+          .where(and(eq(formVersions.id, submittedVersionId), eq(formVersions.formId, form.id)))
+          .limit(1)
+      : await db
+          .select()
+          .from(formVersions)
+          .where(eq(formVersions.formId, form.id))
+          .orderBy(desc(formVersions.versionNumber))
+          .limit(1);
+
+    if (!version) {
+      return NextResponse.json(
+        { error: "Published form version not found" },
+        { status: 400 }
+      );
+    }
+
     // Check response limit
-    if (form.settings?.responseLimit) {
+    if (version.settings?.responseLimit) {
       const [{ total }] = await db
         .select({ total: count() })
         .from(formResponses)
         .where(eq(formResponses.formId, form.id));
 
-      if (total >= form.settings.responseLimit) {
+      if (total >= version.settings.responseLimit) {
         return NextResponse.json(
           { error: "This form has reached its response limit" },
           { status: 400 }
@@ -88,8 +116,8 @@ export async function POST(
     }
 
     // Check close date
-    if (form.settings?.closeDate) {
-      const closeDate = new Date(form.settings.closeDate);
+    if (version.settings?.closeDate) {
+      const closeDate = new Date(version.settings.closeDate);
       if (new Date() > closeDate) {
         return NextResponse.json(
           { error: "This form is closed" },
@@ -98,12 +126,7 @@ export async function POST(
       }
     }
 
-    // 3. Load fields
-    const fields = await db
-      .select()
-      .from(formFields)
-      .where(eq(formFields.formId, form.id))
-      .orderBy(asc(formFields.sortOrder));
+    const fields = version.fieldsSnapshot;
 
     // 4. Evaluate conditional logic to determine visible fields
     const formValues: Record<string, string | undefined> = {};
@@ -148,6 +171,7 @@ export async function POST(
       .insert(formResponses)
       .values({
         formId: form.id,
+        formVersionId: version.id,
         completionTime,
       })
       .returning();
@@ -165,15 +189,15 @@ export async function POST(
     }
 
     // 7. Fire notification email (fire-and-forget)
-    if (form.settings?.notificationEmails?.length) {
+    if (version.settings?.notificationEmails?.length) {
       const fieldValuePairs = visibleFields.map((f) => ({
         label: f.label,
         value: String(body[f.id] ?? ""),
       }));
 
       sendNotificationEmail({
-        to: form.settings.notificationEmails,
-        formTitle: form.title,
+        to: version.settings.notificationEmails,
+        formTitle: version.title,
         responseId: response!.id,
         fieldValues: fieldValuePairs,
         dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL}/forms/${form.id}/responses/${response!.id}`,
@@ -182,8 +206,8 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: form.settings?.successMessage ?? "Thank you for your response!",
-      redirectUrl: form.settings?.redirectUrl ?? null,
+      message: version.settings?.successMessage ?? "Thank you for your response!",
+      redirectUrl: version.settings?.redirectUrl ?? null,
     });
   } catch (error) {
     console.error("Form submission error:", error);

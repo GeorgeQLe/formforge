@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { appRouter } from "../_app";
-import { formFields, forms, users } from "@/server/db/schema";
+import { formFields, forms, formVersions, users } from "@/server/db/schema";
 import type { Context } from "../../context";
 
 const generatedAIForm = vi.hoisted(() => ({
@@ -81,10 +81,23 @@ type FieldRow = {
   createdAt: Date;
 };
 
+type VersionRow = {
+  id: string;
+  formId: string;
+  versionNumber: number;
+  title: string;
+  description: string | null;
+  settings: Record<string, unknown>;
+  themeId: string | null;
+  fieldsSnapshot: unknown[];
+  createdAt: Date;
+};
+
 type MockData = {
   users: UserRow[];
   forms: FormRow[];
   fields: FieldRow[];
+  versions?: VersionRow[];
 };
 
 function user(overrides: Partial<UserRow> = {}): UserRow {
@@ -133,6 +146,21 @@ function field(overrides: Partial<FieldRow> = {}): FieldRow {
     validation: null,
     conditionalLogic: null,
     sortOrder: 0,
+    createdAt: new Date("2026-05-18T12:00:00.000Z"),
+    ...overrides,
+  };
+}
+
+function version(overrides: Partial<VersionRow> = {}): VersionRow {
+  return {
+    id: "40000000-0000-4000-8000-000000000001",
+    formId: "10000000-0000-4000-8000-000000000001",
+    versionNumber: 1,
+    title: "Contact",
+    description: null,
+    settings: {},
+    themeId: null,
+    fieldsSnapshot: [],
     createdAt: new Date("2026-05-18T12:00:00.000Z"),
     ...overrides,
   };
@@ -203,6 +231,12 @@ class SelectQuery {
       return [...this.data.fields].sort((a, b) => a.sortOrder - b.sortOrder);
     }
 
+    if (this.table === formVersions) {
+      return [...(this.data.versions ?? [])].sort(
+        (a, b) => b.versionNumber - a.versionNumber
+      );
+    }
+
     return [];
   }
 }
@@ -242,6 +276,15 @@ class InsertQuery {
       return Promise.resolve([inserted]);
     }
 
+    if (this.table === formVersions) {
+      const inserted = version({
+        ...row,
+        id: `40000000-0000-4000-8000-${String((this.data.versions?.length ?? 0) + 99).padStart(12, "0")}`,
+      });
+      this.data.versions = [...(this.data.versions ?? []), inserted];
+      return Promise.resolve([inserted]);
+    }
+
     return Promise.resolve([]);
   }
 
@@ -257,6 +300,18 @@ class InsertQuery {
             id: `20000000-0000-4000-8000-${String(this.data.fields.length + index + 99).padStart(12, "0")}`,
           })
         );
+      });
+    }
+
+    if (this.table === formVersions) {
+      this.rows.forEach((row, index) => {
+        this.data.versions = [
+          ...(this.data.versions ?? []),
+          version({
+            ...row,
+            id: `40000000-0000-4000-8000-${String((this.data.versions?.length ?? 0) + index + 99).padStart(12, "0")}`,
+          }),
+        ];
       });
     }
 
@@ -535,6 +590,56 @@ describe("tRPC router integration", () => {
       ],
     });
     expect(result.fields.map((row) => row.label)).toEqual(["Company name", "Budget"]);
+  });
+
+  it("creates an immutable version snapshot when publishing a form", async () => {
+    const data: MockData = {
+      users: [user({ plan: "pro" })],
+      forms: [
+        form({
+          title: "Published intake",
+          description: "Snapshot me",
+          settings: { successMessage: "Done" },
+          themeId: "30000000-0000-4000-8000-000000000001",
+        }),
+      ],
+      fields: [
+        field({
+          id: "20000000-0000-4000-8000-000000000002",
+          label: "Second",
+          type: "email",
+          required: true,
+          sortOrder: 2,
+        }),
+        field({
+          id: "20000000-0000-4000-8000-000000000001",
+          label: "First",
+          type: "text",
+          placeholder: "Your name",
+          sortOrder: 1,
+        }),
+      ],
+      versions: [version({ versionNumber: 3 })],
+    };
+
+    const published = await caller(data).form.publish({
+      id: "10000000-0000-4000-8000-000000000001",
+    });
+
+    expect(published.status).toBe("published");
+    expect(data.versions).toHaveLength(2);
+    expect(data.versions![1]).toMatchObject({
+      formId: data.forms[0]!.id,
+      versionNumber: 4,
+      title: "Published intake",
+      description: "Snapshot me",
+      settings: { successMessage: "Done" },
+      themeId: "30000000-0000-4000-8000-000000000001",
+    });
+    expect(data.versions![1]!.fieldsSnapshot).toMatchObject([
+      { id: "20000000-0000-4000-8000-000000000001", label: "First", sortOrder: 1 },
+      { id: "20000000-0000-4000-8000-000000000002", label: "Second", sortOrder: 2 },
+    ]);
   });
 
   it("validates form update input through the router schema", async () => {

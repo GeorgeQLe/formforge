@@ -9,6 +9,10 @@ import {
   fieldResponses,
 } from "@/server/db/schema";
 import { buildResponsesCsv } from "@/server/responses/csv-export";
+import {
+  buildResponseAnalytics,
+  getAnalyticsRangeStart,
+} from "@/server/responses/analytics";
 
 export const responseRouter = router({
   // -----------------------------------------------------------------------
@@ -198,6 +202,50 @@ export const responseRouter = router({
         today: todayCount,
         avgCompletionTime: Math.round(avgTime),
       };
+    }),
+
+  // -----------------------------------------------------------------------
+  // Analytics
+  // -----------------------------------------------------------------------
+  analytics: protectedProcedure
+    .input(
+      z.object({
+        formId: z.string().uuid(),
+        rangeDays: z.number().int().min(7).max(90).default(14),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const [form] = await ctx.db
+        .select()
+        .from(forms)
+        .where(and(eq(forms.id, input.formId), eq(forms.userId, ctx.user.id)))
+        .limit(1);
+
+      if (!form) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      const now = new Date();
+      const rangeStart = getAnalyticsRangeStart(now, input.rangeDays);
+      const responses = await ctx.db
+        .select({
+          submittedAt: formResponses.submittedAt,
+          completionTime: formResponses.completionTime,
+        })
+        .from(formResponses)
+        .where(
+          and(
+            eq(formResponses.formId, input.formId),
+            gte(formResponses.submittedAt, rangeStart)
+          )
+        )
+        .orderBy(formResponses.submittedAt);
+
+      return buildResponseAnalytics({
+        responses,
+        rangeDays: input.rangeDays,
+        now,
+      });
     }),
 
   // -----------------------------------------------------------------------

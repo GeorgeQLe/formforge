@@ -45,3 +45,19 @@ describe("CR-002: Presigned URL auth", () => {
     expect(middlewareSrc).not.toContain("presigned");
   });
 });
+
+describe("response analytics router", () => {
+  it("keeps analytics owner-scoped before reading response data", () => {
+    const analyticsStart = responseRouterSrc.indexOf("analytics: protectedProcedure");
+    const exportStart = responseRouterSrc.indexOf("exportCsv: protectedProcedure");
+    const analyticsSrc = responseRouterSrc.slice(analyticsStart, exportStart);
+
+    expect(analyticsStart).toBeGreaterThan(-1);
+    expect(analyticsSrc).toContain("eq(forms.id, input.formId)");
+    expect(analyticsSrc).toContain("eq(forms.userId, ctx.user.id)");
+    expect(analyticsSrc).toContain('throw new TRPCError({ code: "NOT_FOUND" })');
+    expect(analyticsSrc.indexOf("from(forms)")).toBeLessThan(
+      analyticsSrc.indexOf("from(formResponses)")
+    );
+  });
+});

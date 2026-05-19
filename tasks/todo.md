@@ -119,7 +119,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Reuse existing router test patterns and mocks rather than introducing a database dependency.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
   - Completed 2026-05-18: hardened the existing owner-scoped `response.exportCsv` procedure by extracting deterministic CSV formatting, returning stable header rows for empty exports, preserving the 10,000-row cap/truncation signal, and covering escaping, headers, populated rows, empty exports, and truncation metadata with Vitest.
-- [ ] **Analytics dashboard:** Submission counts over time, completion rates, average completion time
+- [x] **Analytics dashboard:** Submission counts over time, completion rates, average completion time
   - Current context:
     - `src/server/trpc/routers/response.ts` already exposes `stats` with total, new, today, and average completion time for a single form.
     - `src/app/(dashboard)/forms/[id]/responses/page.tsx` renders summary cards for the existing stats above the response table.
@@ -133,7 +133,21 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add focused helper tests for day bucketing, average completion-time math, zero-response output, and completion-rate semantics.
     - Add router/static coverage that the analytics procedure performs the same form ownership check pattern as list/stats/export.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
+  - Completed 2026-05-19: added an owner-scoped `response.analytics` procedure, deterministic analytics helper coverage, and a dashboard analytics section with 14-day daily submission counts, range average completion time, and stored-submission completion-rate semantics.
 - [ ] **Theme CRUD:** Users can currently assign themes but there's no UI to create/edit custom themes
+  - Current context:
+    - Theme assignment already exists in form settings/editor flows, and themes are persisted in the existing database schema.
+    - There is no dashboard UI for listing, creating, editing, or deleting custom themes.
+    - This step should not add billing, collaboration, or marketplace infrastructure.
+  - Implementation approach:
+    - Inspect the theme schema and current form settings usage to identify the narrowest owner-scoped CRUD surface.
+    - Add protected tRPC procedures for listing, creating, updating, and deleting a user's custom themes, preserving any built-in/default theme behavior.
+    - Add a dashboard theme management UI using existing form and UI primitives. Keep the first version focused on practical token editing such as name, colors, typography, and button styling already supported by the renderer.
+    - Ensure delete behavior is safe when forms reference a theme: either block deletion with a clear error or detach affected forms explicitly if the existing schema supports that safely.
+  - Tests first where practical:
+    - Add focused tests for theme input validation, owner scoping, create/update behavior, and delete-with-references semantics.
+    - Add static or component-level coverage for the dashboard route if the current test harness can cover it without adding a browser environment.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
 - [ ] **Form duplication:** Clone an existing form with all its fields
 - [ ] **AI regeneration:** Allow editing a generated form's prompt and re-running AI
 - [ ] **Rate limiting:** Add rate limits to public submission and AI generation endpoints

@@ -1,5 +1,26 @@
 # History
 
+## 2026-05-19 — Response analytics dashboard
+
+- Added an owner-scoped `response.analytics` tRPC procedure for a bounded 14-day response analytics range.
+- Added deterministic analytics helper coverage for UTC day bucketing, average completion-time math, zero-response output, and stored-submission completion-rate semantics.
+- Rendered an analytics section on the response dashboard with daily submission bars, range submission count, completion rate, and average completion time.
+- Marked the analytics dashboard task complete and expanded the Theme CRUD task into the next executable plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was adding a response analytics dashboard.
+- **Changed files:** `src/server/responses/analytics.ts`, `src/server/responses/__tests__/analytics.test.ts`, `src/server/trpc/routers/response.ts`, `src/server/trpc/routers/__tests__/response.test.ts`, `src/app/(dashboard)/forms/[id]/responses/page.tsx`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `analytics.ts` centralizes analytics range and metric shaping; `analytics.test.ts` covers date buckets and metric semantics; `response.ts` exposes the owner-scoped analytics procedure; `response.test.ts` asserts the procedure keeps the ownership check before response reads; the response dashboard renders the new analytics; task docs record completion and next work.
+- **User-goal mapping:** The source changes add submission counts over time, average completion time, and a clearly defined completion-rate display without adding new tracking infrastructure.
+- **Tests run:** `pnpm test src/server/responses/__tests__/analytics.test.ts src/server/trpc/routers/__tests__/response.test.ts` passed: 2 files, 9 tests. `pnpm test` passed: 13 files, 52 tests. `pnpm lint` passed. `pnpm build` compiled successfully and ran TypeScript before failing during prerender on missing Clerk configuration.
+- **Skipped tests:** No browser visual smoke test was run because this step uses existing dashboard query/render patterns and the build environment lacks Clerk configuration for dashboard prerender. Full production build completion is blocked by `@clerk/clerk-react: Missing publishableKey` while prerendering `/forms/new`.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands. `pnpm build` also emitted Next.js's middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked that analytics keeps the same form owner verification pattern as existing response procedures, does not introduce durable view tracking or new tables, uses bounded response reads, and labels completion rate as stored submissions only because started-but-abandoned visits are not tracked.
+- **Residual risk:** The analytics UI was validated by lint/typecheck and helper tests rather than a browser screenshot; completion rate remains a placeholder based on stored submissions until a real started/submitted funnel model exists.
+- **Rollback note:** Revert the analytics helper and test, the `response.analytics` procedure, the dashboard analytics section, and the two task-doc updates.
+- **Next command:** `$run`
+
 ## 2026-05-18 — CSV response export hardening
 
 - Extracted CSV response formatting into a deterministic helper used by the existing owner-scoped `response.exportCsv` tRPC mutation.

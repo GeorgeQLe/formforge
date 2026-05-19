@@ -26,6 +26,10 @@ export default function ResponsesPage({
   const formQuery = trpc.form.getById.useQuery({ id: formId });
   const fieldsQuery = trpc.field.list.useQuery({ formId });
   const statsQuery = trpc.response.stats.useQuery({ formId });
+  const analyticsQuery = trpc.response.analytics.useQuery({
+    formId,
+    rangeDays: 14,
+  });
   const responsesQuery = trpc.response.list.useQuery({
     formId,
     page,
@@ -92,8 +96,13 @@ export default function ResponsesPage({
   };
 
   const stats = statsQuery.data;
+  const analytics = analyticsQuery.data;
   const fields = fieldsQuery.data ?? [];
   const displayFields = fields.slice(0, 4); // Show first 4 fields as columns
+  const maxDailySubmissions = Math.max(
+    1,
+    ...(analytics?.dailySubmissions.map((day) => day.count) ?? [])
+  );
 
   return (
     <div>
@@ -122,7 +131,7 @@ export default function ResponsesPage({
 
       {/* Stats */}
       {stats && (
-        <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
           <Card>
             <CardContent className="p-4">
               <p className="text-sm text-gray-500">Total</p>
@@ -149,6 +158,86 @@ export default function ResponsesPage({
               </p>
             </CardContent>
           </Card>
+        </div>
+      )}
+
+      {analytics && (
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold text-gray-900">Analytics</h2>
+            <span className="text-xs text-gray-500">
+              Last {analytics.rangeDays} days
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_280px] gap-4">
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-end gap-2 h-36">
+                  {analytics.dailySubmissions.map((day) => (
+                    <div
+                      key={day.date}
+                      className="flex min-w-0 flex-1 flex-col items-center gap-2"
+                      title={`${day.date}: ${day.count} submissions`}
+                    >
+                      <div className="flex h-24 w-full items-end">
+                        <div
+                          className="w-full rounded-t bg-indigo-500"
+                          style={{
+                            height: `${Math.max(
+                              day.count === 0
+                                ? 0
+                                : (day.count / maxDailySubmissions) * 100,
+                              day.count === 0 ? 0 : 8
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                      <div className="text-center text-[11px] leading-tight text-gray-500">
+                        <div>{day.date.slice(5)}</div>
+                        <div className="font-medium text-gray-700">{day.count}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-4">
+              <Card>
+                <CardContent className="p-4">
+                  <p className="text-sm text-gray-500">Range Submissions</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {analytics.totalSubmissions}
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <p className="text-sm text-gray-500">Completion Rate</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {analytics.completionRate}%
+                  </p>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Stored submissions only
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <p className="text-sm text-gray-500">Avg Completion</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {analytics.averageCompletionTime
+                      ? formatSeconds(analytics.averageCompletionTime)
+                      : "--"}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+          <p className="mt-2 text-xs text-gray-500">
+            {analytics.completionRateLabel}
+          </p>
         </div>
       )}
 

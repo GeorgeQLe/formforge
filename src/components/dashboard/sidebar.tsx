@@ -19,7 +19,7 @@ const navItems = [
   },
   {
     label: "Experiments",
-    href: "/experiments/team-collaboration",
+    href: "/experiments/api-access",
     icon: <FlaskConical className="h-5 w-5" />,
   },
   {

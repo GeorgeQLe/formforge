@@ -236,7 +236,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add static/source coverage proving the experiment uses fixture/local data and does not import database schema, auth mutation procedures, or billing seat enforcement.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by missing real external credentials, record the exact blocker.
   - Completed 2026-05-19: added a reachable `/experiments/team-collaboration` dashboard prototype with fixture members/forms, local invite/role/removal interactions, deferred-infrastructure notes, sidebar navigation, and tests proving helper behavior plus local-only isolation from database/tRPC/Clerk/billing imports.
-- [ ] **API access design prototype:** Business plan includes API access, but the developer workflow and public contract are not calibrated yet
+- [x] **API access design prototype:** Business plan includes API access, but the developer workflow and public contract are not calibrated yet
   - Current context:
     - The billing copy advertises API access for Business users, but there is no public API key model, external auth contract, rate-limit policy, versioning strategy, or developer documentation.
     - This step must not add durable API-key storage, public production endpoints, billing enforcement, or external developer account infrastructure yet.
@@ -251,7 +251,27 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add focused helper tests for scope labels, sample request generation, or API key display masking.
     - Add static/source coverage proving the experiment uses fixture/local data and does not import database schema, auth mutation procedures, billing enforcement, or route handlers.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by missing real external credentials, record the exact blocker.
+  - Completed 2026-05-19: added a reachable `/experiments/api-access` dashboard prototype with fixture API keys, local key draft/scope interactions, request/response previews, missing-scope error exploration, deferred-infrastructure notes, and tests proving helper behavior plus local-only isolation from database, tRPC, Clerk, billing, generated secrets, and real API routes.
 - [ ] **Form versioning:** Track published versions so field changes don't break in-progress submissions
+  - Current context:
+    - `forms` stores the mutable draft/published form record, and `formFields` stores the current mutable field set.
+    - Public form rendering and `src/app/api/submit/[slug]/route.ts` read the current form and fields by slug, so editing a published form can change validation/field IDs for a respondent who opened an older version.
+    - Responses currently snapshot field labels in `fieldResponses.fieldLabelSnapshot`, but there is no form-version table, published field snapshot, response version reference, or version-aware public URL.
+    - This step introduces durable schema and route behavior, so keep the scope narrow and avoid collaboration, billing, or API-access infrastructure.
+  - Implementation approach:
+    - Inspect `src/app/f/[slug]/page.tsx`, `src/app/f/[slug]/client.tsx`, `src/app/api/submit/[slug]/route.ts`, `src/server/trpc/routers/form.ts`, and field mutation/publish flows to identify the smallest version boundary.
+    - Add a `formVersions` table or equivalent version snapshot model that belongs to a form, records an incrementing version number, title/description/settings/theme snapshot, and ordered field definitions including validation and conditional logic.
+    - Add a nullable `formVersionId` reference on `formResponses` so each submission records the version it was validated against.
+    - On publish, create a new immutable version snapshot from the current form and fields; keep draft editing against the mutable `forms`/`formFields` records.
+    - Update public form loading to render the latest published version snapshot instead of mutable fields. If a version token/id is needed for in-progress submissions, include it in the rendered client payload and submitted request body.
+    - Update submission handling to validate against the submitted/latest published version snapshot and store `formVersionId`; reject stale or missing version references with a clear `400` only if the chosen contract requires exact-version submission.
+    - Preserve existing response list/detail/export behavior by continuing to use field label snapshots, and only add version display where it is cheap and useful.
+  - Tests first where practical:
+    - Add helper coverage for converting mutable form/fields into an immutable version snapshot, preserving field order, validation, options, and conditional logic.
+    - Add router/static coverage proving publish creates a version snapshot and does not mutate older snapshots.
+    - Add submit-route coverage proving submissions validate against the intended version and store the response version reference.
+    - Add regression coverage for editing fields after publish without changing an already-rendered/submitted version snapshot.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by real external credentials, record the exact blocker.
 - [ ] **Accessibility audit:** Ensure form renderer meets WCAG 2.1 AA
 - [ ] **i18n:** Multi-language support for form labels and validation messages
 - [ ] **Webhook integrations:** Let users forward submissions to Zapier, Slack, etc.

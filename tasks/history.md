@@ -1,5 +1,26 @@
 # History
 
+## 2026-05-19 — API access design prototype
+
+- Added a protected dashboard experiment at `/experiments/api-access` for calibrating API key creation, scope selection, request examples, and response/error expectations.
+- Kept the prototype fixture/local-state only and documented deferred API infrastructure in the UI.
+- Updated the Experiments sidebar link plus helper/static tests proving local-only behavior and isolation from database, tRPC, Clerk, billing, generated secrets, and real API routes.
+- Marked the API access prototype complete and expanded the next form-versioning item into a durable-schema implementation plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was a prototype-first API access workflow without durable API key or public endpoint infrastructure.
+- **Changed files:** `src/app/(dashboard)/experiments/api-access/page.tsx`, `src/app/(dashboard)/experiments/api-access/api-access-prototype.ts`, `src/app/(dashboard)/experiments/api-access/__tests__/api-access-prototype.test.ts`, `src/components/dashboard/sidebar.tsx`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The experiment page provides the clickable local-state developer workflow; the helper file centralizes fixtures, scope labels, key masking, request samples, and response previews; the test file covers helper behavior and source isolation; the sidebar exposes the API experiment; task docs record completion and the next executable plan.
+- **User-goal mapping:** The change lets the product team evaluate Business-plan API access concepts before adding key hashing/storage, token issuance, billing authorization, public endpoint versioning, durable rate limits, audit logs, webhook signatures, or developer docs.
+- **Tests run:** `pnpm test 'src/app/(dashboard)/experiments/api-access/__tests__/api-access-prototype.test.ts'` passed: 1 file, 5 tests. `pnpm test` passed: 22 files, 88 tests. `pnpm lint` passed. `pnpm build` with syntactically valid dummy public build env passed and prerendered `/experiments/api-access`.
+- **Skipped tests:** A full authenticated browser interaction smoke was not completed because the dashboard route is protected by Clerk middleware and unauthenticated local HTTP access rewrites to Clerk's signed-out flow. A local dev HTTP check reached the protected route and confirmed the middleware gate rather than a source compile/runtime error.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}`. `pnpm build` emitted Next.js's existing middleware-to-proxy deprecation warning. The first sandboxed build failed only because network access to Google Fonts was blocked; the network-approved build passed.
+- **Adversarial review:** Confirmed the experiment imports no database, tRPC, Clerk, or billing modules, calls no `/api/` route, generates no real secrets, and uses only fixture data plus React local state for key drafts, scope changes, and response/error previews.
+- **Residual risk:** Interaction behavior was validated by helper/static tests, production build, and unauthenticated route reachability rather than a signed-in browser session; visual polish and authenticated click behavior should be reviewed manually before stakeholder feedback.
+- **Rollback note:** Remove the API-access experiment directory, revert the sidebar Experiments link, and revert the task-doc entries.
+- **Next command:** `$run`
+
 ## 2026-05-19 — Team collaboration prototype
 
 - Added a protected dashboard experiment at `/experiments/team-collaboration` for calibrating member invites, role changes, removals, and form-sharing expectations.

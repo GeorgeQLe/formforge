@@ -26,6 +26,7 @@ export const users = pgTable("users", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   forms: many(forms),
+  themes: many(themes),
 }));
 
 // ---------------------------------------------------------------------------
@@ -43,13 +44,15 @@ export type ThemeColors = {
 
 export const themes = pgTable("themes", {
   id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   isSystem: boolean("is_system").default(false).notNull(),
   colors: jsonb("colors").$type<ThemeColors>().notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
-export const themesRelations = relations(themes, ({ many }) => ({
+export const themesRelations = relations(themes, ({ one, many }) => ({
+  user: one(users, { fields: [themes.userId], references: [users.id] }),
   forms: many(forms),
 }));
 

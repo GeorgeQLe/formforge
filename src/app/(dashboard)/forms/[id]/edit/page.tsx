@@ -2,6 +2,7 @@
 
 import { use, useState } from "react";
 import Link from "next/link";
+import { RefreshCw, Sparkles } from "lucide-react";
 import { trpc } from "@/lib/trpc/client";
 import { EditorProvider, useEditor } from "@/components/form-editor/editor-provider";
 import { FieldPalette } from "@/components/form-editor/field-palette";
@@ -11,15 +12,28 @@ import { FormRenderer } from "@/components/form-renderer/form-renderer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/toast";
 
 function EditorTopBar() {
   const { state, dispatch } = useEditor();
   const { toast } = useToast();
   const [isPreview, setIsPreview] = useState(false);
+  const [regenerateOpen, setRegenerateOpen] = useState(false);
+  const [regeneratePrompt, setRegeneratePrompt] = useState("");
+  const [replaceConfirmed, setReplaceConfirmed] = useState(false);
 
+  const utils = trpc.useUtils();
   const updateFormMutation = trpc.form.update.useMutation();
   const publishMutation = trpc.form.publish.useMutation();
+  const regenerateMutation = trpc.form.regenerateWithAI.useMutation();
 
   if (!state.form) return null;
 
@@ -48,6 +62,38 @@ function EditorTopBar() {
       toast({
         title: "Publish failed",
         description: error instanceof Error ? error.message : "Could not publish form",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleRegenerate = async () => {
+    if (!state.form || !regeneratePrompt.trim() || !replaceConfirmed) return;
+
+    try {
+      const result = await regenerateMutation.mutateAsync({
+        id: state.form.id,
+        prompt: regeneratePrompt,
+      });
+
+      dispatch({ type: "SET_FORM", form: result.form, fields: result.fields });
+      await Promise.all([
+        utils.form.getById.invalidate({ id: state.form.id }),
+        utils.field.list.invalidate({ formId: state.form.id }),
+      ]);
+
+      setRegenerateOpen(false);
+      setRegeneratePrompt("");
+      setReplaceConfirmed(false);
+      toast({
+        title: "Form regenerated",
+        description: "The editor has been updated with the new AI-generated fields.",
+        variant: "success",
+      });
+    } catch (error) {
+      toast({
+        title: "Regeneration failed",
+        description: error instanceof Error ? error.message : "Could not regenerate this form",
         variant: "destructive",
       });
     }
@@ -126,6 +172,10 @@ function EditorTopBar() {
             </svg>
             Preview
           </Button>
+          <Button variant="outline" size="sm" onClick={() => setRegenerateOpen(true)}>
+            <Sparkles className="w-4 h-4 mr-1" />
+            Regenerate
+          </Button>
           <Link href={`/forms/${state.form.id}/responses`}>
             <Button variant="outline" size="sm">
               Responses
@@ -151,6 +201,66 @@ function EditorTopBar() {
         <EditorCanvas />
         <FieldProperties />
       </div>
+      <Dialog open={regenerateOpen} onOpenChange={setRegenerateOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Regenerate with AI</DialogTitle>
+            <DialogDescription>
+              Enter a revised prompt. This replaces the current field set after generation.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-5 space-y-4">
+            <Textarea
+              value={regeneratePrompt}
+              onChange={(event) => setRegeneratePrompt(event.target.value)}
+              className="min-h-[140px]"
+              placeholder="Example: Make this a shorter lead qualification form for B2B SaaS buyers, with budget and timeline questions."
+            />
+            <label className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+              <input
+                type="checkbox"
+                checked={replaceConfirmed}
+                onChange={(event) => setReplaceConfirmed(event.target.checked)}
+                className="mt-1 h-4 w-4 rounded border-amber-300"
+              />
+              <span>
+                Replace the current fields with the regenerated version. Existing response
+                snapshots remain intact, but old field IDs will no longer be used for new
+                submissions.
+              </span>
+            </label>
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setRegenerateOpen(false);
+                  setReplaceConfirmed(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleRegenerate}
+                disabled={
+                  regenerateMutation.isPending || !regeneratePrompt.trim() || !replaceConfirmed
+                }
+              >
+                {regenerateMutation.isPending ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Regenerating
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Regenerate form
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

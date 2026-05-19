@@ -168,7 +168,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add static dashboard wiring coverage if the current Vitest setup cannot mount the client route.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
   - Completed 2026-05-19: added `form.duplicate`, reused plan-limit enforcement, cloned draft form metadata and ordered fields without responses, added a dashboard duplicate action that routes to the copied editor, and covered clone/limit behavior with Vitest.
-- [ ] **AI regeneration:** Allow editing a generated form's prompt and re-running AI
+- [x] **AI regeneration:** Allow editing a generated form's prompt and re-running AI
   - Current context:
     - Form generation is implemented in `src/app/api/ai/generate/route.ts` and `src/server/ai/generate-form.ts`.
     - New-form creation lives in `src/app/(dashboard)/forms/new/page.tsx`; editing existing forms lives in `src/app/(dashboard)/forms/[id]/edit/page.tsx` using `FormEditor`.
@@ -184,7 +184,23 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add static/editor wiring coverage if the current Vitest setup cannot mount the editor UI without a browser environment.
     - Cover the chosen replace/append semantics so regeneration cannot accidentally duplicate stale fields or mutate another user's form.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
+  - Completed 2026-05-19: added an owner-scoped `form.regenerateWithAI` mutation, reusable AI form-definition helpers, explicit editor regeneration UI with replacement confirmation, and coverage for conditional logic mapping, router replacement behavior, and editor wiring.
 - [ ] **Rate limiting:** Add rate limits to public submission and AI generation endpoints
+  - Current context:
+    - `src/app/api/submit/[slug]/route.ts` accepts public form submissions and already validates Turnstile before persistence.
+    - `src/app/api/ai/generate/route.ts` creates new AI-generated forms for authenticated users.
+    - A placeholder test file exists at `src/app/api/submit/__tests__/rate-limit.test.ts`; inspect it before adding duplicate coverage.
+    - The project does not currently show durable infrastructure for Redis, Upstash, or edge KV, so default to an in-memory/local helper unless explicit infrastructure is authorized.
+  - Implementation approach:
+    - Add a small server-side rate-limit helper with deterministic time-window behavior and injectable clock/store for tests.
+    - Apply it to public submissions using a stable key such as IP plus form slug, after cheap request parsing but before database persistence.
+    - Apply it to AI generation using the authenticated app user or Clerk user id so one account cannot spam form generation.
+    - Return user-facing `429` JSON errors with a short retry message; avoid leaking internal keys or limits.
+    - Keep the implementation swappable so a future durable store can replace the local store without changing route call sites.
+  - Tests first where practical:
+    - Cover allowed requests, blocked requests after the limit, window reset behavior, and separate keys not affecting each other.
+    - Add route-level or static coverage proving both submit and AI generation routes call the limiter before expensive persistence or OpenAI work.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
 - [ ] **Env validation at build time:** Currently lazy -- consider failing the build if vars are missing
 
 ### Lower Priority

@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { forms, formFields, formResponses } from "@/server/db/schema";
 import { getPlanLimits } from "@/server/billing/stripe";
+import { generateAIFormDefinition, resolveAIConditionalLogic } from "@/server/ai/generate-form";
 import type { Context } from "../context";
 
 function slugify(text: string): string {
@@ -234,6 +235,99 @@ export const formRouter = router({
         .returning();
 
       return updated!;
+    }),
+
+  // -----------------------------------------------------------------------
+  // Regenerate an existing form with AI
+  // -----------------------------------------------------------------------
+  regenerateWithAI: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().uuid(),
+        prompt: z.string().min(1).max(2000),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const [existing] = await ctx.db
+        .select()
+        .from(forms)
+        .where(and(eq(forms.id, input.id), eq(forms.userId, ctx.user.id)))
+        .limit(1);
+
+      if (!existing) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Form not found" });
+      }
+
+      const currentFields = await ctx.db
+        .select()
+        .from(formFields)
+        .where(eq(formFields.formId, input.id))
+        .orderBy(asc(formFields.sortOrder));
+
+      const generated = await generateAIFormDefinition(input.prompt, {
+        title: existing.title,
+        description: existing.description,
+        fields: currentFields.map((field) => ({
+          type: field.type,
+          label: field.label,
+          required: field.required,
+          options: field.options,
+          validation: field.validation,
+        })),
+      });
+
+      const [updatedForm] = await ctx.db
+        .update(forms)
+        .set({
+          title: generated.title,
+          description: generated.description,
+          updatedAt: new Date(),
+        })
+        .where(eq(forms.id, input.id))
+        .returning();
+
+      await ctx.db.delete(formFields).where(eq(formFields.formId, input.id));
+
+      const insertedFields: (typeof formFields.$inferSelect)[] = [];
+      for (let i = 0; i < generated.fields.length; i++) {
+        const field = generated.fields[i]!;
+        const [inserted] = await ctx.db
+          .insert(formFields)
+          .values({
+            formId: input.id,
+            type: field.type,
+            label: field.label,
+            placeholder: field.placeholder ?? null,
+            helpText: field.helpText ?? null,
+            required: field.required,
+            options: field.options ?? null,
+            validation: field.validation ?? null,
+            conditionalLogic: null,
+            sortOrder: i,
+          })
+          .returning();
+
+        insertedFields.push(inserted!);
+      }
+
+      const conditionalUpdates = resolveAIConditionalLogic(generated.fields, insertedFields);
+      for (const update of conditionalUpdates) {
+        if (!update) continue;
+        await ctx.db
+          .update(formFields)
+          .set({ conditionalLogic: update.conditionalLogic })
+          .where(eq(formFields.id, update.fieldId));
+
+        const fieldIndex = insertedFields.findIndex((field) => field.id === update.fieldId);
+        if (fieldIndex >= 0) {
+          insertedFields[fieldIndex] = {
+            ...insertedFields[fieldIndex]!,
+            conditionalLogic: update.conditionalLogic,
+          };
+        }
+      }
+
+      return { form: updatedForm!, fields: insertedFields };
     }),
 
   // -----------------------------------------------------------------------

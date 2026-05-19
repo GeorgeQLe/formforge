@@ -1,8 +1,45 @@
 import { TRPCError } from "@trpc/server";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { appRouter } from "../_app";
 import { formFields, forms, users } from "@/server/db/schema";
 import type { Context } from "../../context";
+
+const generatedAIForm = vi.hoisted(() => ({
+  value: {
+    title: "Regenerated intake",
+    description: "Updated by AI",
+    fields: [
+      {
+        type: "text" as const,
+        label: "Company name",
+        required: true,
+        placeholder: "Acme Inc.",
+      },
+      {
+        type: "dropdown" as const,
+        label: "Budget",
+        required: false,
+        options: [
+          { label: "Under $10k", value: "under-10k" },
+          { label: "$10k+", value: "10k-plus" },
+        ],
+        conditionalLogicHint: {
+          dependsOnLabel: "Company name",
+          operator: "is_not_empty" as const,
+          action: "show" as const,
+        },
+      },
+    ],
+  },
+}));
+
+vi.mock("@/server/ai/generate-form", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/server/ai/generate-form")>();
+  return {
+    ...actual,
+    generateAIFormDefinition: vi.fn(async () => generatedAIForm.value),
+  };
+});
 
 type UserRow = {
   id: string;
@@ -227,10 +264,68 @@ class InsertQuery {
   }
 }
 
+class UpdateQuery {
+  private updateData: Record<string, unknown> = {};
+
+  constructor(
+    private readonly data: MockData,
+    private readonly table: unknown
+  ) {}
+
+  set(updateData: Record<string, unknown>) {
+    this.updateData = updateData;
+    return this;
+  }
+
+  where() {
+    return this;
+  }
+
+  returning() {
+    if (this.table === forms) {
+      const updated = { ...this.data.forms[0]!, ...this.updateData };
+      this.data.forms[0] = updated;
+      return Promise.resolve([updated]);
+    }
+
+    if (this.table === formFields) {
+      const target = this.data.fields.find((row) => row.conditionalLogic === null);
+      if (!target) return Promise.resolve([]);
+      Object.assign(target, this.updateData);
+      return Promise.resolve([target]);
+    }
+
+    return Promise.resolve([]);
+  }
+
+  then<TResult1 = unknown, TResult2 = never>(
+    onfulfilled?: ((value: unknown) => TResult1 | PromiseLike<TResult1>) | null,
+    onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null
+  ) {
+    return Promise.resolve(undefined).then(onfulfilled, onrejected);
+  }
+}
+
+class DeleteQuery {
+  constructor(
+    private readonly data: MockData,
+    private readonly table: unknown
+  ) {}
+
+  where() {
+    if (this.table === formFields) {
+      this.data.fields = [];
+    }
+    return Promise.resolve(undefined);
+  }
+}
+
 function createMockDb(data: MockData) {
   return {
     select: (selection?: Record<string, unknown>) => new SelectQuery(data, selection),
     insert: (table: unknown) => new InsertQuery(data, table),
+    update: (table: unknown) => new UpdateQuery(data, table),
+    delete: (table: unknown) => new DeleteQuery(data, table),
   };
 }
 
@@ -242,6 +337,35 @@ function caller(data: MockData, clerkUserId: string | null = "clerk-user-1") {
 }
 
 describe("tRPC router integration", () => {
+  beforeEach(() => {
+    generatedAIForm.value = {
+      title: "Regenerated intake",
+      description: "Updated by AI",
+      fields: [
+        {
+          type: "text",
+          label: "Company name",
+          required: true,
+          placeholder: "Acme Inc.",
+        },
+        {
+          type: "dropdown",
+          label: "Budget",
+          required: false,
+          options: [
+            { label: "Under $10k", value: "under-10k" },
+            { label: "$10k+", value: "10k-plus" },
+          ],
+          conditionalLogicHint: {
+            dependsOnLabel: "Company name",
+            operator: "is_not_empty",
+            action: "show",
+          },
+        },
+      ],
+    };
+  });
+
   it("rejects protected procedures when there is no authenticated Clerk user", async () => {
     await expect(
       caller({ users: [], forms: [], fields: [] }, null).form.list()
@@ -366,6 +490,51 @@ describe("tRPC router integration", () => {
     ).rejects.toMatchObject({ code: "FORBIDDEN" });
     expect(data.forms).toHaveLength(3);
     expect(data.fields).toHaveLength(1);
+  });
+
+  it("regenerates an owned form by replacing fields from the AI definition", async () => {
+    const data = {
+      users: [user({ plan: "pro" })],
+      forms: [form({ title: "Original intake", description: "Old description" })],
+      fields: [
+        field({
+          id: "20000000-0000-4000-8000-000000000001",
+          label: "Old field",
+          sortOrder: 0,
+        }),
+      ],
+    };
+
+    const result = await caller(data).form.regenerateWithAI({
+      id: "10000000-0000-4000-8000-000000000001",
+      prompt: "Make this a B2B qualification form",
+    });
+
+    expect(result.form).toMatchObject({
+      title: "Regenerated intake",
+      description: "Updated by AI",
+    });
+    expect(data.fields.map((row) => row.label)).toEqual(["Company name", "Budget"]);
+    expect(data.fields[0]).toMatchObject({
+      formId: data.forms[0]!.id,
+      type: "text",
+      label: "Company name",
+      required: true,
+      placeholder: "Acme Inc.",
+      sortOrder: 0,
+    });
+    expect(result.fields[1]!.conditionalLogic).toEqual({
+      action: "show",
+      logic: "AND",
+      showWhen: [
+        {
+          fieldId: result.fields[0]!.id,
+          operator: "is_not_empty",
+          value: undefined,
+        },
+      ],
+    });
+    expect(result.fields.map((row) => row.label)).toEqual(["Company name", "Budget"]);
   });
 
   it("validates form update input through the router schema", async () => {

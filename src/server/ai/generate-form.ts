@@ -62,6 +62,7 @@ const aiFormSchema = z.object({
 });
 
 export type AIFormResponse = z.infer<typeof aiFormSchema>;
+export type AIFieldResponse = AIFormResponse["fields"][number];
 
 // ---------------------------------------------------------------------------
 // System prompt
@@ -81,23 +82,57 @@ For conditional logic, use "conditionalLogicHint" with the LABEL of the field it
 
 Return ONLY valid JSON matching the schema. Be practical and thorough.`;
 
-// ---------------------------------------------------------------------------
-// Generate form from natural language
-// ---------------------------------------------------------------------------
-export async function generateFormFromAI(
+function buildUserPrompt(prompt: string, currentForm?: {
+  title: string;
+  description: string | null;
+  fields: {
+    type: string;
+    label: string;
+    required: boolean;
+    options: unknown;
+    validation: unknown;
+  }[];
+}) {
+  const schemaInstruction =
+    "Respond with a JSON object matching this structure: { title: string, description: string, fields: [{ type, label, placeholder?, helpText?, required, options?, validation?, conditionalLogicHint?: { dependsOnLabel, operator, value?, action } }] }";
+
+  if (!currentForm) {
+    return `Create a form for: ${prompt}\n\n${schemaInstruction}`;
+  }
+
+  const currentFields = currentForm.fields
+    .map((field, index) => {
+      const required = field.required ? "required" : "optional";
+      const options = field.options ? ` options=${JSON.stringify(field.options)}` : "";
+      const validation = field.validation ? ` validation=${JSON.stringify(field.validation)}` : "";
+      return `${index + 1}. ${field.label} (${field.type}, ${required})${options}${validation}`;
+    })
+    .join("\n");
+
+  return `Regenerate this existing form using the user's revision request.
+
+Revision request: ${prompt}
+
+Current form:
+Title: ${currentForm.title}
+Description: ${currentForm.description ?? ""}
+Fields:
+${currentFields || "No fields yet."}
+
+Return a complete replacement form definition, not a patch. ${schemaInstruction}`;
+}
+
+export async function generateAIFormDefinition(
   prompt: string,
-  userId: string
-): Promise<{ form: typeof forms.$inferSelect; fields: (typeof formFields.$inferSelect)[] }> {
+  currentForm?: Parameters<typeof buildUserPrompt>[1]
+): Promise<AIFormResponse> {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   const response = await openai.chat.completions.create({
     model: "gpt-4o",
     response_format: { type: "json_object" },
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
-      {
-        role: "user",
-        content: `Create a form for: ${prompt}\n\nRespond with a JSON object matching this structure: { title: string, description: string, fields: [{ type, label, placeholder?, helpText?, required, options?, validation?, conditionalLogicHint?: { dependsOnLabel, operator, value?, action } }] }`,
-      },
+      { role: "user", content: buildUserPrompt(prompt, currentForm) },
     ],
     temperature: 0.7,
     max_tokens: 4000,
@@ -108,7 +143,50 @@ export async function generateFormFromAI(
     throw new Error("No response from AI");
   }
 
-  const parsed = aiFormSchema.parse(JSON.parse(content));
+  return aiFormSchema.parse(JSON.parse(content));
+}
+
+export function resolveAIConditionalLogic(
+  parsedFields: AIFieldResponse[],
+  insertedFields: (typeof formFields.$inferSelect)[]
+) {
+  const labelToId = new Map<string, string>();
+  for (const field of insertedFields) {
+    labelToId.set(field.label.toLowerCase(), field.id);
+  }
+
+  return parsedFields.map((field, index) => {
+    const hint = field.conditionalLogicHint;
+    if (!hint) return null;
+
+    const dependsOnId = labelToId.get(hint.dependsOnLabel.toLowerCase());
+    if (!dependsOnId) return null;
+
+    return {
+      fieldId: insertedFields[index]!.id,
+      conditionalLogic: {
+        showWhen: [
+          {
+            fieldId: dependsOnId,
+            operator: hint.operator,
+            value: hint.value,
+          },
+        ],
+        logic: "AND" as const,
+        action: hint.action,
+      },
+    };
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Generate form from natural language
+// ---------------------------------------------------------------------------
+export async function generateFormFromAI(
+  prompt: string,
+  userId: string
+): Promise<{ form: typeof forms.$inferSelect; fields: (typeof formFields.$inferSelect)[] }> {
+  const parsed = await generateAIFormDefinition(prompt);
 
   // ---------------------------------------------------------------------------
   // Persist in a transaction
@@ -159,37 +237,22 @@ export async function generateFormFromAI(
     insertedFields.push(field!);
   }
 
-  // Second pass: resolve conditional logic label references to IDs
-  const labelToId = new Map<string, string>();
-  for (const field of insertedFields) {
-    labelToId.set(field.label.toLowerCase(), field.id);
-  }
+  const conditionalUpdates = resolveAIConditionalLogic(parsed.fields, insertedFields);
 
-  for (let i = 0; i < parsed.fields.length; i++) {
-    const hint = parsed.fields[i]!.conditionalLogicHint;
-    if (!hint) continue;
-
-    const dependsOnId = labelToId.get(hint.dependsOnLabel.toLowerCase());
-    if (!dependsOnId) continue;
-
-    const conditionalLogic = {
-      showWhen: [
-        {
-          fieldId: dependsOnId,
-          operator: hint.operator,
-          value: hint.value,
-        },
-      ],
-      logic: "AND" as const,
-      action: hint.action,
-    };
-
+  for (const update of conditionalUpdates) {
+    if (!update) continue;
     await db
       .update(formFields)
-      .set({ conditionalLogic })
-      .where(eq(formFields.id, insertedFields[i]!.id));
+      .set({ conditionalLogic: update.conditionalLogic })
+      .where(eq(formFields.id, update.fieldId));
 
-    insertedFields[i] = { ...insertedFields[i]!, conditionalLogic };
+    const fieldIndex = insertedFields.findIndex((field) => field.id === update.fieldId);
+    if (fieldIndex >= 0) {
+      insertedFields[fieldIndex] = {
+        ...insertedFields[fieldIndex]!,
+        conditionalLogic: update.conditionalLogic,
+      };
+    }
   }
 
   return { form: form!, fields: insertedFields };

@@ -1,5 +1,26 @@
 # History
 
+## 2026-05-19 — AI form regeneration
+
+- Added reusable AI form-definition generation so existing forms can be regenerated from an edited prompt plus current form context.
+- Added an owner-scoped `form.regenerateWithAI` mutation that updates the form title/description, replaces the current fields, and resolves generated conditional-logic label hints to new field IDs.
+- Added a regeneration action in the form editor with explicit replacement confirmation and cache refresh after the new field set is returned.
+- Added regression coverage for conditional-logic mapping, router replacement behavior, and editor wiring, then marked the AI regeneration task complete and expanded the Rate limiting task into the next executable plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was allowing users to edit a generated form prompt and re-run AI.
+- **Changed files:** `src/server/ai/generate-form.ts`, `src/server/ai/__tests__/generate-form.test.ts`, `src/server/trpc/routers/form.ts`, `src/server/trpc/routers/__tests__/integration.test.ts`, `src/app/(dashboard)/forms/[id]/edit/page.tsx`, `src/app/(dashboard)/forms/[id]/edit/__tests__/ai-regeneration.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The AI helper now supports reusable form-definition generation and conditional-logic resolution; the form router exposes authenticated regeneration and field replacement; the editor page adds prompt entry and explicit replacement confirmation; tests cover helper, router, and UI wiring; task docs record completion and the next plan.
+- **User-goal mapping:** The source changes let an owner open an existing form, enter a revised prompt, confirm replacement, regenerate the AI field set, and continue editing the updated form.
+- **Tests run:** `pnpm test src/server/ai/__tests__/generate-form.test.ts src/server/trpc/routers/__tests__/integration.test.ts 'src/app/(dashboard)/forms/[id]/edit/__tests__/ai-regeneration.test.ts'` passed: 3 files, 14 tests. `pnpm test` passed: 17 files, 69 tests. `pnpm lint` passed. `pnpm build` compiled successfully and ran TypeScript before failing during prerender on missing Clerk configuration.
+- **Skipped tests:** Full production build completion is blocked by `@clerk/clerk-react: Missing publishableKey` while prerendering `/forms/new`. No browser smoke test was run because the current validation environment cannot complete the Clerk-backed dashboard build; editor wiring is covered by static source tests and TypeScript.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands. `pnpm build` emitted Next.js's middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked that regeneration verifies form ownership before reading fields or calling AI, sends current form context to the generation prompt, requires explicit UI confirmation before replacing fields, resets editor state from the returned server result, and resolves conditional logic against newly inserted field IDs.
+- **Residual risk:** Field replacement is implemented as sequential update/delete/insert operations rather than an explicit database transaction; an interrupted regeneration could leave partial field state until transactional support is added. Existing responses keep field label snapshots, but old field IDs will not be used for new submissions after replacement.
+- **Rollback note:** Revert the AI helper extraction, `form.regenerateWithAI` mutation, editor regeneration dialog, new tests, and task-doc updates.
+- **Next command:** `$run`
+
 ## 2026-05-19 — Form duplication
 
 - Added an owner-scoped `form.duplicate` tRPC mutation that reuses plan-limit enforcement, creates a draft copy with a fresh slug, and clones ordered fields without copying responses.

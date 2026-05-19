@@ -171,24 +171,26 @@ class SelectQuery {
 }
 
 class InsertQuery {
-  private row: Record<string, unknown> = {};
+  private rows: Record<string, unknown>[] = [];
 
   constructor(
     private readonly data: MockData,
     private readonly table: unknown
   ) {}
 
-  values(row: Record<string, unknown>) {
-    this.row = row;
+  values(row: Record<string, unknown> | Record<string, unknown>[]) {
+    this.rows = Array.isArray(row) ? row : [row];
     return this;
   }
 
   returning() {
+    const row = this.rows[0] ?? {};
+
     if (this.table === forms) {
       const inserted = form({
-        ...this.row,
-        id: "10000000-0000-4000-8000-000000000099",
-        slug: String(this.row.slug),
+        ...row,
+        id: `10000000-0000-4000-8000-${String(this.data.forms.length + 99).padStart(12, "0")}`,
+        slug: String(row.slug),
       });
       this.data.forms.push(inserted);
       return Promise.resolve([inserted]);
@@ -196,14 +198,32 @@ class InsertQuery {
 
     if (this.table === formFields) {
       const inserted = field({
-        ...this.row,
-        id: "20000000-0000-4000-8000-000000000099",
+        ...row,
+        id: `20000000-0000-4000-8000-${String(this.data.fields.length + 99).padStart(12, "0")}`,
       });
       this.data.fields.push(inserted);
       return Promise.resolve([inserted]);
     }
 
     return Promise.resolve([]);
+  }
+
+  then<TResult1 = unknown, TResult2 = never>(
+    onfulfilled?: ((value: unknown) => TResult1 | PromiseLike<TResult1>) | null,
+    onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null
+  ) {
+    if (this.table === formFields) {
+      this.rows.forEach((row, index) => {
+        this.data.fields.push(
+          field({
+            ...row,
+            id: `20000000-0000-4000-8000-${String(this.data.fields.length + index + 99).padStart(12, "0")}`,
+          })
+        );
+      });
+    }
+
+    return Promise.resolve(undefined).then(onfulfilled, onrejected);
   }
 }
 
@@ -262,6 +282,90 @@ describe("tRPC router integration", () => {
       caller(data).form.create({ title: "Fourth form" })
     ).rejects.toMatchObject({ code: "FORBIDDEN" });
     expect(data.forms).toHaveLength(3);
+  });
+
+  it("duplicates a form as a draft copy with all fields and no responses", async () => {
+    const source = form({
+      title: "Published intake",
+      description: "Original description",
+      status: "published",
+      settings: { successMessage: "Done", gdprConsentEnabled: true },
+      themeId: "30000000-0000-4000-8000-000000000001",
+    });
+    const data = {
+      users: [user({ plan: "pro" })],
+      forms: [source],
+      fields: [
+        field({
+          id: "20000000-0000-4000-8000-000000000001",
+          label: "Second",
+          type: "email",
+          required: true,
+          sortOrder: 2,
+          validation: { pattern: ".+@.+" },
+        }),
+        field({
+          id: "20000000-0000-4000-8000-000000000002",
+          label: "First",
+          type: "text",
+          placeholder: "Your name",
+          helpText: "Use your legal name",
+          options: [{ label: "A", value: "a" }],
+          conditionalLogic: {
+            action: "show",
+            logic: "AND",
+            showWhen: [{ fieldId: "x", operator: "equals", value: "yes" }],
+          },
+          sortOrder: 1,
+        }),
+      ],
+    };
+
+    const copied = await caller(data).form.duplicate({ id: source.id });
+
+    expect(copied.id).not.toBe(source.id);
+    expect(copied.title).toBe("Published intake copy");
+    expect(copied.description).toBe(source.description);
+    expect(copied.status).toBe("draft");
+    expect(copied.settings).toEqual(source.settings);
+    expect(copied.themeId).toBe(source.themeId);
+    expect(copied.slug).toMatch(/^published-intake-copy-[\w-]{6}$/);
+
+    const copiedFields = data.fields.filter((row) => row.formId === copied.id);
+    expect(copiedFields).toHaveLength(2);
+    expect(copiedFields.map((row) => row.label)).toEqual(["First", "Second"]);
+    expect(copiedFields[0]).toMatchObject({
+      formId: copied.id,
+      type: "text",
+      placeholder: "Your name",
+      helpText: "Use your legal name",
+      sortOrder: 1,
+    });
+    expect(copiedFields[1]).toMatchObject({
+      formId: copied.id,
+      type: "email",
+      required: true,
+      validation: { pattern: ".+@.+" },
+      sortOrder: 2,
+    });
+  });
+
+  it("enforces the free-plan form limit before duplicating a form", async () => {
+    const data = {
+      users: [user({ plan: "free" })],
+      forms: [
+        form({ id: "10000000-0000-4000-8000-000000000001" }),
+        form({ id: "10000000-0000-4000-8000-000000000002" }),
+        form({ id: "10000000-0000-4000-8000-000000000003" }),
+      ],
+      fields: [field()],
+    };
+
+    await expect(
+      caller(data).form.duplicate({ id: "10000000-0000-4000-8000-000000000001" })
+    ).rejects.toMatchObject({ code: "FORBIDDEN" });
+    expect(data.forms).toHaveLength(3);
+    expect(data.fields).toHaveLength(1);
   });
 
   it("validates form update input through the router schema", async () => {

@@ -1,10 +1,11 @@
 import { z } from "zod";
-import { eq, and, desc, count } from "drizzle-orm";
+import { eq, and, desc, count, asc } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { forms, formFields, formResponses } from "@/server/db/schema";
 import { getPlanLimits } from "@/server/billing/stripe";
+import type { Context } from "../context";
 
 function slugify(text: string): string {
   return (
@@ -18,6 +19,26 @@ function slugify(text: string): string {
     "-" +
     nanoid(6)
   );
+}
+
+async function enforceFormLimit(ctx: {
+  db: Context["db"];
+  user: { id: string; plan: string };
+}) {
+  const limits = getPlanLimits(ctx.user.plan);
+  if (limits.maxForms === Infinity) return;
+
+  const [{ formCount }] = await ctx.db
+    .select({ formCount: count() })
+    .from(forms)
+    .where(eq(forms.userId, ctx.user.id));
+
+  if (formCount >= limits.maxForms) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: `You have reached the maximum of ${limits.maxForms} forms on your plan. Please upgrade.`,
+    });
+  }
 }
 
 export const formRouter = router({
@@ -93,22 +114,7 @@ export const formRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // Check plan limits
-      const limits = getPlanLimits(ctx.user.plan);
-      if (limits.maxForms !== Infinity) {
-        const [{ formCount }] = await ctx.db
-          .select({ formCount: count() })
-          .from(forms)
-          .where(eq(forms.userId, ctx.user.id));
-
-        if (formCount >= limits.maxForms) {
-          throw new TRPCError({
-            code: "FORBIDDEN",
-            message: `You have reached the maximum of ${limits.maxForms} forms on your plan. Please upgrade.`,
-          });
-        }
-      }
-
+      await enforceFormLimit(ctx);
       const slug = slugify(input.title);
 
       const [form] = await ctx.db
@@ -122,6 +128,64 @@ export const formRouter = router({
         .returning();
 
       return form!;
+    }),
+
+  // -----------------------------------------------------------------------
+  // Duplicate
+  // -----------------------------------------------------------------------
+  duplicate: protectedProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const [source] = await ctx.db
+        .select()
+        .from(forms)
+        .where(and(eq(forms.id, input.id), eq(forms.userId, ctx.user.id)))
+        .limit(1);
+
+      if (!source) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Form not found" });
+      }
+
+      await enforceFormLimit(ctx);
+
+      const copiedTitle = `${source.title} copy`;
+      const [copiedForm] = await ctx.db
+        .insert(forms)
+        .values({
+          userId: ctx.user.id,
+          title: copiedTitle,
+          description: source.description,
+          slug: slugify(copiedTitle),
+          status: "draft",
+          settings: source.settings,
+          themeId: source.themeId,
+        })
+        .returning();
+
+      const sourceFields = await ctx.db
+        .select()
+        .from(formFields)
+        .where(eq(formFields.formId, source.id))
+        .orderBy(asc(formFields.sortOrder));
+
+      if (sourceFields.length > 0) {
+        await ctx.db.insert(formFields).values(
+          sourceFields.map((field) => ({
+            formId: copiedForm!.id,
+            type: field.type,
+            label: field.label,
+            placeholder: field.placeholder,
+            helpText: field.helpText,
+            required: field.required,
+            options: field.options,
+            validation: field.validation,
+            conditionalLogic: field.conditionalLogic,
+            sortOrder: field.sortOrder,
+          }))
+        );
+      }
+
+      return copiedForm!;
     }),
 
   // -----------------------------------------------------------------------

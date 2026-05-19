@@ -1,5 +1,26 @@
 # History
 
+## 2026-05-19 — Form duplication
+
+- Added an owner-scoped `form.duplicate` tRPC mutation that reuses plan-limit enforcement, creates a draft copy with a fresh slug, and clones ordered fields without copying responses.
+- Added a duplicate action to dashboard form cards that invalidates the form list and routes to the copied form editor.
+- Added regression coverage for draft-copy metadata, field copying, and free-plan limit rejection.
+- Marked the Form duplication task complete and expanded AI regeneration into the next executable plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was cloning an existing form with all fields.
+- **Changed files:** `src/server/trpc/routers/form.ts`, `src/app/(dashboard)/dashboard/page.tsx`, `src/server/trpc/routers/__tests__/integration.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `form.ts` adds shared form-limit enforcement and the duplicate mutation; the dashboard page exposes the duplicate action; the integration test mock now supports bulk field inserts and covers duplicate behavior; task docs record completion and next work.
+- **User-goal mapping:** The source changes let authenticated owners clone a form, preserve form settings/theme/fields, reset the new form to draft, and avoid copying responses.
+- **Tests run:** `pnpm test src/server/trpc/routers/__tests__/integration.test.ts` passed: 1 file, 9 tests. `pnpm test` passed: 15 files, 64 tests. `pnpm lint` passed. `pnpm build` compiled successfully and ran TypeScript before failing during prerender on missing Clerk configuration.
+- **Skipped tests:** Full production build completion is blocked by `@clerk/clerk-react: Missing publishableKey` while prerendering `/forms/new`. No browser click smoke test was run because the dashboard action is covered by compile/lint and the router behavior is covered by caller-level tests.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands. `pnpm build` emitted Next.js's middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked that the mutation verifies source ownership before cloning, enforces the same form count limit as create, writes `status: "draft"`, copies fields in ascending sort order, and has no path that reads or writes response tables.
+- **Residual risk:** The duplicate persistence behavior is covered with the project’s in-memory Drizzle-style mock rather than a real Postgres transaction; a mid-clone field insert failure could leave a copied form without fields until a transaction is added.
+- **Rollback note:** Revert the duplicate mutation/form-limit helper, dashboard duplicate action, integration test additions, and task-doc updates.
+- **Next command:** `$run`
+
 ## 2026-05-19 — Theme CRUD
 
 - Added owner-scoped theme CRUD through a new `theme` tRPC router.

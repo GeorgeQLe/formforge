@@ -149,7 +149,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add static or component-level coverage for the dashboard route if the current test harness can cover it without adding a browser environment.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
   - Completed 2026-05-19: added owner-scoped theme CRUD procedures, a `/themes` dashboard management UI with token editing and preview, sidebar navigation, nullable custom-theme ownership in the schema, and tests covering validation, router scoping, delete-with-references semantics, and dashboard wiring.
-- [ ] **Form duplication:** Clone an existing form with all its fields
+- [x] **Form duplication:** Clone an existing form with all its fields
   - Current context:
     - Forms are managed through `src/server/trpc/routers/form.ts`.
     - Fields are stored separately in `formFields` and ordered by `sortOrder`; existing field procedures already enforce form ownership.
@@ -167,7 +167,23 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add focused router tests or static/source tests proving the duplicate procedure is owner-scoped, enforces plan limits, inserts a draft form, copies fields, and does not copy responses.
     - Add static dashboard wiring coverage if the current Vitest setup cannot mount the client route.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
+  - Completed 2026-05-19: added `form.duplicate`, reused plan-limit enforcement, cloned draft form metadata and ordered fields without responses, added a dashboard duplicate action that routes to the copied editor, and covered clone/limit behavior with Vitest.
 - [ ] **AI regeneration:** Allow editing a generated form's prompt and re-running AI
+  - Current context:
+    - Form generation is implemented in `src/app/api/ai/generate/route.ts` and `src/server/ai/generate-form.ts`.
+    - New-form creation lives in `src/app/(dashboard)/forms/new/page.tsx`; editing existing forms lives in `src/app/(dashboard)/forms/[id]/edit/page.tsx` using `FormEditor`.
+    - Existing generated forms do not appear to persist the original natural-language prompt, so regeneration may need a UI prompt input that sends the edited prompt plus current form context instead of relying on stored prompt history.
+  - Implementation approach:
+    - Inspect the AI generation route/helper and editor state model to identify the narrowest regeneration surface.
+    - Prefer a prototype-level editor action that lets the owner enter or edit a prompt, calls the existing AI generation helper/route, and replaces or appends generated fields only after explicit user confirmation.
+    - Avoid adding new durable prompt-history storage unless the current schema already has a clear field for it; if persistence is necessary, document the deferred storage decision before adding schema.
+    - Preserve form ownership checks and plan/feature limits already enforced by existing create/update/field procedures.
+    - Keep field IDs and conditional logic coherent if replacing fields: either regenerate a full field set and save through existing field APIs, or add a focused owner-scoped tRPC procedure that performs the replacement transactionally.
+  - Tests first where practical:
+    - Add focused tests for any prompt/context shaping helper and for regeneration route/procedure authorization.
+    - Add static/editor wiring coverage if the current Vitest setup cannot mount the editor UI without a browser environment.
+    - Cover the chosen replace/append semantics so regeneration cannot accidentally duplicate stale fields or mutate another user's form.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` if required env vars are available. If build is blocked by missing Clerk publishable key, record the exact blocker.
 - [ ] **Rate limiting:** Add rate limits to public submission and AI generation endpoints
 - [ ] **Env validation at build time:** Currently lazy -- consider failing the build if vars are missing
 

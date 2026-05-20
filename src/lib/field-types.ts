@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { FieldOption, FieldValidation } from "@/server/db/schema";
+import { t, type Locale } from "@/lib/i18n";
 
 // ---------------------------------------------------------------------------
 // Field Type Registry
@@ -40,6 +41,13 @@ export type FieldDef = {
 };
 
 export function getFieldValidator(field: FieldDef): z.ZodType {
+  return getLocalizedFieldValidator(field, "en");
+}
+
+export function getLocalizedFieldValidator(
+  field: FieldDef,
+  locale: Locale = "en"
+): z.ZodType {
   const { type, required, options, validation } = field;
 
   let schema: z.ZodType;
@@ -55,7 +63,7 @@ export function getFieldValidator(field: FieldDef): z.ZodType {
       break;
     }
     case "email": {
-      schema = z.string().email();
+      schema = z.string().email(t(locale, "validation.email"));
       break;
     }
     case "number": {
@@ -70,7 +78,9 @@ export function getFieldValidator(field: FieldDef): z.ZodType {
       const values = (options ?? []).map((o) => o.value);
       if (values.length > 0) {
         schema = z.string().refine((v) => values.includes(v), {
-          message: `Must be one of: ${values.join(", ")}`,
+          message: t(locale, "validation.mustBeOneOf", {
+            values: values.join(", "),
+          }),
         });
       } else {
         schema = z.string();
@@ -86,7 +96,7 @@ export function getFieldValidator(field: FieldDef): z.ZodType {
             const selected = v.split(",").map((s) => s.trim()).filter(Boolean);
             return selected.every((s) => values.includes(s));
           },
-          { message: "Invalid selection" }
+          { message: t(locale, "validation.invalidSelection") }
         );
       } else {
         schema = z.string();
@@ -95,7 +105,7 @@ export function getFieldValidator(field: FieldDef): z.ZodType {
     }
     case "date": {
       schema = z.string().refine((v) => !isNaN(Date.parse(v)), {
-        message: "Invalid date",
+        message: t(locale, "validation.invalidDate"),
       });
       break;
     }
@@ -109,7 +119,7 @@ export function getFieldValidator(field: FieldDef): z.ZodType {
     }
     case "file_upload": {
       // Value is the S3 URL stored after upload
-      schema = z.string().url();
+      schema = z.string().url(t(locale, "validation.invalidUrl"));
       break;
     }
     default: {
@@ -128,9 +138,16 @@ export function getFieldValidator(field: FieldDef): z.ZodType {
 // Build full-form validator from field list
 // ---------------------------------------------------------------------------
 export function buildFormValidator(fields: FieldDef[]) {
+  return buildLocalizedFormValidator(fields, "en");
+}
+
+export function buildLocalizedFormValidator(
+  fields: FieldDef[],
+  locale: Locale = "en"
+) {
   const shape: Record<string, z.ZodType> = {};
   for (const field of fields) {
-    shape[field.id] = getFieldValidator(field);
+    shape[field.id] = getLocalizedFieldValidator(field, locale);
   }
   return z.object(shape);
 }

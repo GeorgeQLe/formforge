@@ -4,7 +4,12 @@ import { useState, useCallback, type ComponentType } from "react";
 import { ThemeProvider } from "./theme-provider";
 import { validateGdprConsent } from "./gdpr-consent";
 import { evaluateConditionalLogic } from "@/lib/conditional-logic";
-import { buildFormValidator, type FieldDef, type FieldType } from "@/lib/field-types";
+import {
+  buildLocalizedFormValidator,
+  type FieldDef,
+  type FieldType,
+} from "@/lib/field-types";
+import { resolveLocale, t, type Locale } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import type {
   forms,
@@ -78,6 +83,7 @@ interface FormRendererProps {
   turnstileToken?: string;
   completionStartTime?: number;
   initialValues?: Record<string, string>;
+  locale?: Locale | string;
 }
 
 export function FormRenderer({
@@ -90,7 +96,9 @@ export function FormRenderer({
   turnstileToken,
   completionStartTime,
   initialValues,
+  locale: localeProp,
 }: FormRendererProps) {
+  const locale = resolveLocale(localeProp);
   const [values, setValues] = useState<Record<string, string>>(
     initialValues ?? {}
   );
@@ -149,7 +157,7 @@ export function FormRenderer({
       validation: f.validation,
     }));
 
-    const validator = buildFormValidator(fieldDefs);
+    const validator = buildLocalizedFormValidator(fieldDefs, locale);
     const validationData: Record<string, string> = {};
     for (const field of visibleFields) {
       validationData[field.id] = values[field.id] ?? "";
@@ -158,7 +166,8 @@ export function FormRenderer({
     const result = validator.safeParse(validationData);
     const gdprConsentError = validateGdprConsent(
       requiresGdprConsent,
-      gdprConsentAccepted
+      gdprConsentAccepted,
+      locale
     );
     if (!result.success) {
       const newErrors: Record<string, string> = {};
@@ -186,7 +195,7 @@ export function FormRenderer({
         ? Math.round((Date.now() - completionStartTime) / 1000)
         : null;
 
-      const body: Record<string, unknown> = { ...values };
+      const body: Record<string, unknown> = { ...values, _locale: locale };
       if (formVersionId) body._formVersionId = formVersionId;
       if (turnstileToken) body._turnstileToken = turnstileToken;
       if (completionTime) body._completionTime = String(completionTime);
@@ -200,14 +209,18 @@ export function FormRenderer({
       const data = await response.json();
 
       if (!response.ok) {
-        setSubmitResult({ success: false, message: data.error ?? "Submission failed" });
+        setSubmitResult({
+          success: false,
+          message: data.error ?? t(locale, "error.submissionFailed"),
+        });
         return;
       }
 
-      setSubmitResult({ success: true, message: data.message });
-      onSubmitSuccess?.({ message: data.message, redirectUrl: data.redirectUrl });
+      const successMessage = data.message ?? t(locale, "form.defaultSuccess");
+      setSubmitResult({ success: true, message: successMessage });
+      onSubmitSuccess?.({ message: successMessage, redirectUrl: data.redirectUrl });
     } catch {
-      setSubmitResult({ success: false, message: "Network error. Please try again." });
+      setSubmitResult({ success: false, message: t(locale, "error.network") });
     } finally {
       setIsSubmitting(false);
     }
@@ -222,7 +235,9 @@ export function FormRenderer({
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
           </div>
-          <h2 className="text-xl font-semibold mb-2">Thank you!</h2>
+          <h2 className="text-xl font-semibold mb-2">
+            {t(locale, "form.successTitle")}
+          </h2>
           <p className="text-gray-500">{submitResult.message}</p>
         </div>
       </ThemeProvider>
@@ -286,8 +301,7 @@ export function FormRenderer({
                       }
                     />
                     <span>
-                      I consent to this form collecting and processing my
-                      submitted information.
+                      {t(locale, "gdpr.consentLabel")}
                     </span>
                   </label>
                   {errors._gdprConsent && (
@@ -312,10 +326,10 @@ export function FormRenderer({
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    Submitting...
+                    {t(locale, "form.submitting")}
                   </>
                 ) : (
-                  "Submit"
+                  t(locale, "form.submit")
                 )}
               </Button>
             </div>
@@ -324,7 +338,7 @@ export function FormRenderer({
 
         {mode === "fill" && (
           <p className="text-center text-xs text-gray-400 mt-6">
-            Powered by FormForge
+            {t(locale, "form.poweredBy")}
           </p>
         )}
       </div>

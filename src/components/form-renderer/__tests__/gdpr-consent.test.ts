@@ -22,11 +22,15 @@ describe("GDPR consent validation", () => {
 
   it("returns a user-facing error when required consent is missing", () => {
     expect(validateGdprConsent(true, false)).toBe(GDPR_CONSENT_ERROR);
+    expect(validateGdprConsent(true, false, "es")).toBe(
+      "Debes aceptar el consentimiento de procesamiento de datos antes de enviar."
+    );
   });
 
   it("wires the required checkbox to form settings in the renderer", () => {
     expect(rendererSource).toContain("form.settings.gdprConsentEnabled === true");
     expect(rendererSource).toContain("validateGdprConsent(");
+    expect(rendererSource).toContain('t(locale, "gdpr.consentLabel")');
     expect(rendererSource).toContain('type="checkbox"');
     expect(rendererSource).toContain("_gdprConsent");
   });

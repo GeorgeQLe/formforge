@@ -1,5 +1,26 @@
 # History
 
+## 2026-05-20 — Public form i18n prototype
+
+- Added a local English/Spanish i18n catalog for public form system copy and validation messages.
+- Localized the public form renderer, GDPR consent copy/error, submit states, network/submission errors, success heading/default success message, and submit-route system errors.
+- Threaded a non-durable locale through public `?locale=`/`?lang=` query params and the `_locale` submit payload without adding storage, middleware, or translated custom label infrastructure.
+- Marked the i18n task complete and expanded the next webhook integrations item into a prototype-first plan.
+
+### Ship Manifest
+
+- **User goal:** Execute the next incomplete `$run` step, which was adding multi-language support for public form labels and validation messages without introducing full i18n infrastructure.
+- **Changed files:** `src/lib/i18n.ts`, `src/lib/__tests__/i18n.test.ts`, `src/lib/field-types.ts`, `src/components/form-renderer/form-renderer.tsx`, `src/components/form-renderer/gdpr-consent.ts`, `src/components/form-renderer/__tests__/gdpr-consent.test.ts`, `src/app/f/[slug]/page.tsx`, `src/app/f/[slug]/client.tsx`, `src/app/f/[slug]/__tests__/public-submit-redirect.test.ts`, `src/app/api/submit/[slug]/route.ts`, `src/app/api/submit/__tests__/i18n.test.ts`, `src/app/api/submit/__tests__/rate-limit.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The i18n helper defines supported locales, fallback resolution, and message lookup; field validation uses localized Zod messages; the renderer and GDPR helper use catalog copy; the public page/client pass a query-derived locale; the submit route returns localized system/validation responses; tests cover fallback behavior, translated validation, and source wiring; task docs record completion and next work.
+- **User-goal mapping:** Public respondents can now see FormForge-owned system copy and validation errors in English or Spanish through a local prototype path while user-authored labels/options remain unchanged until a durable translation model exists.
+- **Tests run:** `pnpm test src/lib/__tests__/i18n.test.ts src/components/form-renderer/__tests__/gdpr-consent.test.ts src/app/api/submit/__tests__/i18n.test.ts` passed: 3 files, 10 tests. `pnpm test` passed: 26 files, 102 tests. `pnpm lint` passed. Bare `pnpm build` failed early on project-owned missing public env validation. `pnpm build` with local dummy public build env passed after network access was approved for Google Fonts.
+- **Skipped tests:** No browser locale smoke test was run because the step is covered by helper/static tests, lint, and production build; translated custom field labels/options were intentionally deferred because there is no existing durable translation schema.
+- **Warnings:** `pnpm` emitted the existing `.npmrc` warning `Failed to replace env in config: ${NODE_AUTH_TOKEN}` during test, lint, and build commands. Build emitted Next.js's existing middleware-to-proxy deprecation warning.
+- **Adversarial review:** Checked that the implementation does not add locale middleware, database tables, paid translation services, or provider-specific infrastructure; server-side validation uses the same locale as the submitted renderer payload; unsupported locales fall back to English.
+- **Residual risk:** Locale selection is query/body based and not persisted per form; user-authored labels, help text, options, notification emails, dashboard authoring UI, and locale-aware URLs remain deferred.
+- **Rollback note:** Revert the i18n helper/tests, localized validator functions, renderer/GDPR/page/client/submit-route wiring, updated static tests, and task-doc entries.
+- **Next command:** `$run`
+
 ## 2026-05-19 — Form renderer accessibility audit
 
 - Added shared accessible description ID helpers for form field help/error wiring.

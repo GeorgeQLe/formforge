@@ -7,11 +7,12 @@ import {
   formResponses,
   fieldResponses,
 } from "@/server/db/schema";
-import { buildFormValidator, type FieldDef } from "@/lib/field-types";
+import { buildLocalizedFormValidator, type FieldDef } from "@/lib/field-types";
 import { evaluateConditionalLogic } from "@/lib/conditional-logic";
 import { sendNotificationEmail } from "@/server/email/send-notification";
 import { getTurnstileToken, verifyTurnstileToken } from "@/server/security/turnstile";
 import { checkRateLimit, getClientIp } from "@/server/security/rate-limit";
+import { resolveLocale, t } from "@/lib/i18n";
 
 // ---------------------------------------------------------------------------
 // POST /api/submit/[slug]
@@ -32,18 +33,19 @@ export async function POST(
     });
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
-        { error: "Too many submissions. Please try again shortly." },
+        { error: t("en", "error.tooManySubmissions") },
         { status: 429 }
       );
     }
 
     const body = await request.json();
+    const locale = resolveLocale(body._locale);
 
     // 1. Verify Turnstile
     const turnstileToken = getTurnstileToken(body);
     if (!turnstileToken) {
       return NextResponse.json(
-        { error: "Bot verification is required" },
+        { error: t(locale, "error.botRequired") },
         { status: 400 }
       );
     }
@@ -54,7 +56,7 @@ export async function POST(
     });
     if (!validTurnstile) {
       return NextResponse.json(
-        { error: "Bot verification failed" },
+        { error: t(locale, "error.botFailed") },
         { status: 400 }
       );
     }
@@ -67,12 +69,12 @@ export async function POST(
       .limit(1);
 
     if (!form) {
-      return NextResponse.json({ error: "Form not found" }, { status: 404 });
+      return NextResponse.json({ error: t(locale, "error.formNotFound") }, { status: 404 });
     }
 
     if (form.status !== "published") {
       return NextResponse.json(
-        { error: "This form is not accepting responses" },
+        { error: t(locale, "error.notAccepting") },
         { status: 400 }
       );
     }
@@ -95,7 +97,7 @@ export async function POST(
 
     if (!version) {
       return NextResponse.json(
-        { error: "Published form version not found" },
+        { error: t(locale, "error.versionNotFound") },
         { status: 400 }
       );
     }
@@ -109,7 +111,7 @@ export async function POST(
 
       if (total >= version.settings.responseLimit) {
         return NextResponse.json(
-          { error: "This form has reached its response limit" },
+          { error: t(locale, "error.responseLimit") },
           { status: 400 }
         );
       }
@@ -120,7 +122,7 @@ export async function POST(
       const closeDate = new Date(version.settings.closeDate);
       if (new Date() > closeDate) {
         return NextResponse.json(
-          { error: "This form is closed" },
+          { error: t(locale, "error.formClosed") },
           { status: 400 }
         );
       }
@@ -148,7 +150,7 @@ export async function POST(
       validation: f.validation,
     }));
 
-    const validator = buildFormValidator(fieldDefs);
+    const validator = buildLocalizedFormValidator(fieldDefs, locale);
     const validationData: Record<string, unknown> = {};
     for (const field of visibleFields) {
       validationData[field.id] = body[field.id] ?? "";
@@ -157,7 +159,7 @@ export async function POST(
     const result = validator.safeParse(validationData);
     if (!result.success) {
       return NextResponse.json(
-        { error: "Validation failed", issues: result.error.issues },
+        { error: t(locale, "error.validationFailed"), issues: result.error.issues },
         { status: 400 }
       );
     }
@@ -206,13 +208,13 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: version.settings?.successMessage ?? "Thank you for your response!",
+      message: version.settings?.successMessage ?? t(locale, "form.defaultSuccess"),
       redirectUrl: version.settings?.redirectUrl ?? null,
     });
   } catch (error) {
     console.error("Form submission error:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: t("en", "error.internal") },
       { status: 500 }
     );
   }

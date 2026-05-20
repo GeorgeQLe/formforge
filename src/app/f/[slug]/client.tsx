@@ -7,6 +7,7 @@ import type {
   FormVersionFieldSnapshot,
   ThemeColors,
 } from "@/server/db/schema";
+import type { Locale } from "@/lib/i18n";
 
 interface PublicFormClientProps {
   form: typeof forms.$inferSelect;
@@ -14,6 +15,7 @@ interface PublicFormClientProps {
   fields: FormVersionFieldSnapshot[];
   themeColors: ThemeColors | null;
   turnstileSiteKey: string;
+  locale?: Locale | string;
 }
 
 export function PublicFormClient({
@@ -22,6 +24,7 @@ export function PublicFormClient({
   fields,
   themeColors,
   turnstileSiteKey,
+  locale,
 }: PublicFormClientProps) {
   const [turnstileToken, setTurnstileToken] = useState<string>("");
   const [startTime] = useState(() => Date.now());
@@ -69,6 +72,7 @@ export function PublicFormClient({
         turnstileToken={turnstileToken}
         completionStartTime={startTime}
         onSubmitSuccess={handleSubmitSuccess}
+        locale={locale}
       />
 
       {/* Turnstile widget */}

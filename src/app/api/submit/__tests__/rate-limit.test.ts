@@ -27,8 +27,6 @@ describe("Rate limiting on public submit endpoint (CR-016)", () => {
     expect(responseIndex).toBeLessThan(bodyIndex);
     expect(responseIndex).toBeLessThan(turnstileIndex);
     expect(responseIndex).toBeLessThan(formSelectIndex);
-    expect(routeSource).toContain(
-      "Too many submissions. Please try again shortly."
-    );
+    expect(routeSource).toContain('t("en", "error.tooManySubmissions")');
   });
 });

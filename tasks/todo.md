@@ -288,7 +288,7 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add helper tests only if logic is extracted for accessible description IDs or state mapping.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by invalid/missing Clerk publishable key, record the exact blocker.
   - Completed 2026-05-19: added shared accessible description ID helpers, connected help/error text across all public field controls, improved grouped choice/rating semantics, made file upload keyboard-accessible through the native file input, announced submit success/error states with live regions, and covered the renderer accessibility contract with Vitest/static tests.
-- [ ] **i18n:** Multi-language support for form labels and validation messages
+- [x] **i18n:** Multi-language support for form labels and validation messages
   - Current context:
     - Public form labels, help text, options, validation errors, submit states, GDPR consent copy, and system messages are currently rendered in one language.
     - User-authored field labels/options are stored directly on form fields and immutable version snapshots, while validation messages come from `src/lib/field-types.ts` and renderer/API submit paths.
@@ -306,7 +306,22 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
     - Add helper tests for locale fallback and translated validation/system messages.
     - Add static/source tests proving renderer and submit validation use the catalog for system strings where touched.
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by missing public env vars, record the exact blocker.
+  - Completed 2026-05-20: added a local English/Spanish message catalog, localized public renderer and submit-route system messages, localized field validation helpers, non-durable public `locale`/`lang` query support, `_locale` submit payload threading, and tests covering fallback behavior, translated validation, renderer wiring, and submit-route wiring.
 - [ ] **Webhook integrations:** Let users forward submissions to Zapier, Slack, etc.
+  - Current context:
+    - Public submissions are accepted in `src/app/api/submit/[slug]/route.ts`, persisted to `formResponses`/`fieldResponses`, and notification email is fired after persistence.
+    - There is no webhook destination schema, delivery queue, signing secret model, retry policy, dashboard UI, Zapier/Slack-specific integration setup, or delivery log.
+    - Prototype-first constraint: do not add durable webhook/integration tables, background queues, paid Zapier/Slack app setup, or production outbound delivery infrastructure in this step unless explicitly authorized.
+  - Implementation approach:
+    - Inspect response submission, form settings, and dashboard settings surfaces to choose a narrow experiment route or local-only settings panel.
+    - Add an isolated dashboard experiment such as `/experiments/webhook-integrations` with fixture destinations for generic webhook, Zapier catch hook, and Slack-style message preview.
+    - Model local-only interactions for destination enable/disable, event selection, payload preview, header/signature preview, test-send result states, and delivery error/retry expectations.
+    - Keep all data fixture/local state and avoid importing database schema, submission route mutation logic, billing enforcement, or real outbound network clients.
+    - Record deferred infrastructure explicitly: encrypted destination storage, signing secrets, delivery queue/retries, per-form authorization, provider OAuth/setup, delivery logs, rate limits, and alerting.
+  - Tests first where practical:
+    - Add focused helper tests for payload shaping, destination labels, signature preview formatting, and test-send state transitions if logic is extracted.
+    - Add static/source coverage proving the experiment uses fixture/local data and does not import database schema, route handlers, auth mutation procedures, billing enforcement, or real network clients.
+  - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by missing public env vars or network font fetches, record the exact blocker.
 - [ ] **Partial responses / save & resume:** Allow respondents to save progress on long forms
 
 ### Cleanup / Tech Debt

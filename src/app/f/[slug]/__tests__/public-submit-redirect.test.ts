@@ -18,10 +18,13 @@ describe("public submit redirect wiring", () => {
 
   it("passes success message and redirect URL from the renderer to the public client", () => {
     expect(rendererSource).toContain(
-      "onSubmitSuccess?.({ message: data.message, redirectUrl: data.redirectUrl })"
+      'const successMessage = data.message ?? t(locale, "form.defaultSuccess")'
     );
     expect(rendererSource).toContain(
-      "setSubmitResult({ success: true, message: data.message })"
+      "onSubmitSuccess?.({ message: successMessage, redirectUrl: data.redirectUrl })"
+    );
+    expect(rendererSource).toContain(
+      "setSubmitResult({ success: true, message: successMessage })"
     );
   });
 

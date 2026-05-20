@@ -3,13 +3,18 @@ import { notFound } from "next/navigation";
 import { db } from "@/server/db";
 import { forms, formVersions, themes } from "@/server/db/schema";
 import { PublicFormClient } from "./client";
+import { resolveLocale } from "@/lib/i18n";
 
 export default async function PublicFormPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ locale?: string; lang?: string }>;
 }) {
   const { slug } = await params;
+  const query = await searchParams;
+  const locale = resolveLocale(query.locale ?? query.lang);
 
   // Fetch form
   const [form] = await db
@@ -62,6 +67,7 @@ export default async function PublicFormPage({
           fields={version.fieldsSnapshot}
           themeColors={themeColors}
           turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ""}
+          locale={locale}
         />
       </div>
     </div>

@@ -2,6 +2,12 @@
 
 FormForge is a drag-and-drop form builder with analytics, conditional logic, and Stripe-powered subscription billing.
 
+## Fresh Start Bootstrap Note
+
+This repository has been desk-flipped. For a new implementation, use FormForge as an AI-assisted form builder prototype focused on one validated loop: describe a form, review generated fields, edit visually, publish a public link, receive submissions, and review/export responses.
+
+Defer Stripe billing, teams, API keys, webhooks, durable file storage, provider integrations, and full i18n until the core loop is validated. Preserve product lessons from this repo, especially public form accessibility, immutable published form snapshots, response export, clear error handling, consent settings, and explicit deferred-infrastructure notes for future collaboration/API/webhook work.
+
 ## Billing Model
 
 | Tier | Lookup Key (target) |

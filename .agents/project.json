@@ -5,6 +5,7 @@
   ],
   "skill_pack_version": 1,
   "enabled_skills": {
-    "compile-central-alignment": "alignment-page-admin"
+    "compile-central-alignment": "alignment-page-admin",
+    "ship-end": "exec-loop"
   }
 }

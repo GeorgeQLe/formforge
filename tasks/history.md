@@ -1,5 +1,24 @@
 # History
 
+## 2026-06-13 — Generated skill-root hygiene cleanup
+
+- Ignored project-local generated skill roots so `/pack`, `$pack`, and `scripts/pack.sh refresh` outputs do not block normal shipping.
+- Removed the previously tracked `.claude/skills/**` and `.codex/skills/**` skill-root entries from Git's index while preserving the local generated skill directories on disk.
+- Kept `.agents/project.json` as the durable project skill registry and included the `ship-end` skill registration.
+
+### Ship Manifest
+
+- **User goal:** Clean up generated skill roots so `$ship-end` can ship normally without committing local generated skill directory contents.
+- **Changed files:** `.gitignore`, `.agents/project.json`, tracked `.claude/skills/**` and `.codex/skills/**` index entries, `tasks/history.md`.
+- **Per-file purpose:** `.gitignore` excludes generated local skill roots; `.agents/project.json` records the durable `ship-end` project skill registration; the skill-root deletions remove generated entries from version control only; `tasks/history.md` records the cleanup and rationale.
+- **User-goal mapping:** The commit boundary keeps source-of-truth project skill designation tracked while preventing generated skill roots from appearing as dirty tracked or untracked shipping blockers.
+- **Tests run:** `git status --short`, `git check-ignore -v .claude/skills/ship-end/SKILL.md .codex/skills/ship-end/SKILL.md`, and `git diff --cached --name-status`.
+- **Skipped tests:** No app test/build was run because this change is repository metadata and generated-artifact hygiene only; it does not touch application source, runtime configuration, schemas, validation rules, or deploy behavior.
+- **Adversarial review:** Verified the local generated `SKILL.md` files still exist on disk and that staged paths are limited to the ignore rule, project registry update, index-only generated skill-root removals, and this history entry.
+- **Residual risk:** Future pack tooling must continue treating `.agents/project.json` as the durable registry and regenerating local skill roots when needed.
+- **Rollback note:** Revert the `.gitignore` additions and re-add the generated skill-root entries if the project intentionally decides to version local materialized skills.
+- **Next command:** `$ship-end`
+
 ## 2026-05-20 — Public form i18n prototype
 
 - Added a local English/Spanish i18n catalog for public form system copy and validation messages.

@@ -1,3 +1,34 @@
+# FormForge Competitive Analysis Scope Approval Roadmap
+
+## Objective
+
+Prepare the Stage 1 competitive-analysis scope gate for the active flat FormForge research path before any market synthesis or framework research is run.
+
+## Scope Basis
+
+- Active product path: `research/`
+- Approved ICP: client-service consultants, coaches, and small agencies doing client intake/onboarding.
+- Current product boundary: AI-assisted form builder prototype focused on describe, generate, edit, publish, submit, review, and export.
+- This stage is limited to scope evidence, source plan, framework selection, output paths, assumptions, and approval gates.
+
+## Non-Goals
+
+- Do not run competitor web research in Stage 1.
+- Do not rank competitors, make findings, or write canonical competitive-analysis deliverables before approval.
+- Do not create a run manifest before compiled scope YAML approval.
+- Do not change product code.
+
+## Plan
+
+- [x] Resolve active research scope from `research/.progress.yaml`.
+- [x] Read approved ICP and repo context needed for scope selection.
+- [x] Write the scope-selection alignment page at `alignment/competitive-analysis-formforge.html`.
+- [x] Update the central alignment index.
+- [x] Verify review page gates, index entry, and git diff.
+- [x] Stop for compiled YAML approval before running framework research.
+
+---
+
 # FormForge Stage 3 ICP Finalization Roadmap
 
 ## Objective

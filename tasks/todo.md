@@ -1,5 +1,22 @@
 # FormForge - Project Vision & Next Steps
 
+## Active Competitive Analysis Stage 1 Scope Gate
+
+- [x] Resolve active FormForge research scope from `research/.progress.yaml`.
+- [x] Gather scope context from `README.md`, `research/icp.md`, `research/concept-brief.md`, package metadata, and source layout.
+- [x] Create review alignment page: `alignment/competitive-analysis-formforge.html`.
+- [x] Update central alignment index for the new review page.
+- [x] Verify the page includes approval gates, no synthesized competitor findings, and the expected TTS script.
+- [x] Stop for compiled YAML approval before creating `research/_working/competitive-analysis-run.yaml` or running any framework research.
+
+### Review
+
+- Stage 1 scope-selection page drafted on 2026-06-15 at `alignment/competitive-analysis-formforge.html`.
+- The page resolves flat `research/` scope, proposes all four frameworks, renders the source plan and output paths, and includes required compile-to-YAML approval gates.
+- Verification: `research/_working/competitive-analysis-run.yaml` and `research/competitive-analysis.md` do not exist; `alignment/index.html` includes the new page; `git diff --check` passed.
+
+---
+
 ## Active Stage 3 ICP Finalization
 
 - [x] Reconfirm the ICP working packet and alignment page are still review-stage.

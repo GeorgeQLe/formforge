@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="review">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FormForge Competitive Analysis Scope - Review</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #fbfcfd;
+      --ink: #17202a;
+      --muted: #5b6773;
+      --line: #d8dee5;
+      --band: #eef5f2;
+      --band-2: #eef3fb;
+      --accent: #176b5b;
+      --accent-2: #315f9c;
+      --warning: #8a5a00;
+      --warning-bg: #fff7df;
+      --success: #176b3a;
+      --success-bg: #e7f5ec;
+      --danger: #9b2f2f;
+      --danger-bg: #fff1f1;
+      --chart-1: #176b5b;
+      --chart-2: #315f9c;
+      --chart-3: #8a5a00;
+      --chart-4: #6a4c93;
+      --shadow: 0 10px 28px rgba(23, 32, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 44px 24px 72px;
+    }
+    h1, h2, h3 { line-height: 1.18; letter-spacing: 0; }
+    h1 { margin: 0 0 12px; font-size: 34px; }
+    h2 { margin: 34px 0 14px; font-size: 24px; }
+    h3 { margin: 22px 0 10px; font-size: 18px; }
+    p { margin: 0 0 12px; }
+    a { color: #155fa0; }
+    code {
+      background: #eef1f4;
+      border-radius: 5px;
+      padding: 1px 5px;
+      font-size: 0.92em;
+    }
+    .lede {
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 30px;
+      margin-bottom: 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      padding: 4px 10px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .notice, .gate, .callout {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      background: #fff;
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+    }
+    .notice { margin: 22px 0; }
+    .warning { border-left-color: var(--warning); background: var(--warning-bg); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .card h3 { margin-top: 0; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      margin: 3px 4px 3px 0;
+      border-radius: 999px;
+      background: var(--band);
+      padding: 3px 9px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .pill.alt { background: var(--band-2); }
+    .pill.warn { background: var(--warning-bg); color: var(--warning); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+    th {
+      background: #f1f5f8;
+      color: #263442;
+      font-size: 13px;
+    }
+    tr:last-child td { border-bottom: 0; }
+    ul { margin-top: 8px; }
+    li { margin: 5px 0; }
+    .toc {
+      margin: 24px 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 16px 18px;
+    }
+    .toc ol { margin: 8px 0 0; padding-left: 22px; }
+    .chart-container, .table-wrap {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+      margin: 14px 0;
+    }
+    canvas {
+      width: 100%;
+      height: 260px;
+      display: block;
+    }
+    button {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 12px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+    button:focus, input:focus, textarea:focus {
+      outline: 3px solid rgba(23, 107, 91, 0.25);
+      outline-offset: 2px;
+    }
+    .gate {
+      margin: 14px 0;
+      box-shadow: none;
+    }
+    .gate-options {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    label.option {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px 12px;
+    }
+    label.option input { margin-top: 4px; }
+    textarea {
+      width: 100%;
+      min-height: 88px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+    .compile {
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      background: #fff;
+      padding: 18px;
+      margin-top: 18px;
+    }
+    #compiledYaml {
+      min-height: 260px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+    }
+    .meta { color: var(--muted); font-size: 13px; }
+    @media (max-width: 820px) {
+      main { padding: 32px 16px 56px; }
+      h1 { font-size: 28px; }
+      .grid, .three { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="status">alignment_status: review · visual tier · 2026-06-15</div>
+    <h1>FormForge Competitive Analysis Scope - Review</h1>
+    <p class="lede">This page is the Stage 1 approval gate for competitive analysis. It proposes the active scope, framework set, source plan, output paths, assumptions, and approval questions. It intentionally does not contain competitor findings, rankings, recommendations, or synthesized market conclusions.</p>
+
+    <section class="notice warning" id="pre-approval-boundary">
+      <h2>Pre-Approval Boundary</h2>
+      <p>No framework research has been run in this session. The next heavy phase starts only after compiled YAML from this page approves the scope and selected framework set.</p>
+      <p>After approval, the orchestrator will write <code>research/_working/competitive-analysis-run.yaml</code> and run exactly one selected framework per fresh <code>$competitive-analysis</code> invocation.</p>
+    </section>
+
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#scope">Resolved Scope</a></li>
+        <li><a href="#context">Product Context</a></li>
+        <li><a href="#frameworks">Framework Selection</a></li>
+        <li><a href="#source-plan">Source Plan</a></li>
+        <li><a href="#paths">Output Paths</a></li>
+        <li><a href="#assumptions">Assumptions And Gaps</a></li>
+        <li><a href="#loop">Session Loop</a></li>
+        <li><a href="#approval">Approval Gates</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
+      </ol>
+    </nav>
+
+    <section id="scope">
+      <h2>Resolved Scope</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Mode</h3>
+          <p><strong>Standard mode.</strong> The repository has an approved <code>research/icp.md</code> and active research manifest, so this is not concept-validation mode.</p>
+          <span class="pill">flat mode</span>
+          <span class="pill alt">active path: research/</span>
+        </article>
+        <article class="card">
+          <h3>Active ICP</h3>
+          <p>Client-service solo consultants, coaches, and small agencies doing client intake/onboarding.</p>
+          <span class="pill">B2B SaaS</span>
+          <span class="pill">self-serve/PLG</span>
+        </article>
+      </div>
+      <div class="table-wrap" data-tts-narrative="The resolved scope table shows FormForge in flat research mode, using the approved client-service intake ICP and excluding deferred product paths from this analysis.">
+        <table>
+          <thead>
+            <tr><th>Scope Item</th><th>Resolved Value</th><th>Scope Evidence</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Research path</td><td><code>research/</code></td><td><code>research/.progress.yaml</code> lists <code>active_paths: research/</code>.</td></tr>
+            <tr><td>Product path ID</td><td><code>formforge</code></td><td>Manifest label is "FormForge current flat scope".</td></tr>
+            <tr><td>Primary ICP</td><td>Client-service consultants, coaches, and small agencies doing client intake/onboarding.</td><td><code>research/icp.md</code>, confirmed on 2026-06-15.</td></tr>
+            <tr><td>Excluded from this run</td><td>Lead/quote forms, event/community signups, nonprofit/volunteer forms, HR/internal ops forms.</td><td>Manifest marks these as deferred or revisit candidates, not active paths.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="context">
+      <h2>Product Context</h2>
+      <div class="grid three">
+        <article class="card">
+          <h3>Product Loop</h3>
+          <p>Describe a form, review generated fields, edit visually, publish a public link, receive submissions, and review/export responses.</p>
+        </article>
+        <article class="card">
+          <h3>Value Wedge</h3>
+          <p>Fast intent-to-form creation for client-facing intake workflows, with visual editing and a polished public form experience.</p>
+        </article>
+        <article class="card">
+          <h3>Current Boundary</h3>
+          <p>Validate the core loop before expanding into billing, teams, APIs, webhooks, durable file storage, provider integrations, or broad i18n.</p>
+        </article>
+      </div>
+      <h3>Candidate Competitor Categories For Research</h3>
+      <p>These categories are scope hypotheses from existing approved research and repo context, not findings from this competitive-analysis run.</p>
+      <ul>
+        <li>General form builders and survey tools used for polished public forms.</li>
+        <li>AI-assisted form generation tools and generic AI form-builder features.</li>
+        <li>Client-service intake, onboarding, and client-portal suites.</li>
+        <li>Automation stacks that connect forms to spreadsheets, CRM, Notion, email, or project tools.</li>
+        <li>Manual alternatives such as email questionnaires, Google Docs, PDF intake packets, and spreadsheet checklists.</li>
+      </ul>
+    </section>
+
+    <section id="frameworks">
+      <h2>Framework Selection</h2>
+      <p>The proposed set includes all default competitive-analysis frameworks. Strategic group mapping is included because the approved ICP already spans multiple alternative categories and more than five likely competitors.</p>
+      <div class="chart-container" data-tts-narrative="The framework chart shows four selected frameworks. Porter's Five Forces, SWOT, and Feature Pricing Matrix are core defaults, while Strategic Group Map is selected because the market has multiple categories and buyer alternatives.">
+        <button type="button" data-toggle-table="frameworkChartTable">View as table</button>
+        <canvas id="frameworkChart" aria-label="Bar chart showing four selected competitive analysis frameworks and their proposed coverage weights."></canvas>
+        <table id="frameworkChartTable" hidden>
+          <thead><tr><th>Framework</th><th>Status</th><th>Coverage Weight</th></tr></thead>
+          <tbody>
+            <tr><td>Porter's Five Forces</td><td>Selected default</td><td>3</td></tr>
+            <tr><td>SWOT</td><td>Selected default</td><td>3</td></tr>
+            <tr><td>Feature/Pricing Matrix</td><td>Selected default</td><td>3</td></tr>
+            <tr><td>Strategic Group Map</td><td>Selected optional</td><td>2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap" data-tts-narrative="The framework table maps each selected framework to its analytical lens, output file, and why it is included in the proposed run.">
+        <table>
+          <thead>
+            <tr><th>Framework</th><th>Slug</th><th>Lens</th><th>Proposed Output</th><th>Why Included</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Porter's Five Forces</td><td><code>porter-five-forces</code></td><td>Industry structure, buyer power, substitutes, entrants, rivalry.</td><td><code>research/competitive-analysis-porter-five-forces.md</code></td><td>Core default. Useful for deciding whether the intake-form market has structural pressure from free tools, suites, and AI features.</td></tr>
+            <tr><td>SWOT</td><td><code>swot</code></td><td>Strengths, weaknesses, opportunities, and threats against evidence.</td><td><code>research/competitive-analysis-swot.md</code></td><td>Core default. Turns competitive evidence into product-facing strengths and risks without doing positioning work.</td></tr>
+            <tr><td>Feature/Pricing Matrix</td><td><code>feature-pricing-matrix</code></td><td>Capabilities, plans, limits, pricing, and package comparison.</td><td><code>research/competitive-analysis-feature-pricing-matrix.md</code></td><td>Core default. The ICP has visible sensitivity to response caps, branding limits, file uploads, logic, and all-in-one pricing.</td></tr>
+            <tr><td>Strategic Group Map</td><td><code>strategic-group-map</code></td><td>Competitive clusters, axes, whitespace, and segment-level alternatives.</td><td><code>research/competitive-analysis-strategic-group-map.md</code></td><td>Optional but selected. The scope spans general form builders, suites, client portals, automation stacks, and manual workflows.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="source-plan">
+      <h2>Source Plan</h2>
+      <p>After approval, each framework must use web search extensively. Every competitor included in a framework output or synthesis must come from a search result and be cited. Prefer sources from the last 12 months where available.</p>
+      <div class="table-wrap" data-tts-narrative="The source plan prioritizes competitor websites, pricing pages, product documentation, comparison pages, directories, review sites, and relevant customer language sources.">
+        <table>
+          <thead>
+            <tr><th>Source Category</th><th>Purpose</th><th>Examples To Search</th><th>Evidence Needed</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Competitor official pages</td><td>Confirm current positioning, features, plans, and pricing.</td><td>Form builders, AI form tools, client intake suites, client portals.</td><td>Feature claims, plan limits, pricing, target audience, AI capabilities.</td></tr>
+            <tr><td>Pricing and plan pages</td><td>Compare response limits, branding, uploads, logic, seats, and automation limits.</td><td>Vendor pricing pages and docs.</td><td>Plan names, monthly/annual prices, limits, relevant package boundaries.</td></tr>
+            <tr><td>Template galleries and docs</td><td>Validate whether competitors directly serve intake/onboarding use cases.</td><td>Client intake templates, agency onboarding templates, coaching forms.</td><td>Use-case specificity, workflow fit, template depth.</td></tr>
+            <tr><td>Search results and comparison posts</td><td>Identify buyer alternatives and category language.</td><td>Typeform alternatives, Google Forms alternatives, client intake form tools, HoneyBook alternatives.</td><td>Repeated competitor mentions, buyer criteria, substitute categories.</td></tr>
+            <tr><td>Review/community language</td><td>Capture customer pain and switching triggers.</td><td>G2/Capterra-style reviews, Reddit, niche communities, public discussions.</td><td>Complaints about limits, setup work, client experience, export, integrations.</td></tr>
+            <tr><td>Repo and approved research artifacts</td><td>Keep analysis aligned to FormForge's current product boundary and ICP.</td><td><code>README.md</code>, <code>research/icp.md</code>, <code>research/concept-brief.md</code>.</td><td>Scope constraints, ICP needs, deferred product paths, no-go areas.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="paths">
+      <h2>Output Paths</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Stage 2 Working And Intermediate Files</h3>
+          <ul>
+            <li><code>research/_working/preliminary-competitive-analysis-research.md</code> for inherited scope context and later synthesis working packet.</li>
+            <li><code>research/_working/competitive-analysis-run.yaml</code> after scope approval only.</li>
+            <li><code>research/competitive-analysis-{framework}.md</code> for each approved framework intermediate after its own findings approval.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Final Canonical Files</h3>
+          <ul>
+            <li><code>research/competitive-analysis.md</code></li>
+            <li><code>research/competitive-analysis-search-log.md</code></li>
+            <li><code>research/.progress.yaml</code> only for approved pipeline-stage or product-path evidence updates.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="assumptions">
+      <h2>Assumptions And Gaps</h2>
+      <div class="table-wrap" data-tts-narrative="The assumptions register records what is already approved, what is inferred, and what still needs market evidence after scope approval.">
+        <table>
+          <thead>
+            <tr><th>Item</th><th>Type</th><th>Current Confidence</th><th>Decision Impact</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>The active analysis should stay on the flat FormForge scope.</td><td>Approved manifest fact</td><td>High</td><td>Use <code>research/</code> paths, not deferred product-path directories.</td></tr>
+            <tr><td>The ICP is client-service consultants, coaches, and small agencies doing client intake/onboarding.</td><td>Approved research fact</td><td>High</td><td>Competitor research should focus on client intake/onboarding alternatives.</td></tr>
+            <tr><td>Strategic group mapping is warranted.</td><td>Scope inference</td><td>Medium</td><td>Needs approval because it adds a framework session, but the category breadth supports it.</td></tr>
+            <tr><td>Feature and pricing comparison will be sourceable.</td><td>Research assumption</td><td>Medium</td><td>Pricing pages may vary by region or recency; source dates must be recorded.</td></tr>
+            <tr><td>Review/community evidence will be available for customer language.</td><td>Research assumption</td><td>Medium-low</td><td>If sparse, outputs must label source coverage gaps instead of overstating customer sentiment.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Known Source Coverage Gaps Before Research</h3>
+      <ul>
+        <li>No approved customer interviews are present in this repo yet.</li>
+        <li>No current competitive research packet exists for FormForge.</li>
+        <li>Competitor set is not finalized and must be discovered through web search after approval.</li>
+        <li>Pricing and package details are time-sensitive and must be verified from current public sources.</li>
+      </ul>
+    </section>
+
+    <section id="loop">
+      <h2>Session Loop</h2>
+      <ol>
+        <li>This page receives compiled YAML approval for scope and selected frameworks.</li>
+        <li>The next <code>$competitive-analysis</code> invocation writes the run manifest and runs the first pending framework only.</li>
+        <li>Each framework emits its own findings review page and stops for compiled YAML approval.</li>
+        <li>After all selected framework intermediates exist, <code>$competitive-analysis --synthesize</code> or a normal invocation creates the synthesis review page.</li>
+        <li>Only after final synthesis approval are canonical competitive-analysis files written.</li>
+      </ol>
+    </section>
+
+    <section id="approval">
+      <h2>Approval Gates</h2>
+      <p>Answer the required gates below, then use the compile control at the bottom. You may also use notes or section feedback to request edits without approving the scope.</p>
+
+      <div class="gate" data-gate="scope">
+        <h3>Gate 1: Research Scope</h3>
+        <p>Approve the competitive-analysis scope as flat FormForge research under <code>research/</code>, focused on the approved client-service intake ICP?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="scope" value="approved" data-answer="Approve flat FormForge scope and client-service intake ICP."> Approve this scope.</label>
+          <label class="option"><input type="radio" name="scope" value="needs-clarification" data-answer="Scope needs clarification before framework research."> Needs clarification.</label>
+          <label class="option"><input type="radio" name="scope" value="other"> Other decision in notes.</label>
+        </div>
+        <textarea data-notes="scope" placeholder="Optional scope notes"></textarea>
+      </div>
+
+      <div class="gate" data-gate="frameworks">
+        <h3>Gate 2: Selected Frameworks</h3>
+        <p>Approve running all four proposed frameworks: Porter's Five Forces, SWOT, Feature/Pricing Matrix, and Strategic Group Map?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="frameworks" value="approved" data-answer="Approve all four frameworks: porter-five-forces, swot, feature-pricing-matrix, strategic-group-map."> Approve all four frameworks.</label>
+          <label class="option"><input type="radio" name="frameworks" value="approved-core" data-answer="Approve core frameworks only: porter-five-forces, swot, feature-pricing-matrix. Exclude strategic-group-map."> Approve core frameworks only.</label>
+          <label class="option"><input type="radio" name="frameworks" value="needs-clarification" data-answer="Framework selection needs clarification before run manifest creation."> Needs clarification.</label>
+          <label class="option"><input type="radio" name="frameworks" value="other"> Other decision in notes.</label>
+        </div>
+        <textarea data-notes="frameworks" placeholder="Optional framework notes"></textarea>
+      </div>
+
+      <div class="gate" data-gate="sources">
+        <h3>Gate 3: Source Plan</h3>
+        <p>Approve the source plan and requirement that every competitor fact in framework outputs be cited from current web search results?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="sources" value="approved" data-answer="Approve source plan and citation requirement."> Approve source plan.</label>
+          <label class="option"><input type="radio" name="sources" value="needs-clarification" data-answer="Source plan needs clarification before research."> Needs clarification.</label>
+          <label class="option"><input type="radio" name="sources" value="other"> Other decision in notes.</label>
+        </div>
+        <textarea data-notes="sources" placeholder="Optional source notes"></textarea>
+      </div>
+
+      <div class="gate" data-gate="paths">
+        <h3>Gate 4: Output Paths</h3>
+        <p>Approve the proposed working, intermediate, and canonical output paths?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="paths" value="approved" data-answer="Approve proposed output paths."> Approve output paths.</label>
+          <label class="option"><input type="radio" name="paths" value="needs-clarification" data-answer="Output paths need clarification before files are written."> Needs clarification.</label>
+          <label class="option"><input type="radio" name="paths" value="other"> Other decision in notes.</label>
+        </div>
+        <textarea data-notes="paths" placeholder="Optional path notes"></textarea>
+      </div>
+    </section>
+
+    <section id="compile" class="compile">
+      <h2>Compile Responses</h2>
+      <p>Use this after setting gate answers. The generated YAML is the payload to paste back into Codex for the next <code>$competitive-analysis</code> invocation.</p>
+      <button type="button" class="primary" id="compileButton">Compile Responses</button>
+      <button type="button" id="copyButton">Copy YAML</button>
+      <p class="meta" id="copyStatus">No YAML compiled yet.</p>
+      <textarea id="compiledYaml" readonly placeholder="Compiled YAML will appear here."></textarea>
+    </section>
+  </main>
+
+  <script>
+    const chartData = [
+      { label: "Five Forces", value: 3, color: "--chart-1" },
+      { label: "SWOT", value: 3, color: "--chart-2" },
+      { label: "Feature/Pricing", value: 3, color: "--chart-3" },
+      { label: "Group Map", value: 2, color: "--chart-4" }
+    ];
+
+    function cssVar(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function drawFrameworkChart() {
+      const canvas = document.getElementById("frameworkChart");
+      const ctx = canvas.getContext("2d");
+      const ratio = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * ratio;
+      canvas.height = 260 * ratio;
+      ctx.scale(ratio, ratio);
+      ctx.clearRect(0, 0, rect.width, 260);
+      const width = rect.width;
+      const max = 3;
+      const left = 42;
+      const bottom = 210;
+      const barWidth = Math.max(42, (width - 80) / chartData.length - 18);
+      ctx.font = "12px system-ui, sans-serif";
+      ctx.fillStyle = cssVar("--muted");
+      ctx.fillText("Coverage weight", left, 18);
+      chartData.forEach((item, index) => {
+        const x = left + index * (barWidth + 18);
+        const height = (item.value / max) * 150;
+        ctx.fillStyle = cssVar(item.color);
+        ctx.fillRect(x, bottom - height, barWidth, height);
+        ctx.fillStyle = cssVar("--ink");
+        ctx.fillText(String(item.value), x + barWidth / 2 - 4, bottom - height - 8);
+        ctx.save();
+        ctx.translate(x + 4, bottom + 16);
+        ctx.rotate(-0.36);
+        ctx.fillText(item.label, 0, 0);
+        ctx.restore();
+      });
+      ctx.strokeStyle = cssVar("--line");
+      ctx.beginPath();
+      ctx.moveTo(left - 8, bottom);
+      ctx.lineTo(width - 18, bottom);
+      ctx.stroke();
+    }
+
+    document.querySelectorAll("[data-toggle-table]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const table = document.getElementById(button.dataset.toggleTable);
+        const canvas = button.parentElement.querySelector("canvas");
+        const showTable = table.hidden;
+        table.hidden = !showTable;
+        canvas.hidden = showTable;
+        button.textContent = showTable ? "View as chart" : "View as table";
+      });
+    });
+
+    function yamlEscape(value) {
+      return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    }
+
+    function selectedGate(name) {
+      const selected = document.querySelector(`input[name="${name}"]:checked`);
+      const notes = document.querySelector(`[data-notes="${name}"]`).value.trim();
+      if (!selected) {
+        return { name, status: "unanswered", answer: "", notes };
+      }
+      const answer = selected.value === "other" ? notes : selected.dataset.answer;
+      const status = selected.value === "needs-clarification" ? "needs-clarification" : (selected.value === "other" ? "other" : "answered");
+      return { name, status, answer, notes };
+    }
+
+    async function copyYaml() {
+      const textarea = document.getElementById("compiledYaml");
+      const status = document.getElementById("copyStatus");
+      if (!textarea.value.trim()) {
+        status.textContent = "Compile YAML before copying.";
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(textarea.value);
+        status.textContent = "YAML copied to clipboard.";
+      } catch {
+        textarea.select();
+        status.textContent = "Clipboard blocked. YAML selected for manual copy.";
+      }
+    }
+
+    function compileResponses() {
+      const gates = ["scope", "frameworks", "sources", "paths"].map(selectedGate);
+      const unanswered = gates.filter((gate) => gate.status === "unanswered").map((gate) => gate.name);
+      const blocked = gates.some((gate) => gate.status === "needs-clarification" || (gate.status === "other" && !gate.answer));
+      const complete = unanswered.length === 0;
+      const approval = complete && !blocked ? "ready-for-agent-review" : "not-approved";
+      const lines = [
+        "alignment_page: alignment/competitive-analysis-formforge.html",
+        "response_status: " + (complete ? "complete" : "partial"),
+        "approval_status: " + approval,
+        "required_gate_status: " + (complete ? "complete" : "incomplete"),
+        "unanswered_required_questions:"
+      ];
+      if (unanswered.length === 0) {
+        lines.push("  []");
+      } else {
+        unanswered.forEach((item) => lines.push("  - " + item));
+      }
+      lines.push("gate_answers:");
+      gates.forEach((gate) => {
+        lines.push("  - section: approval");
+        lines.push("    gate_type: " + gate.name);
+        lines.push("    status: " + gate.status);
+        lines.push('    answer: "' + yamlEscape(gate.answer) + '"');
+        if (gate.notes) lines.push('    notes: "' + yamlEscape(gate.notes) + '"');
+        if (gate.name === "frameworks") lines.push("    target_path: research/_working/competitive-analysis-run.yaml");
+      });
+      lines.push("section_feedback: []");
+      const textarea = document.getElementById("compiledYaml");
+      textarea.value = lines.join("\n");
+      copyYaml();
+    }
+
+    window.addEventListener("resize", drawFrameworkChart);
+    window.addEventListener("load", drawFrameworkChart);
+    document.getElementById("compileButton").addEventListener("click", compileResponses);
+    document.getElementById("copyButton").addEventListener("click", copyYaml);
+  </script>
+  <script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

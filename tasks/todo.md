@@ -8,13 +8,14 @@
 - [x] Write non-canonical working packet: `research/_working/preliminary-porter-five-forces-research.md`.
 - [x] Build review page: `alignment/porter-five-forces-formforge.html`.
 - [x] Verify framework-review outputs and git diff.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ### Review
 
 - Stage 2 Porter framework review drafted on 2026-06-15. The working packet rates rivalry, entrants, substitutes, and buyer power as high pressure, with supplier power as moderate.
 - Non-canonical review artifacts are `research/_working/preliminary-porter-five-forces-research.md` and `alignment/porter-five-forces-formforge.html`; the approved framework manifest is `research/_working/competitive-analysis-run.yaml`.
 - Verification: `git diff --check` passed; `research/competitive-analysis-porter-five-forces.md` does not exist; the Porter review page reports `data-alignment-status="review"`; the page compiles YAML for `alignment/porter-five-forces-formforge.html`; `alignment/index.html` includes the new page.
+- Shipped on `main` in commit `9d42d31`; follow-up task-status-only update recorded separately.
 
 ---
 

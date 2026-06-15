@@ -1,5 +1,20 @@
 # FormForge - Project Vision & Next Steps
 
+## Active Stage 2 Customer Discovery Review
+
+- [x] Reconfirm repo and concept context for the approved customer-discovery scope.
+- [x] Run current web/source checks for ICP candidate evidence, alternatives, pricing/WTP, and source gaps.
+- [x] Write non-canonical working packet: `research/_working/preliminary-customer-discovery-research.md`.
+- [x] Update Stage 2 review page: `alignment/customer-discovery-formforge.html`.
+- [x] Update central alignment index if needed.
+- [x] Verify the packet/page and confirm canonical research files remain untouched.
+
+### Review
+
+- Stage 2 artifacts drafted 2026-06-15. The working packet recommends client-service intake operators as the primary ICP candidate with medium-high confidence, treats generic AI form generation as a weak standalone wedge, and keeps lead/quote, event/community, nonprofit/volunteer, and HR/internal ops as secondary or lower-priority candidates.
+- Canonical research files remain pending final Stage 3 approval.
+- Verification: confirmed `research/icp.md`, `research/icp-search-log.md`, and `research/.progress.yaml` were not created; checked the review page and index have closing HTML and script blocks.
+
 ## Vision
 
 FormForge is an AI-powered form builder that lets users describe forms in natural language and get a fully functional, publishable form instantly. It combines GPT-4o generation with a drag-and-drop visual editor, conditional logic, file uploads, theming, Stripe billing, and email notifications -- targeting individuals and small teams who need professional forms without the overhead of enterprise tools.

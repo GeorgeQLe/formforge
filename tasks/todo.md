@@ -8,7 +8,7 @@
 - [x] Mark `alignment/porter-five-forces-formforge.html` confirmed and preserve approval decisions.
 - [x] Update central alignment index if needed.
 - [x] Verify artifact structure, archive state, confirmed page controls, and git diff.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ### Review
 
@@ -17,6 +17,7 @@
 - Review-stage artifacts archived under `docs/history/archive/2026-06-15/114752/`.
 - The Porter alignment page is now a confirmed read-only record preserving approved evidence coverage, market boundary, force ratings, and artifact destination.
 - Verification: canonical artifact exists; active Porter working packet is removed; archive copies exist; confirmed page reports `data-alignment-status="confirmed"` and no active gate inputs, textareas, section feedback controls, or compile controls; page inline script passes `node --check`; `git diff --check` passed.
+- Shipped on `main` in commit `71d65b4`.
 
 ---
 

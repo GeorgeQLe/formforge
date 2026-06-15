@@ -1,3 +1,39 @@
+# FormForge Stage 3 ICP Finalization Roadmap
+
+## Objective
+
+Finalize the approved FormForge ICP research cycle by writing canonical ICP artifacts, creating the approved secondary-path manifest, archiving review-stage working files, and marking the ICP alignment page confirmed.
+
+## Approval Input
+
+The user provided final compiled YAML on 2026-06-15 approving:
+
+- Flat FormForge scope and current product boundary.
+- Candidate A as the primary ICP: client-service consultants, coaches, and small agencies doing client intake/onboarding.
+- Evidence coverage as sufficient for canonical ICP writing.
+- Creation of `research/.progress.yaml` with deferred/revisit product path entries, without creating directories.
+- Canonical writes to `research/icp.md`, `research/icp-search-log.md`, and optional `research/.progress.yaml`.
+
+## Non-Goals
+
+- Do not create secondary product-path directories.
+- Do not run downstream competitive analysis, positioning, monetization, GTM, specs, or implementation work.
+- Do not change GitHub Actions.
+
+## Plan
+
+- [x] Reconfirm the active ICP working packet and alignment page are still review-stage.
+- [x] Archive the review-stage ICP alignment page and working packet under `docs/history/archive/2026-06-15/<timestamp>/`.
+- [x] Write `research/icp.md` from the approved working packet using canonical ICP headings.
+- [x] Write `research/icp-search-log.md` with query, evidence, scoring, source coverage, and gap details.
+- [x] Create `research/.progress.yaml` with active FormForge scope plus approved deferred/revisit entries.
+- [x] Convert `alignment/icp-formforge.html` from review to confirmed and preserve the approval record.
+- [x] Update `alignment/index.html` so ICP is shown as confirmed.
+- [ ] Verify required sections, removed working packet, archive paths, and git diff.
+- [ ] Commit and push intended tracked changes.
+
+---
+
 # FormForge Stage 2 Customer Discovery Roadmap
 
 ## Objective

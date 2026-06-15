@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FormForge ICP Alignment - Review</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+      --question: #1c2333;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1180px, 100%);
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3, h4 { color: #fff; letter-spacing: 0; }
+    h1 {
+      margin: 0 0 0.75rem;
+      font-size: 2.25rem;
+      line-height: 1.12;
+    }
+    h2 {
+      margin: 2.5rem 0 0.75rem;
+      color: var(--accent);
+      font-size: 1.45rem;
+    }
+    h3 {
+      margin: 1.5rem 0 0.55rem;
+      font-size: 1.1rem;
+    }
+    h4 {
+      margin: 1.1rem 0 0.4rem;
+      font-size: 1rem;
+    }
+    p { margin: 0 0 0.8rem; }
+    a { color: var(--accent); }
+    code {
+      background: #111827;
+      border: 1px solid var(--border);
+      border-radius: 0.3rem;
+      color: #e6edf3;
+      padding: 0.05rem 0.3rem;
+    }
+    ul, ol { padding-left: 1.4rem; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.8rem 0 1.2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 0.7rem 0.75rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #1f2630;
+      color: #fff;
+      font-weight: 700;
+    }
+    .lede {
+      max-width: 860px;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+    .toc, .card, .notice, .gate, .feedback, .compile, .status {
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      background: var(--surface);
+    }
+    .toc {
+      margin: 1.5rem 0 2rem;
+      padding: 1rem;
+    }
+    .toc h2 { margin-top: 0; }
+    .toc ul {
+      columns: 2;
+      column-gap: 2rem;
+      margin-bottom: 0;
+    }
+    .notice, .status {
+      margin: 1.25rem 0;
+      padding: 1rem;
+      border-left: 4px solid var(--accent);
+    }
+    .status {
+      border-left-color: var(--purple);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(min(260px, 100%), 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .card { padding: 1rem; }
+    .card h3 { margin-top: 0; }
+    .muted { color: var(--text-muted); }
+    .tag {
+      display: inline-flex;
+      min-height: 28px;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: #fff;
+      background: #1f2630;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .rank {
+      color: #fff;
+      background: #12361f;
+      border-color: rgba(63, 185, 80, 0.45);
+    }
+    .table-wrap {
+      overflow-x: auto;
+      max-width: 100%;
+    }
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-top: 2.5rem;
+    }
+    .section-head h2 { margin: 0; }
+    .feedback {
+      margin: 0.55rem 0 1rem;
+      padding: 0.75rem;
+    }
+    .feedback-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .feedback-controls label, .gate label {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      border: 1px solid var(--border);
+      border-radius: 0.45rem;
+      padding: 10px 16px;
+      cursor: pointer;
+      background: #0f1520;
+    }
+    .feedback-controls label:has(input:checked[value="emphasize"]) {
+      border-color: var(--green);
+      color: var(--green);
+    }
+    .feedback-controls label:has(input:checked[value="down"]) {
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .feedback-controls label:has(input:checked[value="needs-clarification"]) {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+    .feedback textarea, .gate textarea, .compile textarea {
+      width: 100%;
+      min-height: 96px;
+      margin-top: 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 0.45rem;
+      background: #0f1520;
+      color: var(--text);
+      font: inherit;
+      padding: 0.7rem;
+    }
+    .feedback textarea[readonly], .compile textarea[readonly] {
+      min-height: 160px;
+      white-space: pre;
+      overflow: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 0.9rem;
+    }
+    .local-actions, .compile-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.65rem;
+    }
+    button {
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 0.45rem;
+      background: #1f2630;
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+    button:hover { border-color: var(--accent); }
+    button:disabled {
+      cursor: not-allowed;
+      color: var(--text-muted);
+      opacity: 0.65;
+    }
+    .gate {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--question);
+      border-color: rgba(188, 140, 255, 0.5);
+    }
+    .gate h3 {
+      color: var(--purple);
+      margin-top: 0;
+    }
+    .gate-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.7rem;
+    }
+    .gate label:has(input:checked) {
+      border-color: var(--purple);
+      color: #fff;
+      background: #272f45;
+    }
+    .compile {
+      margin-top: 2rem;
+      padding: 1rem;
+    }
+    .warning { color: var(--orange); font-weight: 700; }
+    .success { color: var(--green); font-weight: 700; }
+    .danger { color: var(--red); font-weight: 700; }
+    .hidden { display: none; }
+    @media (max-width: 860px) {
+      .toc ul { columns: 1; }
+      h1 { font-size: 1.85rem; }
+    }
+    @media (max-width: 560px) {
+      main { padding: 1.5rem 0.8rem 3rem; }
+      .gate-options, .feedback-controls, .local-actions, .compile-actions { flex-direction: column; align-items: stretch; }
+      .feedback-controls label, .gate label, button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>FormForge ICP Alignment - Review</h1>
+    <p class="lede">Review-stage alignment page for a ground-up ICP redo. This page renders the full preliminary research packet, evidence matrix, confidence register, source gaps, proposed canonical file changes, and approval gates. Canonical ICP artifacts have not been written.</p>
+
+    <div class="status">
+      <p><strong>alignment_status:</strong> review</p>
+      <p><strong>approval_status:</strong> not-approved</p>
+      <p><strong>working packet:</strong> <code>research/_working/preliminary-icp-research.md</code></p>
+      <p><strong>canonical outputs pending approval:</strong> <code>research/icp.md</code>, <code>research/icp-search-log.md</code>, optional <code>research/.progress.yaml</code></p>
+      <p><strong>Prior page archived:</strong> <code>docs/history/archive/2026-06-07/114610/alignment/icp-formforge.html</code></p>
+    </div>
+
+    <nav class="toc" aria-label="Table of Contents">
+      <h2>Table of Contents</h2>
+      <ul>
+        <li><a href="#approval-boundary">Approval Boundary</a></li>
+        <li><a href="#source-context">Source Context</a></li>
+        <li><a href="#first-principles">First-Principles Market Frame</a></li>
+        <li><a href="#marketplace-side">Marketplace Side Preflight</a></li>
+        <li><a href="#broad-research">Broad Research Queries</a></li>
+        <li><a href="#candidate-shortlist">ICP Candidate Shortlist</a></li>
+        <li><a href="#primary-selection">Primary ICP Selection</a></li>
+        <li><a href="#scoring">Value x Accessibility Scoring</a></li>
+        <li><a href="#primary-profile">Primary ICP Deep Profile</a></li>
+        <li><a href="#additional-icps">Additional ICPs</a></li>
+        <li><a href="#cross-icp">Cross-ICP Analysis</a></li>
+        <li><a href="#evidence-matrix">Evidence Matrix</a></li>
+        <li><a href="#source-coverage">Source Coverage</a></li>
+        <li><a href="#assumptions">Assumptions Register</a></li>
+        <li><a href="#file-changes">Proposed File Changes</a></li>
+        <li><a href="#approval-gates">Approval Gates</a></li>
+        <li><a href="#compile">Compile Review YAML</a></li>
+      </ul>
+    </nav>
+
+    <section id="approval-boundary" data-section="Approval Boundary">
+      <div class="section-head">
+        <h2>Approval Boundary</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Approval Boundary"></div>
+      <p>This packet rebuilds FormForge ICP research from first principles. It is a non-canonical working artifact. The intended post-approval canonical outputs are <code>research/icp.md</code>, <code>research/icp-search-log.md</code>, and optional <code>research/.progress.yaml</code> entries for secondary product surfaces if approved.</p>
+      <p>No canonical research, spec, or task file has been written in this stage.</p>
+    </section>
+
+    <section id="source-context" data-section="Source Context">
+      <div class="section-head">
+        <h2>Source Context</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Source Context"></div>
+      <h3>Repo Evidence</h3>
+      <ul>
+        <li><code>research/concept-brief.md</code> defines FormForge as an AI-assisted form builder for public forms: describe the needed form, review generated fields, edit visually, publish a public link, receive submissions, and review/export responses.</li>
+        <li><code>research/concept-brief.md</code> frames the broad beneficiary hypothesis as "individuals and small teams," but explicitly says this is not yet an ICP selection.</li>
+        <li><code>src/server/ai/generate-form.ts</code> shows the implemented AI wedge: prompt to structured form definition with title, description, field types, validation, options, and conditional logic hints.</li>
+        <li><code>src/app/page.tsx</code> presents the product as natural-language form creation plus drag-and-drop editing and response analytics.</li>
+        <li><code>tasks/todo.md</code> and <code>README.md</code> show an older/broader surface with billing, collaboration/API experiments, file uploads, analytics, Turnstile, versioning, themes, and i18n-related work. The concept brief warns not to rebuild that old app feature-for-feature before ICP validation.</li>
+      </ul>
+      <h3>Product Boundary Used For This Redo</h3>
+      <ol>
+        <li>A form creator describes a form.</li>
+        <li>AI drafts a usable form structure.</li>
+        <li>The creator edits it visually.</li>
+        <li>The creator publishes a public link.</li>
+        <li>Respondents submit.</li>
+        <li>The creator reviews or exports responses.</li>
+      </ol>
+      <p>Deferred or unproven surfaces include full CRM ownership, contract/payment flows, client portals, durable integrations, quote-estimator engines, event check-in, volunteer schedule management, HR compliance workflows, and enterprise procurement.</p>
+    </section>
+
+    <section id="first-principles" data-section="First-Principles Market Frame">
+      <div class="section-head">
+        <h2>First-Principles Market Frame</h2>
+      </div>
+      <div class="feedback" data-feedback-section="First-Principles Market Frame"></div>
+      <p>Forms are not a standalone job. A form is an input boundary between someone who needs information and someone who has it. Demand becomes economically meaningful when the submitted information moves a paid or operational workflow forward.</p>
+      <p>The key selection question is therefore not "who needs forms?" Almost everyone does. The useful question is: "Which user repeatedly needs a new or modified public data-collection flow, suffers when setup or response handling is slow, can adopt self-serve software, and already has a reason to pay for better intake?"</p>
+      <p>From that frame, FormForge should prefer segments where:</p>
+      <ul>
+        <li>The form creator and budget owner are close to the work.</li>
+        <li>Form setup is frequent or variable enough that AI drafting matters.</li>
+        <li>The submitted information directly affects revenue, delivery quality, or avoidable labor.</li>
+        <li>Respondents are external enough that the form must look professional and be easy to complete.</li>
+        <li>The first useful workflow can survive with a link, response dashboard, export, file upload, notifications, and basic logic.</li>
+        <li>The segment is not blocked from early adoption by HIPAA/FERPA/HR compliance, enterprise procurement, deep integrations, or specialized workflow infrastructure.</li>
+      </ul>
+    </section>
+
+    <section id="marketplace-side" data-section="Marketplace Side Preflight">
+      <div class="section-head">
+        <h2>Marketplace Side Preflight</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Marketplace Side Preflight"></div>
+      <p>FormForge is not a marketplace. It is primarily B2B SaaS with product-led/self-serve adoption and some prosumer/solo-operator usage.</p>
+      <h3>Material Sides</h3>
+      <ul>
+        <li><strong>Customer/buyer side:</strong> the person or small team creating forms and reviewing responses.</li>
+        <li><strong>User side:</strong> often the same as the buyer in solo and small-team segments; sometimes an ops/admin teammate uses the tool after the owner chooses it.</li>
+        <li><strong>Respondent side:</strong> clients, leads, attendees, volunteers, applicants, or customers who complete the form. Respondents do not pay FormForge, but their experience changes customer value because poor completion, confusion, or missing details damage the creator's workflow.</li>
+      </ul>
+      <p><strong>Excluded side:</strong> respondents are not ICP candidates because they are not the customer side for this product. Their needs are captured as value drivers and risks inside each buyer/customer ICP.</p>
+      <h3>Business Model Classification</h3>
+      <ul>
+        <li>Primary: B2B SaaS (PLG/self-serve).</li>
+        <li>Secondary: B2C/prosumer edge for solo consultants, coaches, creators, and operators.</li>
+        <li>Not classified as marketplace/platform, B2B2C, open-core, or API/developer-first for the initial ICP.</li>
+      </ul>
+      <p>Evidence includes the concept brief and self-serve product loop, competitor self-serve pricing/free-trial patterns, and the fact that Typeform and Jotform have added AI form creation, making generic AI generation less differentiated.</p>
+    </section>
+
+    <section id="broad-research" data-section="Broad Research Queries">
+      <div class="section-head">
+        <h2>Broad Research Queries And Findings</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Broad Research Queries"></div>
+      <p>Minimum broad-query requirement met: 12+ query strategies before final candidate prioritization.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Query Strategy</th><th>Representative Query</th><th>Finding</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>AI form-builder landscape</td><td><code>AI form builder generate forms natural language Typeform Jotform Fillout Tally Paperform pricing features 2026</code></td><td>AI generation is now an expected feature in major and newer form tools, not a standalone moat.</td></tr>
+            <tr><td>Generic alternatives/pricing</td><td><code>form builder alternatives Typeform Jotform Tally Fillout pricing submission limits free plan 2026</code></td><td>The market has many free or low-cost competitors; response limits, branding, and advanced logic are common switching triggers.</td></tr>
+            <tr><td>Client intake</td><td><code>client intake forms consultants coaches agencies pain points onboarding questionnaire tools Dubsado HoneyBook Paperform Typeform</code></td><td>Intake is tied to paid work, professional first impressions, missing client details, and repeated onboarding workflows.</td></tr>
+            <tr><td>Small-business lead/quote forms</td><td><code>small business quote request lead capture forms pain points online forms CRM follow up</code></td><td>Lead/quote use cases have strong economic urgency but quickly require lead scoring, estimates, CRM/pipeline, and immediate follow-up.</td></tr>
+            <tr><td>Event registration</td><td><code>event registration form software pain points small event organizers RSVP registration forms attendee data exports</code></td><td>Event organizers need structured registration data, capacity/waitlist controls, reminders, attendee roster, and exports.</td></tr>
+            <tr><td>Nonprofit/volunteer forms</td><td><code>volunteer signup form software nonprofit pain points volunteer coordinators Google Forms Jotform pricing discounts</code></td><td>Nonprofits and schools have real operational pain but strong free/discount expectations.</td></tr>
+            <tr><td>No-code/natural-language research</td><td><code>AI no code form builder natural language workflow automation non technical users research 2025</code></td><td>Natural language helps non-experts, but real workflows still need review/editing and integration clarity.</td></tr>
+            <tr><td>Official pricing/WTP</td><td><code>Typeform pricing responses per month Basic 2026 official</code>, <code>Jotform pricing free plan submissions forms 2026 official</code>, <code>Tally pricing free plan unlimited forms submissions 2026 official</code>, <code>Fillout pricing free plan submissions forms AI form builder 2026 official</code></td><td>Paid alternatives prove budget existence, but free tiers and cheap alternatives create pricing pressure for generic use.</td></tr>
+            <tr><td>Client-intake competitors</td><td><code>client intake form builder consultants agencies onboarding questionnaire pain points Dubsado HoneyBook Typeform Reddit 2026</code></td><td>Specialized intake tools market around fewer emails, collecting assets/files, professional onboarding, and avoiding migration to all-in-one suites.</td></tr>
+            <tr><td>Lead/quote competitors</td><td><code>quote request form software home services small business lead capture follow up pain 2026</code></td><td>Quote tools emphasize estimates, lead tracking, status, and reminders more than form creation alone.</td></tr>
+            <tr><td>Event/community signup competitors</td><td><code>event registration software small organizers RSVP forms attendee roster Google Sheets export pain 2026</code></td><td>Event/signup tools emphasize no-login respondents, reminders, waitlists, slots, rosters, and Google Sheets.</td></tr>
+            <tr><td>HR/internal ops</td><td><code>HR job application form builder small business hiring screening forms pain Jotform Typeform 2026</code></td><td>HR forms have strong use cases, but compliance, e-signature, routing, and HRIS/ATS fit become blockers earlier.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="candidate-shortlist" data-section="ICP Candidate Shortlist">
+      <div class="section-head">
+        <h2>ICP Candidate Shortlist</h2>
+      </div>
+      <div class="feedback" data-feedback-section="ICP Candidate Shortlist"></div>
+      <div class="grid">
+        <article class="card">
+          <span class="tag rank">Rank 1</span>
+          <h3>Client-service consultants, coaches, and small agencies</h3>
+          <p><strong>Who:</strong> independent consultants, coaches, boutique agencies, creative studios, fractional operators, accountants/bookkeepers, and similar service providers that need structured information before kickoff or recurring client work.</p>
+          <p><strong>Pain:</strong> intake affects paid work directly: missing details delay kickoff, create rework, and make the provider look unprofessional.</p>
+          <p><strong>Accessibility:</strong> high. These buyers are often owner-operators or small teams, search for templates/tools, and can self-serve.</p>
+          <p><strong>WTP:</strong> moderate to strong through Typeform, Paperform, Pixelform, HoneyBook, Dubsado, intake/client-portal products, and automation stacks.</p>
+          <p><strong>Risk:</strong> some users want all-in-one contracts, payments, schedulers, portals, reminders, and CRM. The early ICP must be the subset that wants better intake without migrating its whole business system.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Rank 2</span>
+          <h3>Small service businesses using quote/lead qualification forms</h3>
+          <p><strong>Who:</strong> local services, contractors, studios, agencies, and B2B service businesses that use forms to capture inquiries, qualify leads, collect job details, and start a quote or booking process.</p>
+          <p><strong>Pain:</strong> strong economic urgency from slow follow-up, poor lead quality, incomplete project details, and quotes going cold.</p>
+          <p><strong>WTP:</strong> moderate to strong in verticals where one closed job is valuable.</p>
+          <p><strong>Risk:</strong> this quickly becomes a quote-estimator/CRM product, not just an AI form builder.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Rank 3</span>
+          <h3>Small event organizers and community operators</h3>
+          <p><strong>Who:</strong> workshop hosts, sports clubs, community groups, churches, PTAs, schools, creator communities, and small business/event teams.</p>
+          <p><strong>Pain:</strong> registration data, rosters, capacity limits, reminders, no-login access, mobile completion, and exports matter.</p>
+          <p><strong>WTP:</strong> mixed. Business/professional events and sports/event programs may pay; community groups and PTAs often prefer free/ad-free/low-cost tools.</p>
+          <p><strong>Risk:</strong> the best product usually needs capacity, slots, waitlists, reminders, attendee edits, check-in, payments, and rosters.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Rank 4</span>
+          <h3>Nonprofits, schools, and volunteer coordinators</h3>
+          <p><strong>Who:</strong> nonprofit staff, volunteer coordinators, school/PTA leaders, church admins, community groups, and small charity teams.</p>
+          <p><strong>Pain:</strong> real operational pain around volunteer applications, donation forms, event registrations, supporter surveys, and spreadsheet drift.</p>
+          <p><strong>WTP:</strong> weak to mixed because discounting and free alternatives are central in this category.</p>
+          <p><strong>Risk:</strong> may require donation payments, volunteer scheduling, nonprofit CRM, compliance, accessibility, and low-cost/ad-free expectations.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Rank 5</span>
+          <h3>Internal HR/ops teams at small businesses</h3>
+          <p><strong>Who:</strong> HR, admin, operations, and team leads who need job applications, onboarding forms, approval/request forms, employee feedback, and routine internal data collection.</p>
+          <p><strong>Pain:</strong> real needs around applications, e-signatures, policy acknowledgments, reviews, and internal process automation.</p>
+          <p><strong>WTP:</strong> moderate in businesses with formal HR workflows, but generic small teams can use Google Forms/Sheets.</p>
+          <p><strong>Risk:</strong> this path drifts toward HR workflow software with trust, routing, signatures, and compliance expectations.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="primary-selection" data-section="Primary ICP Selection">
+      <div class="section-head">
+        <h2>Primary ICP Selection</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Primary ICP Selection"></div>
+      <div class="notice">
+        <p><strong>Recommended primary ICP:</strong> client-service solo consultants, coaches, and small agencies doing client intake/onboarding.</p>
+      </div>
+      <h3>Why this is the strongest first-principles fit</h3>
+      <ol>
+        <li>The workflow is repeated and variable. Each new client, offer, project, cohort, audit, or program can require a different intake form.</li>
+        <li>The value is tied to paid delivery, not abstract data collection. Missing intake data delays kickoff, creates rework, or hurts the client experience.</li>
+        <li>The buyer and user are close together. Owner-operators and small teams can self-serve without enterprise procurement.</li>
+        <li>The respondent experience matters. Their clients are external and often paying; a polished form is part of the provider's perceived professionalism.</li>
+        <li>The current FormForge loop can satisfy a meaningful first slice without becoming a CRM, event platform, donation processor, or HR system.</li>
+        <li>WTP evidence is better than generic forms because the segment already buys adjacent tools: Typeform/Paperform for polish, HoneyBook/Dubsado for client workflows, Pixelform/intake tools for intake-specific needs, and Zapier/Sheets/Notion for handoff.</li>
+      </ol>
+      <p><strong>Strongest caveat:</strong> FormForge should not position the initial ICP as "anyone who needs forms quickly." That puts it against free/low-cost general form builders and makes AI generation a commodity feature. The sharper problem is "client-service operators need a usable, professional intake flow fast, without manually building forms or migrating their whole workflow stack."</p>
+    </section>
+
+    <section id="scoring" data-section="Value x Accessibility Scoring">
+      <div class="section-head">
+        <h2>Value x Accessibility Scoring</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Value x Accessibility Scoring"></div>
+      <p>Scores are 1-5. Value combines pain intensity and WTP quality but keeps them separate in the rationale.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Candidate</th><th>Pain Intensity</th><th>WTP Quality</th><th>Accessibility</th><th>Product-Fit Risk</th><th>Overall</th><th>Rank</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Client-service consultants/coaches/agencies</td><td>4.4</td><td>4.0</td><td>4.3</td><td>4.1</td><td>4.2</td><td>1</td></tr>
+            <tr><td>Small-service lead/quote forms</td><td>4.5</td><td>4.2</td><td>3.6</td><td>2.8</td><td>3.8</td><td>2</td></tr>
+            <tr><td>Event/community organizers</td><td>3.8</td><td>3.0</td><td>3.5</td><td>3.1</td><td>3.4</td><td>3</td></tr>
+            <tr><td>Nonprofits/schools/volunteer coordinators</td><td>3.9</td><td>2.4</td><td>3.2</td><td>3.0</td><td>3.1</td><td>4</td></tr>
+            <tr><td>Internal HR/ops small teams</td><td>3.4</td><td>3.3</td><td>2.7</td><td>2.6</td><td>3.0</td><td>5</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul>
+        <li>Candidate A has lower maximum economic upside than quote/lead forms, but much better fit to FormForge's first validated loop.</li>
+        <li>Candidate B has strong pain and WTP, but the value driver is often quote/lead workflow after submission, not form creation.</li>
+        <li>Candidate C has clear workflow pain but episodic buying and signup-specific needs.</li>
+        <li>Candidate D has high operational friction but weaker WTP because of discounts, free tools, and budget constraints.</li>
+        <li>Candidate E has real form needs but trust/compliance/workflow routing requirements create early adoption friction.</li>
+      </ul>
+    </section>
+
+    <section id="primary-profile" data-section="Primary ICP Deep Profile">
+      <div class="section-head">
+        <h2>Primary ICP Deep Profile</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Primary ICP Deep Profile"></div>
+
+      <h3>Customer Profile</h3>
+      <p><strong>Buyer persona:</strong> owner-operator, founder, principal consultant, coach, agency owner, operations coordinator, or client-success/project manager inside a small service business.</p>
+      <p><strong>Budget owner:</strong> usually the business owner or department lead. In small agencies, the ops/project lead may recommend tools, but the owner controls spend.</p>
+      <p><strong>Geographic focus:</strong> initial focus can remain English-speaking US/Canada/UK/Australia-style service businesses because the current repo and concept are English-first and no market-specific compliance wedge is being claimed.</p>
+      <p><strong>Business model and GTM motion:</strong> B2B SaaS PLG/self-serve with solo-operator prosumer adoption. Buyer and user are often the same person. The primary motion should be validated around self-serve discovery and evaluation behavior, not enterprise sales.</p>
+
+      <h4>Named Account Examples To Verify Before Outbound</h4>
+      <p class="muted">These are illustrative public account types, not validated prospects. Sizes are approximate public-profile ranges and should be verified before outbound or account-based work.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Account</th><th>Approx Size</th><th>Industry</th><th>Why It Fits The ICP Pattern</th></tr></thead>
+          <tbody>
+            <tr><td>Orbit Media Studios</td><td>20-50</td><td>Web design/content agency</td><td>Project intake, client discovery, and website/content briefs are repeated external-client workflows.</td></tr>
+            <tr><td>Animalz</td><td>50-200</td><td>Content marketing agency</td><td>Client onboarding and content briefing require structured information from external stakeholders.</td></tr>
+            <tr><td>Siege Media</td><td>50-200</td><td>Content/content marketing agency</td><td>Repeated new-client and campaign intake across content projects.</td></tr>
+            <tr><td>KlientBoost</td><td>100-250</td><td>Performance marketing agency</td><td>Paid client onboarding and campaign details create structured intake needs.</td></tr>
+            <tr><td>SmartBug Media</td><td>100-250</td><td>Digital agency/consultancy</td><td>Service delivery spans clients, forms, requests, and project handoff.</td></tr>
+            <tr><td>Single Grain</td><td>50-200</td><td>Digital marketing agency</td><td>Repeated client acquisition/onboarding and campaign intake.</td></tr>
+            <tr><td>The Futur</td><td>10-50</td><td>Creative business education/coaching</td><td>Coach/consultant-style programs and applications can require branded forms.</td></tr>
+            <tr><td>GrowthMentor</td><td>10-50</td><td>Coaching/mentor marketplace</td><td>Mentor/client application and onboarding flows are structurally relevant, though marketplace dynamics may differ.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Named-account confidence:</strong> low to moderate. These examples help shape customer discovery targets; they are not evidence that these companies need or would buy FormForge.</p>
+
+      <h3>User Profile(s)</h3>
+      <ul>
+        <li><strong>Daily users:</strong> solo provider, agency/project coordinator, coach/program operator.</li>
+        <li><strong>Skill level:</strong> comfortable with SaaS tools, templates, Google Workspace, Notion, and simple automations; does not want to hand-code forms or build logic trees from scratch.</li>
+        <li><strong>Goals:</strong> get the right client information before kickoff, avoid chasing missing files/details, look polished, customize quickly by service/client type, and export or route answers into the existing work system.</li>
+        <li><strong>Frustrations:</strong> blank form setup, amateur-looking Google Forms, response/branding/feature limits, heavy all-in-one client systems, and manual copy/paste into project docs or spreadsheets.</li>
+      </ul>
+
+      <h3>Trigger Events</h3>
+      <ol>
+        <li>New paid client signed or discovery call booked.</li>
+        <li>New service offer, package, audit, cohort, or retainer process launches.</li>
+        <li>Provider notices onboarding delays from missing client information or files.</li>
+        <li>Provider wants a more professional client-facing form than Google Forms.</li>
+        <li>Existing tool hits response limits, branding limits, file upload limits, or price increases.</li>
+        <li>Provider wants to avoid moving fully into HoneyBook/Dubsado or similar suites.</li>
+        <li>Provider needs a recurring progress check-in, testimonial, project feedback, or renewal questionnaire.</li>
+      </ol>
+
+      <h3>Current State Journey</h3>
+      <ol>
+        <li>The provider closes a client, schedules a discovery call, launches a program, or starts a project.</li>
+        <li>They decide what they need to know: goals, background, contact details, files, links, access, timeline, budget, preferences, constraints, and stakeholders.</li>
+        <li>They start from memory, a template, a previous form, a Google Doc, a Typeform/Jotform/Tally draft, or a client-management platform.</li>
+        <li>They manually create fields, labels, help text, required flags, options, file-upload requests, and conditional branches.</li>
+        <li>They send the link to the client.</li>
+        <li>The client submits incomplete answers or files across multiple channels.</li>
+        <li>The provider follows up through email, Slack, text, or calls.</li>
+        <li>The provider copies answers into a project board, CRM, Notion doc, kickoff notes, or spreadsheet.</li>
+        <li>The kickoff proceeds, is delayed, or starts with avoidable ambiguity.</li>
+      </ol>
+
+      <h3>Pain Map</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Pain</th><th>Severity</th><th>Frequency</th><th>Evidence Strength</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Blank-page form creation</td><td>Medium-high</td><td>High</td><td>Medium</td><td>AI generation directly targets this if forms vary by service/project.</td></tr>
+            <tr><td>Chasing missing client details/assets</td><td>High</td><td>High</td><td>Strong</td><td>Intake/agency competitors and user sentiment repeatedly name back-and-forth.</td></tr>
+            <tr><td>Poor client-facing professionalism</td><td>Medium-high</td><td>Medium-high</td><td>Medium</td><td>Google Forms is commonly framed as basic/amateur for premium service workflows.</td></tr>
+            <tr><td>Response limits and pricing friction</td><td>Medium</td><td>Medium</td><td>Strong</td><td>Typeform/Jotform limits and Tally free/unlimited positioning make this visible.</td></tr>
+            <tr><td>Manual copy/paste after submission</td><td>High</td><td>High</td><td>Strong</td><td>Users describe forms as only the first step; data must reach project workflows.</td></tr>
+            <tr><td>Heavy all-in-one workflow migration</td><td>Medium-high</td><td>Medium</td><td>Medium</td><td>HoneyBook/Dubsado alternatives show buyers want client flow support, but some resist migration.</td></tr>
+            <tr><td>Compliance/security anxiety</td><td>Medium</td><td>Low-medium</td><td>Medium</td><td>Stronger in accounting/legal/health; choose less regulated services first.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Current Alternatives (User Perspective)</h3>
+      <ul>
+        <li><strong>Manual:</strong> email questionnaires, Google Docs/PDFs, spreadsheet checklists, prior intake forms.</li>
+        <li><strong>General form builders:</strong> Google Forms, Typeform, Tally, Jotform, Fillout/Paperform/forms.app and similar alternatives.</li>
+        <li><strong>Client-service suites and portals:</strong> HoneyBook, Dubsado, Pixelform, Dashform, Intake, Agencify, Agency Handy, Formaloo AgencyOS, Brieform.</li>
+        <li><strong>Automation stacks:</strong> Google Forms or Typeform to Zapier/Make to Sheets/Notion/CRM/email.</li>
+      </ul>
+      <p><strong>User-language themes:</strong> "I need everything in one link," "I do not want to chase clients across email," "Google Forms is fine but looks cheap," "The form is easy; the mess is what happens after submission," and "I do not want to move my CRM, invoicing, and calendar just to solve intake."</p>
+
+      <h3>Market Sizing</h3>
+      <ul>
+        <li><strong>Top-down references:</strong> SBA's 2025 small business profile reports 36.2 million US small businesses and 4.88 million in Professional, Scientific, and Technical Services. BLS reports 155,800 US meeting/convention/event planners for the event candidate. Independent Sector reports about 1.9 million registered nonprofit and philanthropic organizations nationwide.</li>
+        <li><strong>Primary TAM proxy:</strong> US small professional-service businesses that sell services requiring client discovery/intake. Start with SBA Professional, Scientific, and Technical Services: 4.88M.</li>
+        <li><strong>SAM hypothesis:</strong> 5-15% of that broad pool may run repeated external client intake/onboarding with enough form variance and client-facing polish needs to consider a paid intake/form tool: roughly 240k-730k possible US accounts before subtracting industry/compliance mismatch.</li>
+        <li><strong>SOM discovery target:</strong> 500-2,000 early accounts in agencies/coaches/consultants/bookkeepers/creative studios would be enough to validate the wedge.</li>
+        <li><strong>Confidence:</strong> medium for broad TAM; low for SAM/SOM because repeated intake frequency requires customer discovery or better dataset work.</li>
+      </ul>
+
+      <h3>Stated Value Drivers</h3>
+      <ul>
+        <li>Faster setup from a plain-English description.</li>
+        <li>Less back-and-forth collecting required information.</li>
+        <li>Professional, branded first impression.</li>
+        <li>Client can complete the intake without an account.</li>
+        <li>File uploads, conditional fields, and required fields capture complete answers.</li>
+        <li>Easy CSV/Sheets export or downstream handoff.</li>
+        <li>Avoiding response caps, branding limitations, or unintuitive builder complexity.</li>
+        <li>Not being forced into an all-in-one platform migration.</li>
+      </ul>
+      <p><strong>Likely aha moment:</strong> "I described the client/project and got a good enough intake form in minutes, then edited it and sent a polished link without rebuilding from scratch."</p>
+
+      <h4>Willingness-to-Pay Signals</h4>
+      <ul>
+        <li><strong>Paid alternatives:</strong> Typeform paid plans include AI form creation and response limits; HoneyBook starts with paid monthly tiers and includes lead forms, client portals, templates, contracts, invoices, and AI; Dubsado annual pricing includes lead capture forms and client workflow capabilities; Pixelform markets directly to coaches with paid form pricing and coach-specific templates.</li>
+        <li><strong>Budget owner/context:</strong> owner-operator or small agency lead pays from operating/software budget.</li>
+        <li><strong>Current spend/time-cost proxies:</strong> existing spend on client-service suites, form builders, schedulers, automation tools, or manual assistant/ops time.</li>
+        <li><strong>Switching-cost tolerance:</strong> moderate for form builders, low for all-in-one migration.</li>
+        <li><strong>Economic urgency:</strong> high when missing intake delays kickoff or creates poor first impressions; medium when only aesthetic or one-off.</li>
+        <li><strong>Pricing sensitivity:</strong> generic form builders face strong free-tier pressure; client-intake-specific value can tolerate more spend only if tied to saved time and better client delivery.</li>
+      </ul>
+
+      <h3>Customer ↔ User Dynamics</h3>
+      <ul>
+        <li>In solo businesses, buyer, admin, and daily user are the same person.</li>
+        <li>In small agencies, the owner may buy while an operations coordinator or project manager creates and edits forms.</li>
+        <li>Respondents are external clients or prospective clients. Their experience affects buyer value even though they do not pay FormForge.</li>
+        <li>The buyer expects fast setup, likely starting from a prompt or template, and needs to reuse/adapt forms across clients/offers.</li>
+      </ul>
+
+      <h3>Discovery & Evaluation Behavior</h3>
+      <ul>
+        <li><strong>Where they find solutions:</strong> Google searches for client intake form templates/tools, Typeform alternatives, Google Forms alternatives, HoneyBook/Dubsado alternatives, and service-specific intake forms; peer communities for consultants, coaches, agencies, freelancers, no-code builders, and small businesses; tool directories, template galleries, SaaS comparison posts, and competitor landing pages.</li>
+        <li><strong>What they compare:</strong> Google Forms vs Typeform/Tally/Jotform/Paperform; generic form builder vs client-management suite; dedicated intake/client-portal tool vs simple form plus automation stack.</li>
+        <li><strong>How they choose:</strong> usable form quickly, credible client-facing presentation, low respondent friction, file uploads/logic/required fields/exports, no painful caps or branding limits, and fit with existing workflow without forced migration.</li>
+      </ul>
+    </section>
+
+    <section id="additional-icps" data-section="Additional ICPs">
+      <div class="section-head">
+        <h2>Additional ICPs</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Additional ICPs"></div>
+      <h3>Candidate B - Small Service Lead/Quote Forms</h3>
+      <p><strong>Customer:</strong> owner/operators or small teams in local services, contractors, studios, agencies, and service businesses that qualify inbound leads or generate quote requests.</p>
+      <p><strong>Triggers:</strong> website lead volume increases, missed follow-ups or quote delays become visible, a new ad campaign/service line/quote workflow launches, or the current website contact form lacks qualification detail.</p>
+      <p><strong>Journey:</strong> customer fills contact/quote form; team reviews incomplete info; team manually estimates or calls for missing details; lead goes cold if response is slow; data moves into a sheet, CRM, or inbox.</p>
+      <p><strong>Pain:</strong> lead quality, quote delay, missing scope details, no instant follow-up, manual CRM entry.</p>
+      <p><strong>Alternatives:</strong> website contact forms, CRM web forms, Google Forms, Typeform/Jotform/Tally, quote-estimator tools, service-business CRMs, custom calculator forms.</p>
+      <p><strong>WTP and verdict:</strong> strong when tied to valuable closed jobs, but current FormForge fit is lower because the core value often needs pricing logic, CRM, SMS/email follow-up, pipeline status, and vertical-specific qualification. Revisit as a different product surface if the project pivots toward lead qualification or quote workflows.</p>
+
+      <h3>Candidate C - Small Event And Community Organizers</h3>
+      <p><strong>Customer:</strong> community groups, workshops, sports clubs, PTAs, churches, schools, event hosts, and small professional event teams.</p>
+      <p><strong>Triggers:</strong> new event, workshop, roster, volunteer day, class, fundraiser, tournament, or campaign.</p>
+      <p><strong>Journey:</strong> organizer creates registration/RSVP/signup form, shares link by email/social/text, tracks responses in a sheet/dashboard, and manually manages waitlist, no-shows, reminders, rosters, and exports.</p>
+      <p><strong>Pain:</strong> capacity limits, no-login completion, reminders, waitlists, roster visibility, attendee edits, staff/volunteer coordination.</p>
+      <p><strong>Alternatives:</strong> Google Forms, Eventbrite, Jotform, SignUpGenius, Signup Haven, Formgrid, Sendtable, Lome, and event-specific tools.</p>
+      <p><strong>WTP and verdict:</strong> business events may pay, community groups prefer free/low-cost. Good problem, but likely requires event/signup-specific capabilities early.</p>
+
+      <h3>Candidate D - Nonprofits, Schools, Volunteer Coordinators</h3>
+      <p><strong>Customer:</strong> small nonprofit teams, school/PTA admins, churches, volunteer coordinators, charity event operators.</p>
+      <p><strong>Triggers:</strong> fundraiser, volunteer recruitment cycle, campaign, school year, donation drive, event registration, supporter survey.</p>
+      <p><strong>Journey:</strong> create volunteer/donation/event form, share link, track submissions in sheets/CRM, send reminders, coordinate volunteers, export data, reconcile donations.</p>
+      <p><strong>Pain:</strong> paper/spreadsheet drift, volunteer coordination, donation/event forms, supporter data handoff, reminders, low budget, integration needs.</p>
+      <p><strong>Alternatives:</strong> Google Forms, Jotform nonprofit templates/discounts, Gravity Forms, Wufoo, Lome, SignUpGenius alternatives, donor/volunteer platforms.</p>
+      <p><strong>WTP and verdict:</strong> operational value is real, but WTP is weak to mixed due to discounts/free expectations.</p>
+
+      <h3>Candidate E - Internal HR/Ops Forms</h3>
+      <p><strong>Customer:</strong> small business HR/admin/ops teams needing job applications, onboarding documents, approvals, employee feedback, and internal request forms.</p>
+      <p><strong>Triggers:</strong> hiring cycle, onboarding, policy acknowledgment, annual review, compliance need, manager request workflow, paper-process pain.</p>
+      <p><strong>Journey:</strong> create form/PDF, send to employees/managers/candidates, track completions, route approvals/signatures, store records in HR/payroll/ATS systems or spreadsheets.</p>
+      <p><strong>Pain:</strong> routing/approval, e-signature, compliance storage, candidate screening, recordkeeping, internal permissions.</p>
+      <p><strong>Alternatives:</strong> Jotform HR, Typeform application forms, Google Forms, HRIS/payroll software, ATS forms, e-signature tools, Power Automate/AppSheet.</p>
+      <p><strong>WTP and verdict:</strong> WTP exists in formal HR, but trust/compliance matters. Lower early fit unless a low-compliance internal ops segment emerges.</p>
+    </section>
+
+    <section id="cross-icp" data-section="Cross-ICP Analysis">
+      <div class="section-head">
+        <h2>Cross-ICP Analysis</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Cross-ICP Analysis"></div>
+      <h3>Shared Pains</h3>
+      <ul>
+        <li>People need to get structured information from someone else.</li>
+        <li>Blank-page form setup is annoying.</li>
+        <li>Existing free tools are "good enough" for simple cases.</li>
+        <li>Value grows when the form feeds a real workflow after submission.</li>
+        <li>Respondent friction matters: no-login, mobile completion, clear questions, and professional presentation affect completion.</li>
+        <li>CSV/Sheets/export and notifications are recurring minimum expectations.</li>
+      </ul>
+      <h3>Conflicts</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Conflict</th><th>Candidate A</th><th>Candidate B</th><th>Candidate C</th><th>Candidate D</th><th>Candidate E</th></tr></thead>
+          <tbody>
+            <tr><td>Workflow after submission</td><td>Client kickoff/project docs</td><td>Lead pipeline/quote/follow-up</td><td>Roster/check-in/reminders</td><td>Volunteer/donor/CRM</td><td>HRIS/ATS/records</td></tr>
+            <tr><td>Compliance burden</td><td>Low-medium if avoiding regulated sectors</td><td>Low-medium by vertical</td><td>Low</td><td>Medium</td><td>Medium-high</td></tr>
+            <tr><td>WTP pattern</td><td>Service-delivery software budget</td><td>Lead/revenue budget</td><td>Event budget</td><td>Discount/free constrained</td><td>HR/admin budget</td></tr>
+            <tr><td>Best wedge</td><td>Intake speed + professional client experience</td><td>Quote/lead qualification</td><td>No-login registration/roster</td><td>Low-cost volunteer/donation/event forms</td><td>Secure routing/e-signature</td></tr>
+            <tr><td>Risk of overbuilding</td><td>Portals/contracts/payments</td><td>CRM/estimator/SMS</td><td>Event management</td><td>Donor/volunteer CRM</td><td>HR workflow/compliance</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Build/Validation Sequence Rationale</h3>
+      <ol>
+        <li>Validate Candidate A first because it has the best fit with FormForge's existing loop and strongest combination of pain, WTP, accessibility, and low regulatory burden.</li>
+        <li>Keep Candidate B as the highest-value revisit path if early discovery shows client intake is not urgent enough or if users keep asking for lead/quote workflows.</li>
+        <li>Keep Candidate C as a secondary path if discovery points toward registration rather than client intake.</li>
+        <li>Defer Candidate D unless nonprofit/volunteer discovery reveals an unusually strong budget-backed wedge.</li>
+        <li>Defer Candidate E until the product is ready to handle trust, routing, signatures, and compliance expectations.</li>
+      </ol>
+      <h3>Product-Line / Manifest Implications</h3>
+      <p>If approved, I recommend the canonical stage either keep <code>research/.progress.yaml</code> absent and record secondary paths inside <code>research/icp.md</code>, or create <code>research/.progress.yaml</code> with FormForge active and deferred/revisit entries for <code>lead-quote-forms</code>, <code>event-registration-signups</code>, <code>nonprofit-volunteer-forms</code>, and <code>hr-ops-forms</code>. My recommendation is the more skill-complete option because the rejected candidates imply materially different product surfaces. It should not create product directories or run downstream work for those paths.</p>
+    </section>
+
+    <section id="evidence-matrix" data-section="Evidence Matrix">
+      <div class="section-head">
+        <h2>Evidence Matrix</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Evidence Matrix"></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Assumption Status</th><th>Decision Impact</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Generic AI form generation is no longer enough as a wedge.</td><td>Typeform pricing includes AI-powered form creation; Typeform help explains AI creation/editing; Jotform and Fillout expose AI form builder surfaces; newer AI-native competitors exist.</td><td>AI is becoming table-stakes in form builders. FormForge needs an ICP-specific job, not generic AI.</td><td>High</td><td>Evidence-backed</td><td>Approve narrow ICP, not "anyone needing forms".</td></tr>
+            <tr><td>Generic form builders are price competitive.</td><td>Tally offers unlimited forms/submissions for free within fair use; Jotform free starter exists but pushes upgrades for limits; Typeform paid plans include strict response tiers.</td><td>Users comparing generic form tools will anchor against free/cheap alternatives.</td><td>High</td><td>Evidence-backed</td><td>Do not select an ICP whose only pain is "forms take time."</td></tr>
+            <tr><td>Client-service intake has stronger early fit than generic SMB forms.</td><td>Pixelform, Dashform, Intake, Agencify, Brieform, HoneyBook, and Dubsado all target client intake/onboarding, assets, forms, lead forms, templates, and client workflows.</td><td>There is a visible cluster of tools around professional intake and client workflow.</td><td>Medium-high</td><td>Evidence-backed</td><td>Select Candidate A unless user has a strong strategic constraint.</td></tr>
+            <tr><td>Candidate A has WTP beyond free tools.</td><td>HoneyBook starts with paid client-experience plans; Dubsado annual plans include lead capture/forms; Pixelform charges for coach-focused intake; Typeform/Paperform/Fillout/Jotform paid tiers exist.</td><td>Service providers already pay for adjacent polish, client workflow, and forms.</td><td>Medium-high</td><td>Evidence-backed</td><td>Candidate A has credible paid adoption path.</td></tr>
+            <tr><td>The strongest Candidate A risk is after-submission workflow.</td><td>Reddit and competitor pages repeatedly frame forms as only the first step; users discuss Zapier/Sheets/Notion/CRM, follow-up, assets, and client portals.</td><td>FormForge must validate whether first-loop form/export is enough or whether users immediately require workflow handoff.</td><td>Medium</td><td>Provisional</td><td>Discovery should ask about minimum acceptable post-submission workflow.</td></tr>
+            <tr><td>Lead/quote forms have high value but lower fit to current loop.</td><td>ScopeForm, Quotify, Quoterform, Quote Box, Requo, and service-business lead tools emphasize estimates, status, reminders, CRM/follow-up.</td><td>The value is tied to lead conversion and quoting, not just form creation.</td><td>Medium-high</td><td>Evidence-backed</td><td>Park as revisit candidate; do not make primary without pivot.</td></tr>
+            <tr><td>Event/community organizers need signup-specific operations.</td><td>Formgrid, Signup Haven, Lome, SignUpVibe, EventForm, and Reddit examples emphasize rosters, reminders, waitlists, capacity, no-login, and Sheets sync.</td><td>Generic form creation is insufficient when signup logistics matter.</td><td>Medium-high</td><td>Evidence-backed</td><td>Keep Candidate C secondary.</td></tr>
+            <tr><td>Nonprofit/school/volunteer segments have real pain but weaker WTP.</td><td>Jotform nonprofit, Gravity Forms nonprofit, SureForms nonprofit, Lome, and Signup Haven all target the segment with discounts/free trials and low-cost signup tooling.</td><td>Discount/free expectations reduce early monetization quality.</td><td>Medium</td><td>Evidence-backed</td><td>Defer unless mission/brand strategy prioritizes this segment.</td></tr>
+            <tr><td>HR/internal ops has real need but higher trust/compliance burden.</td><td>Jotform HR, Typeform HR/application pages, HR form builders, and user discussions mention e-signature, approvals, employee lifecycle, job applications.</td><td>The product would need routing, records, signatures, and compliance earlier.</td><td>Medium</td><td>Evidence-backed</td><td>Keep lower-ranked.</td></tr>
+            <tr><td>US small business base is large enough; narrow SAM remains uncertain.</td><td>SBA reports 36.2M US small businesses and 4.88M small Professional/Scientific/Technical Services businesses.</td><td>Enough top-down market exists, but serviceable market must be narrowed by use case and repeated intake frequency.</td><td>Medium</td><td>Partially inferred</td><td>Market size should not drive primary selection alone.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="source-coverage" data-section="Source Coverage">
+      <div class="section-head">
+        <h2>Source Coverage, Links, And Gaps</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Source Coverage"></div>
+      <h3>Source Links By Category</h3>
+      <ul>
+        <li><strong>Generic form builders:</strong> <a href="https://www.typeform.com/pricing">Typeform pricing</a>, <a href="https://help.typeform.com/hc/en-us/articles/42053773420948-Create-and-edit-forms-with-Typeform-AI">Typeform AI help</a>, <a href="https://www.jotform.com/pricing/">Jotform pricing</a>, <a href="https://tally.so/pricing">Tally pricing</a>, <a href="https://www.fillout.com/pricing">Fillout pricing</a>.</li>
+        <li><strong>Client intake/client workflow:</strong> <a href="https://usepixelform.com/">Pixelform</a>, <a href="https://getaiform.com/use-cases/client-onboarding">Dashform client onboarding</a>, <a href="https://dointake.com/">Intake</a>, <a href="https://www.tryagencify.com/">Agencify</a>, <a href="https://www.honeybook.com/pricing">HoneyBook pricing</a>, <a href="https://www.dubsado.com/pricing">Dubsado pricing</a>.</li>
+        <li><strong>Lead/quote:</strong> <a href="https://www.scopeform.io/">ScopeForm</a>, <a href="https://quotify.app/">Quotify</a>, <a href="https://quoterform.com/">Quoterform</a>, <a href="https://www.quote-box.com/">Quote Box</a>.</li>
+        <li><strong>Events/community:</strong> <a href="https://formgrid.dev/event-registration-forms">Formgrid event registration</a>, <a href="https://signuphaven.com/">Signup Haven</a>, <a href="https://sendtable.com/">Sendtable</a>, <a href="https://www.withlome.com/">Lome</a>.</li>
+        <li><strong>Nonprofits/volunteer:</strong> <a href="https://www.jotform.com/nonprofit/">Jotform nonprofit</a>, <a href="https://www.gravityforms.com/nonprofit/">Gravity Forms nonprofit</a>, <a href="https://sureforms.com/nonprofit-organizations/">SureForms nonprofit</a>, <a href="https://donorfy.com/forms">Donorfy forms</a>.</li>
+        <li><strong>HR/internal ops:</strong> <a href="https://www.jotform.com/hr-form-builder/">Jotform HR form builder</a>, <a href="https://www.typeform.com/roles/hr">Typeform for HR</a>, <a href="https://www.typeform.com/application-form-builder">Typeform application forms</a>.</li>
+        <li><strong>Market sizing:</strong> <a href="https://advocacy.sba.gov/2025/06/30/new-advocacy-report-shows-the-number-of-small-businesses-in-the-u-s-exceeds-36-million/">SBA 2025 small business count</a>, <a href="https://advocacy.sba.gov/wp-content/uploads/2025/06/United_States_2025-State-Profile.pdf">SBA US small business profile PDF</a>, <a href="https://www.bls.gov/ooh/business-and-financial/meeting-convention-and-event-planners.htm">BLS event planners</a>, <a href="https://healthysector.org/">Independent Sector nonprofit sector</a>.</li>
+        <li><strong>Research:</strong> <a href="https://arxiv.org/abs/2508.02470">AIAP no-code workflow builder paper</a>.</li>
+      </ul>
+      <h3>Source Coverage Gaps</h3>
+      <ul>
+        <li>No first-party customer interviews or proprietary FormForge usage logs.</li>
+        <li>Named-account sizes for Candidate A are illustrative and need verification before outbound.</li>
+        <li>SAM/SOM estimates are inferred from broad datasets and competitor presence, not from a dedicated market-sizing dataset.</li>
+        <li>Pricing sensitivity is based on competitor pricing and user sentiment, not FormForge-specific willingness-to-pay tests.</li>
+        <li>Compliance constraints for accounting, legal, health/wellness, education, and HR need deeper validation before targeting those subsegments.</li>
+        <li>This research did not inspect G2/Capterra reviews deeply because public access and recency vary; doing so could improve user-language evidence.</li>
+      </ul>
+    </section>
+
+    <section id="assumptions" data-section="Assumptions Register">
+      <div class="section-head">
+        <h2>Assumptions And Confidence Register</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Assumptions Register"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Assumption</th><th>Confidence</th><th>Evidence Status</th><th>What Would Change It</th></tr></thead>
+          <tbody>
+            <tr><td>Client-service intake is the best initial ICP.</td><td>Medium-high</td><td>Supported by competitor cluster and product-fit reasoning.</td><td>Interviews show buyers need portals/contracts/payments before forms matter.</td></tr>
+            <tr><td>AI drafting is valuable when forms vary by service/client.</td><td>Medium</td><td>Supported by AI builder adoption and no-code research.</td><td>Users say templates are enough and AI adds little.</td></tr>
+            <tr><td>Post-submission workflow is the biggest risk for Candidate A.</td><td>Medium-high</td><td>Supported by user sentiment and competitor positioning.</td><td>Users accept CSV/export/manual handoff for first version.</td></tr>
+            <tr><td>Generic small-business lead forms are too broad.</td><td>High</td><td>Supported by quote/lead tool specialization.</td><td>A narrow vertical emerges with form-only pain and low CRM need.</td></tr>
+            <tr><td>Nonprofit/volunteer WTP is weaker.</td><td>Medium</td><td>Supported by discounts/free/ad-free competitors.</td><td>Discovery finds budget-backed nonprofit operations segment with urgent paid need.</td></tr>
+            <tr><td>HR/internal ops is not a good first ICP.</td><td>Medium</td><td>Supported by compliance/routing/e-signature needs.</td><td>A low-compliance internal ops segment emerges with simple public-form needs.</td></tr>
+            <tr><td>English-speaking service businesses are the first geographic focus.</td><td>Medium</td><td>Based on current product/language and discovery practicality.</td><td>User has proprietary evidence of another geography/language opportunity.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Rejected Or Lower-Confidence Findings</h3>
+      <ul>
+        <li>"Target everyone who dislikes Typeform pricing." Rejected because Tally and many alternatives already compete on free/cheap form building.</li>
+        <li>"Target nonprofits first because they need many forms." Lower confidence because budgets and free/discount expectations weaken WTP.</li>
+        <li>"Target event organizers first." Lower confidence because event/signup workflows require slots, waitlists, reminders, and rosters earlier than client intake.</li>
+        <li>"Target local service quote forms first." Lower confidence as primary because the best version is likely quote-estimator/CRM-adjacent.</li>
+        <li>"Target HR forms first." Rejected for early ICP due to compliance, routing, signatures, and recordkeeping requirements.</li>
+        <li>"AI generation alone is the value proposition." Rejected because incumbents and startups already offer AI form creation.</li>
+      </ul>
+    </section>
+
+    <section id="file-changes" data-section="Proposed File Changes">
+      <div class="section-head">
+        <h2>Proposed Canonical File Changes After Approval</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Proposed File Changes"></div>
+      <h3><code>research/icp.md</code></h3>
+      <p>Write canonical ICP report with primary ICP, required parser headings, additional ICPs, cross-ICP analysis, downstream signals, and final next-step section required by the skill only after approval.</p>
+      <h3><code>research/icp-search-log.md</code></h3>
+      <p>Write the raw research log: query list and findings, source URLs by category, marketplace side preflight, business model classification evidence, candidate scoring rationale, evidence gaps, and confidence notes.</p>
+      <h3><code>research/.progress.yaml</code> Optional</h3>
+      <p>If approved, add <code>product_paths[]</code> entries for materially different secondary surfaces with <code>source_skill: icp</code>, <code>pipeline_stage: icp</code>, status values, and evidence refs. Do not create product directories yet.</p>
+      <ul>
+        <li><code>lead-quote-forms</code> - revisit candidate.</li>
+        <li><code>event-registration-signups</code> - deferred.</li>
+        <li><code>nonprofit-volunteer-forms</code> - deferred.</li>
+        <li><code>hr-ops-forms</code> - deferred.</li>
+      </ul>
+    </section>
+
+    <section id="approval-gates" data-section="Approval Gates">
+      <div class="section-head">
+        <h2>Approval Gates</h2>
+      </div>
+      <div class="feedback" data-feedback-section="Approval Gates"></div>
+
+      <div class="gate" data-gate-section="Scope" data-gate-type="scope/non-goals">
+        <h3>Scope / Non-Goals Gate</h3>
+        <p>Does the flat FormForge scope and first-principles product boundary match what should be written canonically?</p>
+        <div class="gate-options">
+          <label><input type="radio" name="gate-scope" value="Approve flat FormForge scope and current product boundary"> Approve flat FormForge scope</label>
+          <label><input type="radio" name="gate-scope" value="Revise the scope before canonical writing"> Revise scope first</label>
+          <label><input type="radio" name="gate-scope" value="Other / None of the above"> Other / None of the above</label>
+          <label><input type="radio" name="gate-scope" value="Need clarification"> Need clarification</label>
+        </div>
+        <textarea class="gate-notes" placeholder="Additional notes, alternate scope, or clarification request"></textarea>
+      </div>
+
+      <div class="gate" data-gate-section="Primary ICP Decision" data-gate-type="candidate/verdict decisions">
+        <h3>Primary ICP Decision Gate</h3>
+        <p>Which primary ICP decision should drive the canonical report?</p>
+        <div class="gate-options">
+          <label><input type="radio" name="gate-primary" value="Approve Candidate A: client-service consultants, coaches, and small agencies doing client intake/onboarding"> Approve Candidate A</label>
+          <label><input type="radio" name="gate-primary" value="Do not approve Candidate A; revise ranking before writing"> Revise ranking first</label>
+          <label><input type="radio" name="gate-primary" value="Other / None of the above"> Other / None of the above</label>
+          <label><input type="radio" name="gate-primary" value="Need clarification"> Need clarification</label>
+        </div>
+        <textarea class="gate-notes" placeholder="Additional notes, missing segment, alternate primary ICP, or clarification request"></textarea>
+      </div>
+
+      <div class="gate" data-gate-section="Evidence Coverage" data-gate-type="evidence coverage">
+        <h3>Research Completeness / Evidence Coverage Gate</h3>
+        <p>Is the evidence sufficient for a canonical ICP write, or should more source work happen first?</p>
+        <div class="gate-options">
+          <label><input type="radio" name="gate-evidence" value="Evidence is sufficient for canonical ICP writing"> Evidence sufficient</label>
+          <label><input type="radio" name="gate-evidence" value="Run more targeted research before writing"> More research first</label>
+          <label><input type="radio" name="gate-evidence" value="Other / None of the above"> Other / None of the above</label>
+          <label><input type="radio" name="gate-evidence" value="Need clarification"> Need clarification</label>
+        </div>
+        <textarea class="gate-notes" placeholder="Claims needing more support, missing context, or clarification request"></textarea>
+      </div>
+
+      <div class="gate" data-gate-section="Secondary Paths" data-gate-type="coverage checkpoint" data-target-path="research/.progress.yaml">
+        <h3>Secondary Path Manifest Gate</h3>
+        <p>How should materially different lower-ranked product surfaces be handled after approval?</p>
+        <div class="gate-options">
+          <label><input type="radio" name="gate-progress" value="Create research/.progress.yaml with deferred/revisit product_paths entries; do not create directories"> Create optional manifest entries</label>
+          <label><input type="radio" name="gate-progress" value="Do not create research/.progress.yaml; keep secondary paths only inside research/icp.md"> Skip manifest for now</label>
+          <label><input type="radio" name="gate-progress" value="Other / None of the above"> Other / None of the above</label>
+          <label><input type="radio" name="gate-progress" value="Need clarification"> Need clarification</label>
+        </div>
+        <textarea class="gate-notes" placeholder="Manifest preference, secondary path adjustments, or clarification request"></textarea>
+      </div>
+
+      <div class="gate" data-gate-section="Artifact Destination & Proposed File Changes" data-gate-type="proposed file changes" data-target-path="research/icp.md; research/icp-search-log.md; optional research/.progress.yaml">
+        <h3>Artifact Destination & Proposed File Changes Gate</h3>
+        <p>Approve the canonical artifact destinations and allowed file mutation set?</p>
+        <div class="gate-options">
+          <label><input type="radio" name="gate-files" value="Approve canonical writes to research/icp.md, research/icp-search-log.md, and optional research/.progress.yaml per manifest decision"> Approve proposed files</label>
+          <label><input type="radio" name="gate-files" value="Approve only research/icp.md and research/icp-search-log.md"> Approve ICP files only</label>
+          <label><input type="radio" name="gate-files" value="Other / None of the above"> Other / None of the above</label>
+          <label><input type="radio" name="gate-files" value="Need clarification"> Need clarification</label>
+        </div>
+        <textarea class="gate-notes" placeholder="Allowed file set, destination changes, or clarification request"></textarea>
+      </div>
+    </section>
+
+    <section id="compile" class="compile">
+      <h2>Compile Review YAML</h2>
+      <p>Use feedback-only YAML for emphasis requests, concerns, or clarification before final approval. Use final answers only when every required gate has a selected answer.</p>
+      <p id="answer-status" class="warning">5 required questions remaining.</p>
+      <div class="compile-actions">
+        <button type="button" id="compile-feedback">Compile Feedback YAML</button>
+        <button type="button" id="compile-answers" disabled>Compile Answers</button>
+        <button type="button" id="copy-output">Copy YAML</button>
+      </div>
+      <textarea id="yaml-output" readonly placeholder="Compiled YAML will appear here."></textarea>
+      <p id="copy-status" class="muted" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script>
+    const pagePath = "alignment/icp-formforge.html";
+
+    function esc(value) {
+      return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    }
+
+    function yamlLine(key, value, indent = "") {
+      return `${indent}${key}: "${esc(value)}"`;
+    }
+
+    function setupFeedback(section) {
+      const name = "feedback-" + section.dataset.feedbackSection.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      section.innerHTML = `
+        <div class="feedback-controls" role="group" aria-label="Section feedback for ${section.dataset.feedbackSection}">
+          <span class="muted">Section feedback:</span>
+          <label><input type="radio" name="${name}" value="emphasize"> emphasize</label>
+          <label><input type="radio" name="${name}" value="down"> thumbs down</label>
+          <label><input type="radio" name="${name}" value="needs-clarification"> clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Notes for this section feedback"></textarea>
+        <div class="local-actions hidden">
+          <button type="button" class="local-compile">Compile Feedback YAML</button>
+          <button type="button" class="local-copy">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+      `;
+      section.querySelectorAll("input[type='radio']").forEach((radio) => {
+        radio.addEventListener("change", () => {
+          section.querySelector(".feedback-notes").classList.remove("hidden");
+          section.querySelector(".local-actions").classList.remove("hidden");
+          updateAnswerStatus();
+        });
+      });
+      section.querySelector(".local-compile").addEventListener("click", () => {
+        const yaml = compileFeedback([section]);
+        const output = section.querySelector(".local-yaml");
+        output.value = yaml;
+        output.classList.remove("hidden");
+        copyText(yaml, null);
+      });
+      section.querySelector(".local-copy").addEventListener("click", () => {
+        copyText(section.querySelector(".local-yaml").value, null);
+      });
+    }
+
+    document.querySelectorAll("[data-feedback-section]").forEach(setupFeedback);
+
+    function selectedFeedbackSections(scope) {
+      const sections = Array.from(scope || document.querySelectorAll("[data-feedback-section]"));
+      return sections.map((section) => {
+        const selected = section.querySelector("input[type='radio']:checked");
+        if (!selected) return null;
+        const feedback = selected.value;
+        const action = feedback === "emphasize" ? "add-weight-to-section" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval";
+        return {
+          section: section.dataset.feedbackSection,
+          feedback,
+          notes: section.querySelector(".feedback-notes").value.trim(),
+          requested_agent_action: action
+        };
+      }).filter(Boolean);
+    }
+
+    function unansweredGateNames() {
+      return Array.from(document.querySelectorAll(".gate")).filter((gate) => !gate.querySelector("input[type='radio']:checked")).map((gate) => gate.dataset.gateSection);
+    }
+
+    function compileFeedback(scope) {
+      const feedback = selectedFeedbackSections(scope);
+      const unanswered = unansweredGateNames();
+      const lines = [
+        yamlLine("alignment_page", pagePath),
+        'feedback_status: "revision-request"',
+        'approval_status: "not-approved"',
+        "unanswered_required_questions:",
+        ...unanswered.map((item) => `  - "${esc(item)}"`),
+        "section_feedback:"
+      ];
+      if (!feedback.length) {
+        lines.push("  []");
+      } else {
+        feedback.forEach((item) => {
+          lines.push(`  - ${yamlLine("section", item.section).trim()}`);
+          lines.push(yamlLine("feedback", item.feedback, "    "));
+          lines.push(yamlLine("notes", item.notes, "    "));
+          lines.push(yamlLine("requested_agent_action", item.requested_agent_action, "    "));
+        });
+      }
+      return lines.join("\n");
+    }
+
+    function compileAnswers() {
+      const gates = Array.from(document.querySelectorAll(".gate"));
+      const lines = [
+        yamlLine("alignment_page", pagePath),
+        'approval_status: "ready-for-agent-review"',
+        "gate_answers:"
+      ];
+      gates.forEach((gate) => {
+        const selected = gate.querySelector("input[type='radio']:checked");
+        const notes = gate.querySelector(".gate-notes").value.trim();
+        let status = "answered";
+        if (selected.value === "Other / None of the above") status = "other";
+        if (selected.value === "Need clarification") status = "needs-clarification";
+        lines.push(`  - ${yamlLine("section", gate.dataset.gateSection).trim()}`);
+        lines.push(yamlLine("gate_type", gate.dataset.gateType, "    "));
+        lines.push(yamlLine("status", status, "    "));
+        lines.push(yamlLine("answer", selected.value, "    "));
+        lines.push(yamlLine("notes", notes, "    "));
+        if (gate.dataset.targetPath) lines.push(yamlLine("target_path", gate.dataset.targetPath, "    "));
+      });
+      const feedback = selectedFeedbackSections();
+      lines.push("section_feedback:");
+      if (!feedback.length) {
+        lines.push("  []");
+      } else {
+        feedback.forEach((item) => {
+          lines.push(`  - ${yamlLine("section", item.section).trim()}`);
+          lines.push(yamlLine("feedback", item.feedback, "    "));
+          lines.push(yamlLine("notes", item.notes, "    "));
+          lines.push(yamlLine("requested_agent_action", item.requested_agent_action, "    "));
+        });
+      }
+      return lines.join("\n");
+    }
+
+    function updateAnswerStatus() {
+      const remaining = unansweredGateNames();
+      const status = document.getElementById("answer-status");
+      const button = document.getElementById("compile-answers");
+      if (remaining.length) {
+        status.textContent = `${remaining.length} required question${remaining.length === 1 ? "" : "s"} remaining.`;
+        status.className = "warning";
+        button.disabled = true;
+      } else {
+        status.textContent = "All required questions answered. Final answer YAML can be compiled.";
+        status.className = "success";
+        button.disabled = false;
+      }
+    }
+
+    document.querySelectorAll(".gate input[type='radio']").forEach((radio) => {
+      radio.addEventListener("change", updateAnswerStatus);
+    });
+
+    document.getElementById("compile-feedback").addEventListener("click", () => {
+      const yaml = compileFeedback();
+      document.getElementById("yaml-output").value = yaml;
+      copyText(yaml, document.getElementById("copy-status"));
+    });
+
+    document.getElementById("compile-answers").addEventListener("click", () => {
+      const remaining = unansweredGateNames();
+      if (remaining.length) {
+        const first = Array.from(document.querySelectorAll(".gate")).find((gate) => !gate.querySelector("input[type='radio']:checked"));
+        first.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+      const yaml = compileAnswers();
+      document.getElementById("yaml-output").value = yaml;
+      copyText(yaml, document.getElementById("copy-status"));
+    });
+
+    document.getElementById("copy-output").addEventListener("click", () => {
+      copyText(document.getElementById("yaml-output").value, document.getElementById("copy-status"));
+    });
+
+    async function copyText(text, statusEl) {
+      if (!text) {
+        if (statusEl) statusEl.textContent = "Nothing to copy yet.";
+        return;
+      }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+          if (statusEl) statusEl.textContent = "YAML copied to clipboard.";
+        } else {
+          throw new Error("Clipboard API unavailable");
+        }
+      } catch (error) {
+        const output = document.getElementById("yaml-output");
+        if (output && output.value === text) output.select();
+        if (statusEl) statusEl.textContent = "Clipboard blocked; YAML is selected for manual copy.";
+      }
+    }
+
+    updateAnswerStatus();
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+active_paths:
+  - research/
+product_paths:
+  - id: formforge
+    label: FormForge current flat scope
+    source_skill: icp
+    scope_path: research/
+    status: active
+    reason: Approved primary ICP is client-service consultants, coaches, and small agencies doing client intake/onboarding within the current flat FormForge product boundary.
+    archive_reason: null
+    archived_at: null
+    promoted_at: "2026-06-15"
+    evidence_refs:
+      - alignment/icp-formforge.html
+      - research/icp.md
+      - research/icp-search-log.md
+    revisit_trigger: Continue downstream research and validation for the approved primary ICP.
+    next_skill: competitive-analysis
+    last_touched: "2026-06-15"
+    pipeline_stage: icp
+  - id: lead-quote-forms
+    label: Small service lead and quote forms
+    source_skill: icp
+    scope_path: research/lead-quote-forms/
+    status: revisit_candidate
+    reason: Ranked second with high pain and WTP, but the evidence points toward quote, lead qualification, CRM, estimator, and follow-up workflows that are materially different from FormForge's current intake loop.
+    archive_reason: null
+    archived_at: null
+    promoted_at: null
+    evidence_refs:
+      - alignment/icp-formforge.html
+      - research/icp.md#additional-icps
+      - research/icp-search-log.md#icp-candidate-shortlist
+    revisit_trigger: Revisit if client-intake discovery shows weak urgency or users repeatedly ask for quote, lead qualification, CRM handoff, estimator, or immediate follow-up workflows.
+    next_skill: null
+    last_touched: "2026-06-15"
+    pipeline_stage: icp
+  - id: event-registration-signups
+    label: Event registration and community signups
+    source_skill: icp
+    scope_path: research/event-registration-signups/
+    status: deferred
+    reason: Clear registration and signup pain exists, but the best fit likely requires event-specific capacity, waitlist, reminder, roster, check-in, payment, and attendee-management behavior.
+    archive_reason: null
+    archived_at: null
+    promoted_at: null
+    evidence_refs:
+      - alignment/icp-formforge.html
+      - research/icp.md#additional-icps
+      - research/icp-search-log.md#icp-candidate-shortlist
+    revisit_trigger: Revisit if discovery points toward registration/signups rather than client intake, or if FormForge intentionally expands toward event/community operations.
+    next_skill: null
+    last_touched: "2026-06-15"
+    pipeline_stage: icp
+  - id: nonprofit-volunteer-forms
+    label: Nonprofit, school, and volunteer forms
+    source_skill: icp
+    scope_path: research/nonprofit-volunteer-forms/
+    status: deferred
+    reason: Operational pain is real, but WTP is weaker because discounts, free tools, committees, and low-cost expectations are central in this segment.
+    archive_reason: null
+    archived_at: null
+    promoted_at: null
+    evidence_refs:
+      - alignment/icp-formforge.html
+      - research/icp.md#additional-icps
+      - research/icp-search-log.md#icp-candidate-shortlist
+    revisit_trigger: Revisit if discovery finds a budget-backed nonprofit or volunteer operations segment with urgent paid need and low integration burden.
+    next_skill: null
+    last_touched: "2026-06-15"
+    pipeline_stage: icp
+  - id: hr-ops-forms
+    label: Internal HR and operations forms
+    source_skill: icp
+    scope_path: research/hr-ops-forms/
+    status: deferred
+    reason: Small-business HR and operations needs are real, but early fit is lower because routing, e-signature, records, internal permissions, HRIS/ATS fit, and compliance expectations arrive quickly.
+    archive_reason: null
+    archived_at: null
+    promoted_at: null
+    evidence_refs:
+      - alignment/icp-formforge.html
+      - research/icp.md#additional-icps
+      - research/icp-search-log.md#icp-candidate-shortlist
+    revisit_trigger: Revisit if a low-compliance internal operations segment emerges with simple public-form needs and clear paid urgency.
+    next_skill: null
+    last_touched: "2026-06-15"
+    pipeline_stage: icp

@@ -1,5 +1,24 @@
 # FormForge - Project Vision & Next Steps
 
+## Active Stage 3 ICP Finalization
+
+- [x] Reconfirm the ICP working packet and alignment page are still review-stage.
+- [x] Archive review-stage ICP artifacts.
+- [x] Write approved canonical ICP report: `research/icp.md`.
+- [x] Write approved ICP search/evidence log: `research/icp-search-log.md`.
+- [x] Create approved secondary-path manifest: `research/.progress.yaml`.
+- [x] Mark `alignment/icp-formforge.html` confirmed and preserve approval decisions.
+- [x] Update central alignment index for confirmed ICP status.
+- [x] Verify artifact structure, archive state, and git diff.
+- [ ] Commit and push intended tracked changes.
+
+### Review
+
+- Stage 3 ICP artifacts written on 2026-06-15. Approval YAML contained no unresolved section feedback or clarification requests.
+- The ICP alignment page is now confirmed. Canonical artifacts are `research/icp.md`, `research/icp-search-log.md`, and `research/.progress.yaml`.
+- Review-stage artifacts were archived under `docs/history/archive/2026-06-15/105625/`.
+- Verification: required `research/icp.md` headings are present; `research/.progress.yaml` parses as YAML; active `research/_working/preliminary-icp-research.md` is removed; archived ICP review page and packet exist; `alignment/icp-formforge.html` now reports `alignment_status: confirmed`; `git diff --check` passed. The skill-specific `scripts/open-html-page.mjs` script is absent in this repo, so the page was opened with `open alignment/icp-formforge.html` instead.
+
 ## Active Stage 2 Customer Discovery Review
 
 - [x] Reconfirm repo and concept context for the approved customer-discovery scope.

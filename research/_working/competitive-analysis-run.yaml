@@ -1,0 +1,10 @@
+orchestrator: competitive-analysis
+selected_frameworks:
+  - slug: porter-five-forces
+    intermediate: research/competitive-analysis-porter-five-forces.md
+  - slug: swot
+    intermediate: research/competitive-analysis-swot.md
+  - slug: feature-pricing-matrix
+    intermediate: research/competitive-analysis-feature-pricing-matrix.md
+  - slug: strategic-group-map
+    intermediate: research/competitive-analysis-strategic-group-map.md

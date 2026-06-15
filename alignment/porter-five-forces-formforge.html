@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="review">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FormForge Porter's Five Forces - Review</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+      --chart-1: #58a6ff;
+      --chart-2: #3fb950;
+      --chart-3: #d29922;
+      --chart-4: #bc8cff;
+      --chart-5: #f85149;
+      --chart-6: #79c0ff;
+      --chart-7: #f0883e;
+      --chart-8: #a5d6ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1160px, calc(100% - 32px));
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 40px 0 72px;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { letter-spacing: 0; line-height: 1.16; color: #fff; }
+    h1 { margin: 0 0 10px; font-size: 2.15rem; }
+    h2 { margin: 36px 0 14px; color: var(--accent); font-size: 1.55rem; }
+    h3 { margin: 22px 0 10px; font-size: 1.12rem; }
+    a { color: var(--accent); }
+    code {
+      background: #222a35;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 1px 5px;
+    }
+    section, .toc, .notice, .card, .gate, .chart-container, .table-wrap, .compile {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+    section { margin: 22px 0; padding: 20px; }
+    .toc, .notice, .compile { padding: 18px 20px; margin: 20px 0; }
+    .lede, .meta { color: var(--text-muted); }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 12px;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.84rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(min(210px, 100%), 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(min(210px, 100%), 1fr));
+      gap: 14px;
+    }
+    .card { padding: 15px; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin: 2px 4px 2px 0;
+      background: #1c2333;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+    .high { color: var(--red); }
+    .moderate { color: var(--orange); }
+    .table-wrap, .chart-container { padding: 14px; margin: 14px 0; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 11px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.92rem;
+    }
+    th { background: #1c2333; color: #fff; }
+    tr:last-child td { border-bottom: 0; }
+    canvas { width: 100%; height: 260px; display: block; }
+    button {
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #21262d;
+      color: var(--text);
+      padding: 10px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.primary { border-color: var(--accent); background: var(--accent); color: #06101d; }
+    .feedback {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 8px 0 12px;
+    }
+    .feedback button { min-height: 36px; padding: 6px 10px; font-size: 0.82rem; }
+    .feedback button[data-choice="emphasize"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-choice="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-choice="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+    textarea {
+      width: 100%;
+      min-height: 92px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0d1117;
+      color: var(--text);
+      padding: 10px 12px;
+      font: inherit;
+    }
+    .gate {
+      margin: 14px 0;
+      padding: 16px;
+      background: #1c2333;
+      border-left: 4px solid var(--purple);
+    }
+    .gate-options { display: grid; gap: 8px; margin: 10px 0; }
+    label.option {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #161b22;
+    }
+    label.option input { margin-top: 5px; }
+    #compiledYaml { min-height: 260px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.86rem; }
+    @media (max-width: 860px) {
+      .grid, .cards { grid-template-columns: 1fr; }
+      main { width: min(100% - 24px, 1160px); padding-top: 28px; }
+    }
+    @media (max-width: 560px) {
+      section, .toc, .notice, .compile { padding: 14px; }
+      h1 { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="status">review · 2026-06-15 · visual research artifact</p>
+    <h1>FormForge Porter's Five Forces</h1>
+    <p class="lede">Stage 2 framework review for the approved flat FormForge competitive-analysis scope. This page renders the full non-canonical working packet at <code>research/_working/preliminary-porter-five-forces-research.md</code>. Approval promotes it to <code>research/competitive-analysis-porter-five-forces.md</code>; it does not run later frameworks or synthesis.</p>
+
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Table Of Contents</h2>
+      <ol>
+        <li><a href="#basis">Basis And Method</a></li>
+        <li><a href="#boundary">Market Boundary</a></li>
+        <li><a href="#assessment">Force Assessment</a></li>
+        <li><a href="#details">Force Detail</a></li>
+        <li><a href="#opportunities">Structural Opportunities</a></li>
+        <li><a href="#risks">Structural Risks</a></li>
+        <li><a href="#evidence">Evidence Matrix</a></li>
+        <li><a href="#assumptions">Assumptions And Gaps</a></li>
+        <li><a href="#gates">Approval Gates</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
+      </ol>
+    </nav>
+
+    <section id="basis">
+      <h2>Basis And Method</h2>
+      <div class="feedback" data-section="basis"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="basis" placeholder="Optional section feedback notes"></textarea>
+      <div class="grid">
+        <article class="card">
+          <h3>Inputs</h3>
+          <ul>
+            <li>Parent scope approval YAML pasted on 2026-06-15.</li>
+            <li>Confirmed ICP: client-service solo consultants, coaches, and small agencies doing client intake/onboarding.</li>
+            <li>Current boundary: describe, generate, edit, publish, submit, review, and export.</li>
+            <li>Web source checks across general builders, free substitutes, client-service suites, vertical intake tools, and suppliers.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Method</h3>
+          <p>Pressure is rated Low, Moderate, or High. The analysis separates claim, evidence, inference, confidence, and decision impact. Product changes, positioning recommendations, and downstream routing are out of scope.</p>
+          <p><span class="pill">review only</span><span class="pill">non-canonical</span><span class="pill">Porter framework</span></p>
+        </article>
+      </div>
+    </section>
+
+    <section id="boundary">
+      <h2>Market Boundary</h2>
+      <div class="feedback" data-section="boundary"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="boundary" placeholder="Optional section feedback notes"></textarea>
+      <p>FormForge is evaluated as an AI-assisted client-intake form builder for small client-service businesses, not as a broad survey suite, enterprise form platform, healthcare intake system, or full client-management suite.</p>
+      <div class="grid">
+        <article class="card">
+          <h3>Included Alternatives</h3>
+          <ul>
+            <li>General form builders and survey/form products: Typeform, Jotform, Tally, Fillout, Google Forms.</li>
+            <li>Client-service workflow suites: HoneyBook, Dubsado.</li>
+            <li>Vertical intake/practice-management tools as WTP evidence: IntakeQ.</li>
+            <li>Manual and DIY substitutes: email questionnaires, Google Docs, spreadsheets, PDFs, prior-form reuse, and automation stacks.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Lower-Weight Alternatives</h3>
+          <ul>
+            <li>Enterprise-only platforms where governance and procurement dominate.</li>
+            <li>Regulated healthcare/legal workflows except as vertical intake WTP signals.</li>
+            <li>Internal HR and operations tools because the active ICP is external client-service intake.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="assessment">
+      <h2>Force Assessment</h2>
+      <div class="feedback" data-section="assessment"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="assessment" placeholder="Optional section feedback notes"></textarea>
+      <div class="chart-container" data-tts-narrative="The force chart rates rivalry, new entrants, substitutes, and buyer power as high pressure. Supplier power is moderate.">
+        <button type="button" data-toggle-table="forceTable">View as table</button>
+        <canvas id="forceChart" aria-label="Bar chart showing Porter force pressure ratings for FormForge: rivalry, entrants, substitutes, and buyer power high; supplier power moderate."></canvas>
+        <div class="table-wrap" id="forceTable" hidden>
+          <table>
+            <thead><tr><th>Force</th><th>Pressure</th><th>Score</th></tr></thead>
+            <tbody>
+              <tr><td>Rivalry</td><td>High</td><td>3</td></tr>
+              <tr><td>New Entrants</td><td>High</td><td>3</td></tr>
+              <tr><td>Substitutes</td><td>High</td><td>3</td></tr>
+              <tr><td>Buyer Power</td><td>High</td><td>3</td></tr>
+              <tr><td>Supplier Power</td><td>Moderate</td><td>2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="table-wrap" data-tts-narrative="The force assessment table maps each pressure rating to evidence, confidence, and the implication for later synthesis.">
+        <table>
+          <thead><tr><th>Force</th><th>Pressure</th><th>Evidence</th><th>Confidence</th><th>Implication For Parent Synthesis</th></tr></thead>
+          <tbody>
+            <tr><td>Rivalry</td><td class="high">High</td><td>Typeform, Jotform, Tally, Fillout, Google Forms, HoneyBook, Dubsado, and IntakeQ cover portions of creation, intake, branded collection, submissions, automation, or workflow.</td><td>High</td><td>The broad form-builder layer is crowded and price-pressured; defensibility likely depends on a narrower intake workflow boundary rather than "AI forms" alone.</td></tr>
+            <tr><td>New Entrants</td><td class="high">High</td><td>AI APIs, auth, email, payments, and hosting ecosystems reduce build barriers; incumbents advertise AI form/workflow features.</td><td>Medium-high</td><td>Basic AI builders can be assembled quickly; durable advantage must come from workflow depth, distribution, trust, or integration.</td></tr>
+            <tr><td>Substitutes</td><td class="high">High</td><td>Google Forms and Tally provide strong free collection options; the ICP journey includes email/docs/spreadsheets/PDFs and reuse of prior forms.</td><td>High</td><td>Buyers can remain with free/manual tools unless intake pain is urgent enough to justify switching.</td></tr>
+            <tr><td>Buyer Power</td><td class="high">High</td><td>The ICP is small businesses and owner-operators with many low-cost choices and visible plan comparisons.</td><td>High</td><td>Buyers have leverage on price and switching; value must tie to saved time, client polish, reduced follow-up, or avoided suite migration.</td></tr>
+            <tr><td>Supplier Power</td><td class="moderate">Moderate</td><td>OpenAI, Stripe, Clerk, and Resend publish usage or free-tier pricing; supplier concentration exists but most layers have alternatives.</td><td>Medium</td><td>Supplier economics support a prototype, but AI cost, policy, deliverability, payments, and auth pricing remain scaling risks.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="details">
+      <h2>Force Detail</h2>
+      <div class="feedback" data-section="details"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="details" placeholder="Optional section feedback notes"></textarea>
+      <h3>1. Competitive Rivalry: High</h3>
+      <p><strong>Claim:</strong> Rivalry is high because buyers can choose from mature general form builders, generous free form builders, lightweight workspace substitutes, and client-service suites.</p>
+      <ul>
+        <li>Typeform lists AI-powered form creation, conditional logic, integrations, unlimited typeforms, and response tiers from 100 responses/month on Basic to 10,000 responses/month on Business. Source: <a href="https://www.typeform.com/pricing">Typeform pricing</a>.</li>
+        <li>Jotform describes Starter/free plus Bronze, Silver, Gold, and Enterprise plans, with limits increasing by tier. Source: <a href="https://www.jotform.com/pricing/">Jotform pricing FAQ</a>.</li>
+        <li>Tally claims unlimited forms and submissions for free within fair-use guidelines plus logic, file uploads, redirects, and integrations. Source: <a href="https://tally.so/pricing">Tally pricing</a>.</li>
+        <li>Fillout advertises unlimited forms, unlimited seats, 1,000 free responses/month, conditional logic, payments, PDF generation, workflows, and file uploads. Source: <a href="https://www.fillout.com/pricing">Fillout pricing</a>.</li>
+        <li>HoneyBook and Dubsado bundle intake-adjacent forms with CRM, proposals/contracts, invoices, scheduling, portals, workflows, and automation. Sources: <a href="https://www.honeybook.com/pricing">HoneyBook pricing</a>; <a href="https://www.dubsado.com/pricing">Dubsado pricing</a>.</li>
+      </ul>
+      <p><strong>Inference:</strong> FormForge is unlikely to win on basic form creation or AI generation alone. General tools compete on breadth and price; suites compete on workflow completeness.</p>
+
+      <h3>2. Threat Of New Entrants: High</h3>
+      <p><strong>Claim:</strong> New-entry pressure is high because the ingredients for an AI-assisted form builder are accessible and incumbents already show AI form creation can be productized.</p>
+      <ul>
+        <li>OpenAI publishes usage pricing for text models and web search, and API access is billed separately from ChatGPT subscriptions. Source: <a href="https://openai.com/api/pricing/">OpenAI API pricing</a>.</li>
+        <li>Clerk offers auth APIs and prebuilt UI with a free Hobby plan up to 50,000 monthly retained users per app. Source: <a href="https://clerk.com/pricing">Clerk pricing</a>.</li>
+        <li>Resend offers a free email tier with 3,000 emails/month and paid tiers for higher volume. Source: <a href="https://resend.com/pricing">Resend pricing</a>.</li>
+        <li>Stripe advertises pay-as-you-go standard online card pricing with no setup or monthly fees. Source: <a href="https://stripe.com/pricing">Stripe pricing</a>.</li>
+      </ul>
+      <p><strong>Inference:</strong> Entry barriers are weak at the generation layer. The harder barrier is distribution plus specific workflow fit for service-business intake.</p>
+
+      <h3>3. Threat Of Substitutes: High</h3>
+      <p><strong>Claim:</strong> Substitution pressure is high because many buyers can collect client information with free tools, documents, email, or broader workspace products.</p>
+      <ul>
+        <li>Google Forms offers online forms and surveys with multiple question types, templates, logic, sharing/embed options, charts, and Sheets export. Source: <a href="https://workspace.google.com/products/forms/">Google Workspace Forms</a>.</li>
+        <li>Tally offers unlimited forms and submissions for free within fair-use limits and includes logic, file uploads, redirects, and integrations. Source: <a href="https://tally.so/pricing">Tally pricing</a>.</li>
+        <li>The confirmed ICP journey identifies email questionnaires, Google Docs/PDFs, spreadsheets, previous forms, and automation stacks as current alternatives. Source: <code>research/icp.md</code>.</li>
+      </ul>
+      <p><strong>Inference:</strong> Substitutes are strongest when the job is simple collection or a one-off questionnaire. The structural opening is repeated blank-page setup, follow-up reduction, and client-facing polish.</p>
+
+      <h3>4. Buyer Power: High</h3>
+      <p><strong>Claim:</strong> Buyer power is high because the active ICP consists mostly of small businesses and owner-operators with many visible alternatives, low switching costs, and sensitivity to free tiers.</p>
+      <ul>
+        <li>The confirmed ICP says the buyer is often the owner-operator, founder, consultant, coach, agency owner, operations coordinator, or project lead. Source: <code>research/icp.md</code>.</li>
+        <li>Typeform exposes response limits by plan; Tally, Fillout, and Jotform make free or low-entry plans visible. Sources: Typeform, Tally, Fillout, and Jotform pricing pages.</li>
+        <li>HoneyBook starts at $29/month billed yearly, while Dubsado lists $335/year Starter and $525/year Premier. Sources: HoneyBook and Dubsado pricing.</li>
+      </ul>
+      <p><strong>Inference:</strong> Small service providers can compare tools quickly and usually do not face enterprise switching costs. Willingness to pay is strongest when intake directly supports paid onboarding and reduces admin.</p>
+
+      <h3>5. Supplier Power: Moderate</h3>
+      <p><strong>Claim:</strong> Supplier power is moderate because FormForge depends on third-party AI, auth, payments, email, and infrastructure, but most layers have transparent pricing and viable substitutes.</p>
+      <ul>
+        <li>The repo stack includes OpenAI, Clerk, Stripe, Resend, Neon/Postgres, Drizzle, and AWS S3. Sources: <code>README.md</code>, <code>package.json</code>.</li>
+        <li>OpenAI, Stripe, Clerk, and Resend publish usage-based or free-tier pricing. Sources: linked pricing pages above.</li>
+      </ul>
+      <p><strong>Inference:</strong> Supplier risk is manageable for a prototype and rises if AI cost, deliverability, file storage, compliance, or payment disputes become central.</p>
+    </section>
+
+    <section id="opportunities">
+      <h2>Structural Opportunities</h2>
+      <div class="feedback" data-section="opportunities"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="opportunities" placeholder="Optional section feedback notes"></textarea>
+      <ol>
+        <li><strong>Narrow client-intake wedge.</strong> General builders cover broad collection jobs, but the approved ICP has a specific repeated setup and client-information problem.</li>
+        <li><strong>Anti-suite evidence for synthesis.</strong> HoneyBook and Dubsado bundle intake with CRM, invoices, contracts, portals, scheduling, and workflows, creating possible room for users who want better intake without full-suite migration.</li>
+        <li><strong>Free-tier pressure clarifies the bar.</strong> Generic forms are cheap; value must be measured against setup/follow-up time saved for paid client work.</li>
+        <li><strong>Vertical WTP signal.</strong> IntakeQ shows specialized intake can support higher paid plans when attachments, signatures, reminders, compliance, and secure sharing matter.</li>
+      </ol>
+    </section>
+
+    <section id="risks">
+      <h2>Structural Risks</h2>
+      <div class="feedback" data-section="risks"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="risks" placeholder="Optional section feedback notes"></textarea>
+      <ol>
+        <li><strong>AI generation commoditization.</strong> AI form creation is already visible in incumbent products and accessible to new entrants.</li>
+        <li><strong>Generic feature parity.</strong> Conditional logic, file uploads, redirects, payments, analytics, and integrations are already common.</li>
+        <li><strong>Free substitute ceiling.</strong> Google Forms and Tally set a strong good-enough benchmark for basic intake.</li>
+        <li><strong>Suite gravity.</strong> Buyers who want intake plus contracts, invoices, portals, scheduling, and automation may choose a broader suite.</li>
+        <li><strong>Evidence gap.</strong> No direct FormForge customer interviews or win/loss data exist yet.</li>
+      </ol>
+    </section>
+
+    <section id="evidence">
+      <h2>Evidence Matrix</h2>
+      <div class="feedback" data-section="evidence"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="evidence" placeholder="Optional section feedback notes"></textarea>
+      <div class="table-wrap" data-tts-narrative="The evidence matrix maps each major claim to source type, inference, and confidence.">
+        <table>
+          <thead><tr><th>Claim</th><th>Source</th><th>Evidence Type</th><th>Inference</th><th>Confidence</th><th>Decision Impact</th></tr></thead>
+          <tbody>
+            <tr><td>Rivalry is high in general forms.</td><td>Typeform, Jotform, Tally, Fillout pricing pages</td><td>Competitor/pricing</td><td>Many alternatives provide overlapping builder, logic, branding, submission, and integration features.</td><td>High</td><td>Approve or correct the high rivalry rating.</td></tr>
+            <tr><td>Client-service suites compete from above.</td><td>HoneyBook, Dubsado</td><td>Workflow/product</td><td>Suites can absorb intake into broader client-management workflows.</td><td>High</td><td>Decide whether suite competition belongs in this Porter boundary.</td></tr>
+            <tr><td>Free substitutes are structurally strong.</td><td>Google Forms, Tally, <code>research/icp.md</code></td><td>Substitute evidence</td><td>Basic intake can be handled without a paid standalone tool.</td><td>High</td><td>Approve or adjust substitute pressure.</td></tr>
+            <tr><td>New entrants can build quickly.</td><td>OpenAI, Clerk, Stripe, Resend pricing; incumbent AI features</td><td>Infrastructure and feature evidence</td><td>AI-assisted generation has low technical entry barriers.</td><td>Medium-high</td><td>Approve or request more entrant evidence.</td></tr>
+            <tr><td>Buyer power is high.</td><td>ICP budget-owner profile; visible competitor pricing</td><td>Buyer/pricing evidence</td><td>Owner-operators can compare, switch, and remain with free tools.</td><td>High</td><td>Approve or request stronger buyer evidence.</td></tr>
+            <tr><td>Supplier power is moderate.</td><td>Repo stack; OpenAI, Stripe, Clerk, Resend pricing</td><td>Infrastructure evidence</td><td>Usage-based suppliers matter but do not block entry; risk rises with scale.</td><td>Medium</td><td>Approve or adjust supplier rating.</td></tr>
+            <tr><td>Specialized intake can support WTP.</td><td>IntakeQ pricing</td><td>Vertical pricing evidence</td><td>Intake gains value when tied to secure workflows, signatures, reminders, and attachments.</td><td>Medium</td><td>Keep as evidence, not as a regulated-market recommendation.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="assumptions">
+      <h2>Assumptions And Gaps</h2>
+      <div class="feedback" data-section="assumptions"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="assumptions" placeholder="Optional section feedback notes"></textarea>
+      <div class="table-wrap" data-tts-narrative="The assumptions register shows which conclusions are evidence-backed and what would change them.">
+        <table>
+          <thead><tr><th>Assumption</th><th>Status</th><th>Confidence</th><th>What Would Change It</th></tr></thead>
+          <tbody>
+            <tr><td>The market boundary should stay around client-service intake rather than generic surveys.</td><td>Approved by ICP and scope YAML</td><td>High</td><td>New approval changing ICP or product path.</td></tr>
+            <tr><td>Competitor public pricing reflects buyer-visible alternatives.</td><td>Evidence-backed but time-sensitive</td><td>Medium-high</td><td>Region-specific pricing or plan changes.</td></tr>
+            <tr><td>AI generation is commoditizing in form builders.</td><td>Evidence-backed for incumbents, inferred for entrants</td><td>Medium</td><td>Discovery showing buyers strongly distinguish FormForge generation quality or workflow-specific generation.</td></tr>
+            <tr><td>Buyer WTP is higher for intake tied to paid client work.</td><td>Inferred from ICP and suite/vertical pricing</td><td>Medium</td><td>Customer interviews showing low urgency or unwillingness to pay.</td></tr>
+            <tr><td>Supplier risk is moderate, not high.</td><td>Evidence-backed by pricing and repo stack</td><td>Medium</td><td>Heavy AI costs, deliverability issues, payment disputes, compliance, or lock-in becoming central.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Source Coverage Gaps</h3>
+      <ul>
+        <li>No direct current target-buyer interviews, win/loss notes, or sales calls.</li>
+        <li>Limited customer-review/community evidence in this pass.</li>
+        <li>No traffic, market share, funding, or revenue comparisons were used.</li>
+        <li>Pricing is current as checked on 2026-06-15 and should be rechecked if substantial time passes.</li>
+      </ul>
+    </section>
+
+    <section id="gates">
+      <h2>Approval Gates</h2>
+      <p>Answer the required gates below. The compiled YAML can approve promotion to the canonical Porter intermediate, request revisions, or flag clarification needs.</p>
+      <div class="gate" data-gate="evidence coverage">
+        <h3>Gate 1: Evidence Coverage</h3>
+        <p>Is the cited source set sufficient for this Porter intermediate, with the stated source gaps preserved?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="evidence" value="approved" data-answer="Approve evidence coverage with the stated source gaps."> Approve evidence coverage.</label>
+          <label class="option"><input type="radio" name="evidence" value="needs-clarification" data-answer="Evidence coverage needs clarification before canonical promotion."> Need clarification.</label>
+          <label class="option"><input type="radio" name="evidence" value="other"> Other / None of the above.</label>
+        </div>
+        <textarea data-notes="evidence" placeholder="Optional notes or required evidence changes"></textarea>
+      </div>
+      <div class="gate" data-gate="market boundary">
+        <h3>Gate 2: Market Boundary</h3>
+        <p>Approve the client-service intake boundary and included/excluded alternative set?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="boundary" value="approved" data-answer="Approve client-service intake market boundary and alternative set."> Approve boundary.</label>
+          <label class="option"><input type="radio" name="boundary" value="needs-clarification" data-answer="Market boundary needs clarification before canonical promotion."> Need clarification.</label>
+          <label class="option"><input type="radio" name="boundary" value="other"> Other / None of the above.</label>
+        </div>
+        <textarea data-notes="boundary" placeholder="Optional boundary notes"></textarea>
+      </div>
+      <div class="gate" data-gate="force ratings">
+        <h3>Gate 3: Force Ratings</h3>
+        <p>Approve High rivalry, High new entrants, High substitutes, High buyer power, and Moderate supplier power?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="ratings" value="approved" data-answer="Approve force ratings: rivalry high, new entrants high, substitutes high, buyer power high, supplier power moderate."> Approve ratings.</label>
+          <label class="option"><input type="radio" name="ratings" value="needs-clarification" data-answer="Force ratings need clarification before canonical promotion."> Need clarification.</label>
+          <label class="option"><input type="radio" name="ratings" value="other"> Other / None of the above.</label>
+        </div>
+        <textarea data-notes="ratings" placeholder="Optional rating corrections"></textarea>
+      </div>
+      <div class="gate" data-gate="artifact destination">
+        <h3>Gate 4: Artifact Destination & Proposed File Change</h3>
+        <p>Approve promoting the reviewed packet to <code>research/competitive-analysis-porter-five-forces.md</code> after final YAML approval?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="artifact" value="approved" data-answer="Approve canonical Porter intermediate at research/competitive-analysis-porter-five-forces.md."> Approve destination and file change.</label>
+          <label class="option"><input type="radio" name="artifact" value="needs-clarification" data-answer="Artifact destination or file-change scope needs clarification."> Need clarification.</label>
+          <label class="option"><input type="radio" name="artifact" value="other"> Other / None of the above.</label>
+        </div>
+        <textarea data-notes="artifact" placeholder="Optional destination/file-change notes"></textarea>
+      </div>
+    </section>
+
+    <section id="compile" class="compile">
+      <h2>Compile Responses</h2>
+      <p>Use this after setting gate answers or selecting section feedback. The generated YAML is the payload to paste back into Codex for this Porter framework review.</p>
+      <button type="button" class="primary" id="compileButton">Compile Responses</button>
+      <button type="button" id="copyButton">Copy YAML</button>
+      <p class="meta" id="copyStatus">No YAML compiled yet.</p>
+      <textarea id="compiledYaml" readonly placeholder="Compiled YAML will appear here."></textarea>
+    </section>
+  </main>
+
+  <script>
+    const forceData = [
+      { label: "Rivalry", value: 3, color: "--chart-5" },
+      { label: "Entrants", value: 3, color: "--chart-5" },
+      { label: "Substitutes", value: 3, color: "--chart-5" },
+      { label: "Buyer Power", value: 3, color: "--chart-5" },
+      { label: "Supplier Power", value: 2, color: "--chart-3" }
+    ];
+    const gateNames = ["evidence", "boundary", "ratings", "artifact"];
+    function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+    function drawForceChart() {
+      const canvas = document.getElementById("forceChart");
+      const ctx = canvas.getContext("2d");
+      const ratio = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * ratio;
+      canvas.height = 260 * ratio;
+      ctx.scale(ratio, ratio);
+      ctx.clearRect(0, 0, rect.width, 260);
+      const left = 44;
+      const bottom = 210;
+      const width = rect.width;
+      const barWidth = Math.max(42, (width - 92) / forceData.length - 14);
+      ctx.font = "12px system-ui, sans-serif";
+      ctx.fillStyle = cssVar("--text-muted");
+      ctx.fillText("Pressure: 1 low, 2 moderate, 3 high", left, 18);
+      forceData.forEach((item, index) => {
+        const x = left + index * (barWidth + 14);
+        const height = (item.value / 3) * 150;
+        ctx.fillStyle = cssVar(item.color);
+        ctx.fillRect(x, bottom - height, barWidth, height);
+        ctx.fillStyle = cssVar("--text");
+        ctx.fillText(String(item.value), x + barWidth / 2 - 4, bottom - height - 8);
+        ctx.save();
+        ctx.translate(x + 2, bottom + 16);
+        ctx.rotate(-0.32);
+        ctx.fillText(item.label, 0, 0);
+        ctx.restore();
+      });
+      ctx.strokeStyle = cssVar("--border");
+      ctx.beginPath();
+      ctx.moveTo(left - 8, bottom);
+      ctx.lineTo(width - 18, bottom);
+      ctx.stroke();
+    }
+    document.querySelector("[data-toggle-table]").addEventListener("click", (event) => {
+      const table = document.getElementById(event.target.dataset.toggleTable);
+      const canvas = document.getElementById("forceChart");
+      const showTable = table.hidden;
+      table.hidden = !showTable;
+      canvas.hidden = showTable;
+      event.target.textContent = showTable ? "View as chart" : "View as table";
+    });
+    document.querySelectorAll(".feedback button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const wrapper = button.closest(".feedback");
+        const active = button.classList.contains("active");
+        wrapper.querySelectorAll("button").forEach((item) => item.classList.remove("active"));
+        const notes = document.querySelector(`[data-feedback-notes="${wrapper.dataset.section}"]`);
+        if (active) {
+          delete wrapper.dataset.feedback;
+          notes.hidden = true;
+        } else {
+          button.classList.add("active");
+          wrapper.dataset.feedback = button.dataset.choice;
+          notes.hidden = false;
+        }
+      });
+    });
+    function yamlEscape(value) {
+      return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    }
+    function selectedGate(name) {
+      const selected = document.querySelector(`input[name="${name}"]:checked`);
+      const notes = document.querySelector(`[data-notes="${name}"]`).value.trim();
+      if (!selected) return { name, status: "unanswered", answer: "", notes };
+      const answer = selected.value === "other" ? notes : selected.dataset.answer;
+      const status = selected.value === "needs-clarification" ? "needs-clarification" : (selected.value === "other" ? "other" : "answered");
+      return { name, status, answer, notes };
+    }
+    function feedbackItems() {
+      return Array.from(document.querySelectorAll(".feedback[data-feedback]")).map((wrapper) => {
+        const feedback = wrapper.dataset.feedback;
+        const notes = document.querySelector(`[data-feedback-notes="${wrapper.dataset.section}"]`).value.trim();
+        const action = feedback === "emphasize" ? "add-weight-to-section" : (feedback === "down" ? "investigate-and-revise" : "clarify-before-approval");
+        return { section: wrapper.dataset.section, feedback, notes, action };
+      });
+    }
+    async function copyYaml() {
+      const textarea = document.getElementById("compiledYaml");
+      const status = document.getElementById("copyStatus");
+      if (!textarea.value.trim()) {
+        status.textContent = "Compile YAML before copying.";
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(textarea.value);
+        status.textContent = "YAML copied to clipboard.";
+      } catch {
+        textarea.select();
+        status.textContent = "Clipboard blocked. YAML selected for manual copy.";
+      }
+    }
+    function compileResponses() {
+      const gates = gateNames.map(selectedGate);
+      const feedback = feedbackItems();
+      const unanswered = gates.filter((gate) => gate.status === "unanswered").map((gate) => gate.name);
+      const blocked = gates.some((gate) => gate.status === "needs-clarification" || (gate.status === "other" && !gate.answer)) || feedback.some((item) => item.feedback === "down" || item.feedback === "needs-clarification");
+      const complete = unanswered.length === 0;
+      const lines = [
+        "alignment_page: alignment/porter-five-forces-formforge.html",
+        "response_status: " + (complete ? "complete" : "partial"),
+        "approval_status: " + (complete && !blocked ? "ready-for-agent-review" : "not-approved"),
+        "required_gate_status: " + (complete ? "complete" : "incomplete"),
+        "unanswered_required_questions:"
+      ];
+      if (unanswered.length === 0) lines.push("  []"); else unanswered.forEach((item) => lines.push("  - " + item));
+      lines.push("gate_answers:");
+      gates.forEach((gate) => {
+        lines.push("  - section: gates");
+        lines.push("    gate_type: " + gate.name);
+        lines.push("    status: " + gate.status);
+        lines.push('    answer: "' + yamlEscape(gate.answer) + '"');
+        if (gate.notes) lines.push('    notes: "' + yamlEscape(gate.notes) + '"');
+        if (gate.name === "artifact") lines.push("    target_path: research/competitive-analysis-porter-five-forces.md");
+      });
+      lines.push("section_feedback:");
+      if (feedback.length === 0) {
+        lines.push("  []");
+      } else {
+        feedback.forEach((item) => {
+          lines.push("  - section: " + item.section);
+          lines.push("    feedback: " + item.feedback);
+          if (item.notes) lines.push('    notes: "' + yamlEscape(item.notes) + '"');
+          lines.push("    requested_agent_action: " + item.action);
+        });
+      }
+      document.getElementById("compiledYaml").value = lines.join("\n");
+      copyYaml();
+    }
+    window.addEventListener("resize", drawForceChart);
+    window.addEventListener("load", drawForceChart);
+    document.getElementById("compileButton").addEventListener("click", compileResponses);
+    document.getElementById("copyButton").addEventListener("click", copyYaml);
+  </script>
+  <script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

@@ -29,6 +29,39 @@ Prepare the Stage 1 competitive-analysis scope gate for the active flat FormForg
 
 ---
 
+# FormForge Competitive Analysis Porter Framework Roadmap
+
+## Objective
+
+Consume the approved competitive-analysis scope YAML and run the first selected framework, Porter's Five Forces, for the flat FormForge client-service intake ICP.
+
+## Approval Input
+
+The user provided compiled YAML on 2026-06-15 approving:
+
+- Flat FormForge scope and client-service intake ICP.
+- All four frameworks: Porter Five Forces, SWOT, Feature/Pricing Matrix, and Strategic Group Map.
+- Source plan and citation requirement.
+- Proposed output paths.
+
+## Non-Goals
+
+- Do not write canonical `research/competitive-analysis-porter-five-forces.md` before Porter artifact approval.
+- Do not run SWOT, Feature/Pricing Matrix, Strategic Group Map, or synthesis in this session.
+- Do not change product code or GitHub Actions.
+
+## Plan
+
+- [x] Record the approved framework manifest at `research/_working/competitive-analysis-run.yaml`.
+- [x] Gather current ICP/product context and Porter framework instructions.
+- [x] Run cited web/source research for the market boundary and five forces.
+- [x] Write the non-canonical Porter working packet.
+- [x] Build/update the Porter review alignment page.
+- [x] Verify outputs, task docs, and git diff.
+- [ ] Commit and push intended tracked changes.
+
+---
+
 # FormForge Stage 3 ICP Finalization Roadmap
 
 ## Objective

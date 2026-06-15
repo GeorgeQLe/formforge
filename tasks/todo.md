@@ -1,5 +1,23 @@
 # FormForge - Project Vision & Next Steps
 
+## Active Competitive Analysis Porter Framework Review
+
+- [x] Record approved selected-framework manifest.
+- [x] Gather FormForge ICP/product context and Porter framework instructions.
+- [x] Run cited source research for rivalry, entrants, substitutes, buyer power, and supplier power.
+- [x] Write non-canonical working packet: `research/_working/preliminary-porter-five-forces-research.md`.
+- [x] Build review page: `alignment/porter-five-forces-formforge.html`.
+- [x] Verify framework-review outputs and git diff.
+- [ ] Commit and push intended tracked changes.
+
+### Review
+
+- Stage 2 Porter framework review drafted on 2026-06-15. The working packet rates rivalry, entrants, substitutes, and buyer power as high pressure, with supplier power as moderate.
+- Non-canonical review artifacts are `research/_working/preliminary-porter-five-forces-research.md` and `alignment/porter-five-forces-formforge.html`; the approved framework manifest is `research/_working/competitive-analysis-run.yaml`.
+- Verification: `git diff --check` passed; `research/competitive-analysis-porter-five-forces.md` does not exist; the Porter review page reports `data-alignment-status="review"`; the page compiles YAML for `alignment/porter-five-forces-formforge.html`; `alignment/index.html` includes the new page.
+
+---
+
 ## Active Competitive Analysis Stage 1 Scope Gate
 
 - [x] Resolve active FormForge research scope from `research/.progress.yaml`.

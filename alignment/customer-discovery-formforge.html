@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en" data-alignment-category="research" data-visual-tier="visual">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FormForge Customer Discovery Scope - Review</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+      --question: #1c2333;
+      --chart-1: #58a6ff;
+      --chart-2: #3fb950;
+      --chart-3: #d29922;
+      --chart-4: #bc8cff;
+      --chart-5: #f85149;
+      --chart-6: #79c0ff;
+      --chart-7: #f0883e;
+      --chart-8: #a5d6ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1180px, 100%);
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3, h4 { color: #fff; letter-spacing: 0; }
+    h1 { margin: 0 0 0.75rem; font-size: 2.25rem; line-height: 1.12; }
+    h2 { margin: 2.5rem 0 0.75rem; color: var(--accent); font-size: 1.45rem; }
+    h3 { margin: 1.5rem 0 0.55rem; font-size: 1.1rem; }
+    p { margin: 0 0 0.8rem; }
+    a { color: var(--accent); }
+    code {
+      background: #111827;
+      border: 1px solid var(--border);
+      border-radius: 0.3rem;
+      color: #e6edf3;
+      padding: 0.05rem 0.3rem;
+    }
+    ul, ol { padding-left: 1.4rem; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.8rem 0 1.2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 0.7rem 0.75rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #1f2630; color: #fff; font-weight: 700; }
+    .lede { max-width: 860px; color: var(--text-muted); font-size: 1.05rem; }
+    .toc, .card, .notice, .gate, .feedback, .compile, .status, .chart-container {
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      background: var(--surface);
+    }
+    .toc { margin: 1.5rem 0 2rem; padding: 1rem; }
+    .toc h2 { margin-top: 0; }
+    .toc ul { columns: 2; column-gap: 2rem; margin-bottom: 0; }
+    .notice, .status {
+      margin: 1.25rem 0;
+      padding: 1rem;
+      border-left: 4px solid var(--accent);
+    }
+    .status { border-left-color: var(--purple); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(min(260px, 100%), 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .card { padding: 1rem; }
+    .card h3 { margin-top: 0; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.8rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #111827;
+      color: #fff;
+      padding: 0.18rem 0.65rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 0.1rem 0.2rem 0.1rem 0;
+    }
+    .pill.warn { color: #111827; background: var(--orange); border-color: var(--orange); }
+    .pill.good { color: #06140a; background: var(--green); border-color: var(--green); }
+    .pill.muted { color: var(--text); background: #0f1724; }
+    .feedback {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      margin: 0.75rem 0 1rem;
+      padding: 0.65rem;
+    }
+    .feedback button, .toggle-btn, .compile button, .copy-btn {
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 0.45rem;
+      background: #111827;
+      color: var(--text);
+      cursor: pointer;
+      font: inherit;
+      padding: 0.62rem 1rem;
+    }
+    .feedback button[data-feedback="emphasize"].active { background: var(--green); color: #06140a; border-color: var(--green); }
+    .feedback button[data-feedback="down"].active { background: var(--red); color: #fff; border-color: var(--red); }
+    .feedback button[data-feedback="needs-clarification"].active { background: var(--orange); color: #111827; border-color: var(--orange); }
+    .feedback-body { flex-basis: 100%; display: none; }
+    .feedback.has-feedback .feedback-body { display: block; }
+    textarea {
+      width: 100%;
+      min-height: 7rem;
+      border: 1px solid var(--border);
+      border-radius: 0.45rem;
+      background: #0f1724;
+      color: var(--text);
+      font: inherit;
+      padding: 0.75rem;
+    }
+    .gate {
+      margin: 1rem 0;
+      padding: 1rem;
+      border-left: 4px solid var(--purple);
+    }
+    .gate h3 { margin-top: 0; color: var(--purple); }
+    .question {
+      margin-top: 0.85rem;
+      padding: 0.85rem;
+      border: 1px solid #2d3b54;
+      border-radius: 0.5rem;
+      background: var(--question);
+    }
+    .question legend { color: #fff; font-weight: 800; padding: 0; }
+    .option {
+      display: block;
+      min-height: 44px;
+      margin: 0.45rem 0;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 0.45rem;
+      background: #111827;
+    }
+    .option input { margin-right: 0.5rem; }
+    .notes { display: none; margin-top: 0.55rem; }
+    .option:has(input:checked) + .notes, .notes.is-visible { display: block; }
+    .table-wrap {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    .chart-container { margin: 1rem 0; padding: 1rem; }
+    .chart-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
+      gap: 1rem;
+      align-items: start;
+    }
+    canvas {
+      width: 100%;
+      max-width: 100%;
+      min-height: 260px;
+      border: 1px solid var(--border);
+      border-radius: 0.45rem;
+      background: #0f1724;
+    }
+    .compile { margin-top: 2rem; padding: 1rem; border-left: 4px solid var(--green); }
+    .compile h2 { margin-top: 0; color: var(--green); }
+    .compile-output { margin-top: 1rem; display: none; }
+    .copy-status { color: var(--text-muted); margin-left: 0.5rem; }
+    .muted { color: var(--text-muted); }
+    .small { font-size: 0.9rem; }
+    @media (max-width: 860px) {
+      .toc ul { columns: 1; }
+      .chart-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      main { padding: 1.5rem 1rem 3rem; }
+      h1 { font-size: 1.8rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="pill warn">review</p>
+      <p class="pill">Stage 1 scope approval</p>
+      <p class="pill">customer-discovery</p>
+      <h1>FormForge Customer Discovery Scope</h1>
+      <p class="lede">This page is a pre-research approval artifact. It proposes the customer-discovery scope, source plan, assumptions, paths, and gates for FormForge before any new ICP candidates, rankings, synthesized findings, framework plan, working packet, or canonical research file is created.</p>
+      <div class="status">
+        <p><strong>Alignment date:</strong> 2026-06-15</p>
+        <p><strong>Alignment status:</strong> review</p>
+        <p><strong>Scope mode:</strong> flat <code>research/</code> single-product mode. No active <code>research/.progress.yaml</code> product path was found in Stage 1 discovery.</p>
+        <p><strong>Research boundary:</strong> no web research, ICP candidate generation, ranking, framework execution, or canonical artifact writing has been performed for this customer-discovery stage.</p>
+      </div>
+    </header>
+
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Table Of Contents</h2>
+      <ul>
+        <li><a href="#scope-evidence">Scope Evidence</a></li>
+        <li><a href="#mode-resolution">Mode Resolution</a></li>
+        <li><a href="#source-plan">Source Plan</a></li>
+        <li><a href="#output-paths">Output Paths</a></li>
+        <li><a href="#stage2-preview">Stage 2 Preview</a></li>
+        <li><a href="#assumptions">Assumptions And Confidence</a></li>
+        <li><a href="#gates">Approval Gates</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
+      </ul>
+    </nav>
+
+    <section id="scope-evidence" data-section="Scope Evidence">
+      <h2>Scope Evidence</h2>
+      <div class="feedback" id="feedback-scope-evidence" data-section="Scope Evidence">
+        <span class="muted small">Section feedback</span>
+        <button type="button" data-feedback="emphasize">Emphasize</button>
+        <button type="button" data-feedback="down">Thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+        <div class="feedback-body">
+          <textarea data-feedback-notes placeholder="Optional notes for this section"></textarea>
+          <button type="button" class="copy-btn" data-local-compile>Compile Feedback YAML</button>
+          <button type="button" class="copy-btn" data-local-copy>Copy YAML</button><span class="copy-status"></span>
+          <textarea readonly data-local-yaml></textarea>
+        </div>
+      </div>
+      <p>These are source-availability observations, not customer-discovery findings.</p>
+      <div class="grid">
+        <article class="card">
+          <h3>Concept Sources</h3>
+          <p><code>research/concept-brief.md</code> and <code>research/concept-brief-interview.md</code> define a fresh-start FormForge concept: describe a form, review generated fields, edit visually, publish a link, receive submissions, and review or export responses.</p>
+        </article>
+        <article class="card">
+          <h3>Codebase Sources</h3>
+          <p><code>package.json</code> and <code>src/</code> show a substantial Next.js app surface with AI generation, editor, public rendering, submission, responses, billing, auth, and tests. This is context, not proof of live customer usage.</p>
+        </article>
+        <article class="card">
+          <h3>Task And History Sources</h3>
+          <p><code>tasks/todo.md</code>, <code>tasks/history.md</code>, and <code>desk-flip-report.md</code> document prior build scope, deferred infrastructure, and the fresh-start constraint that old code should inform lessons but not dictate the new product.</p>
+        </article>
+        <article class="card">
+          <h3>Prior ICP Working Packet</h3>
+          <p><code>research/_working/preliminary-icp-research.md</code> and <code>alignment/icp-formforge.html</code> exist. They are non-canonical prior artifacts and should be explicitly approved, rejected, or treated as only seed context for Stage 2.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="mode-resolution" data-section="Mode Resolution">
+      <h2>Mode Resolution</h2>
+      <div class="feedback" id="feedback-mode-resolution" data-section="Mode Resolution">
+        <span class="muted small">Section feedback</span>
+        <button type="button" data-feedback="emphasize">Emphasize</button>
+        <button type="button" data-feedback="down">Thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+        <div class="feedback-body">
+          <textarea data-feedback-notes placeholder="Optional notes for this section"></textarea>
+          <button type="button" class="copy-btn" data-local-compile>Compile Feedback YAML</button>
+          <button type="button" class="copy-btn" data-local-copy>Copy YAML</button><span class="copy-status"></span>
+          <textarea readonly data-local-yaml></textarea>
+        </div>
+      </div>
+      <p>Stage 1 found mixed mode signals. The repository contains production-like code, but the active research brief frames this as a fresh-start, prototype-first concept with no real customer feedback file and no approved canonical ICP.</p>
+      <div class="table-wrap" data-tts-narrative="The mode resolution table separates code-exists signals from fresh-start discovery signals and proposes a scoped decision for the user to approve.">
+        <table>
+          <thead>
+            <tr><th>Signal</th><th>Observed Source</th><th>Interpretation For Approval</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Production-like app code exists</td><td><code>src/</code>, <code>package.json</code>, <code>README.md</code></td><td>Supports product-exists context, but not necessarily empirical validation.</td></tr>
+            <tr><td>No customer feedback artifact found</td><td>No <code>research/customer-feedback.md</code> in Stage 1 file scan</td><td>PMF validation should not be the default unless the user provides real user/customer evidence.</td></tr>
+            <tr><td>Fresh-start concept is active</td><td><code>research/concept-brief.md</code>, <code>desk-flip-report.md</code></td><td>Supports pre-product customer discovery around the new validated loop.</td></tr>
+            <tr><td>Prior ICP packet exists but is not canonical</td><td><code>research/_working/preliminary-icp-research.md</code></td><td>Use only if approved as seed evidence; otherwise rerun discovery from the concept brief.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Proposed Stage 2 operating mode:</strong> pre-product customer discovery for the fresh-start FormForge concept, with repo/code context used as product-boundary evidence and the prior ICP packet used only if approved by the gate below.</p>
+    </section>
+
+    <section id="source-plan" data-section="Source Plan">
+      <h2>Source Plan</h2>
+      <div class="feedback" id="feedback-source-plan" data-section="Source Plan">
+        <span class="muted small">Section feedback</span>
+        <button type="button" data-feedback="emphasize">Emphasize</button>
+        <button type="button" data-feedback="down">Thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+        <div class="feedback-body">
+          <textarea data-feedback-notes placeholder="Optional notes for this section"></textarea>
+          <button type="button" class="copy-btn" data-local-compile>Compile Feedback YAML</button>
+          <button type="button" class="copy-btn" data-local-copy>Copy YAML</button><span class="copy-status"></span>
+          <textarea readonly data-local-yaml></textarea>
+        </div>
+      </div>
+      <p>After scope approval, Stage 2 should perform broad market research before identifying ICP candidates. The minimum search coverage is 8 web queries; the proposed plan uses 12 source categories to reduce segment bias.</p>
+      <div class="chart-container" data-tts-narrative="The chart shows planned source coverage across twelve research categories, with the heaviest weight on persona, pain, competitor, user sentiment, workflow trigger, and willingness-to-pay signals.">
+        <div class="chart-row">
+          <canvas id="coverageChart" width="720" height="360" aria-label="Bar chart of proposed source coverage categories for Stage 2 customer discovery"></canvas>
+          <div>
+            <button type="button" class="toggle-btn" data-toggle-table="coverage-table">View as table</button>
+            <p class="muted small">Values are planning weights, not findings. They show relative attention in Stage 2.</p>
+          </div>
+        </div>
+        <div class="table-wrap" id="coverage-table" hidden data-tts-narrative="The source coverage table lists twelve planned research categories and their intended evidence role.">
+          <table>
+            <thead><tr><th>Category</th><th>Planning Weight</th><th>Evidence Role</th></tr></thead>
+            <tbody>
+              <tr><td>Direct persona</td><td>5</td><td>Identify likely form creators and buyers.</td></tr>
+              <tr><td>Pain point</td><td>5</td><td>Find repeated friction in form creation, collection, or handoff.</td></tr>
+              <tr><td>Market segment</td><td>4</td><td>Compare broad segments without selecting prematurely.</td></tr>
+              <tr><td>Competitor users</td><td>5</td><td>Understand who uses adjacent form/intake products.</td></tr>
+              <tr><td>Forums/community</td><td>5</td><td>Capture natural language and switching complaints.</td></tr>
+              <tr><td>Job postings</td><td>3</td><td>Spot operational roles that own intake/data collection.</td></tr>
+              <tr><td>Industry reports</td><td>4</td><td>Ground market sizing and category context.</td></tr>
+              <tr><td>Switching trigger</td><td>5</td><td>Find events that cause adoption or churn.</td></tr>
+              <tr><td>Adjacent market</td><td>4</td><td>Compare intake, survey, workflow, and no-code edges.</td></tr>
+              <tr><td>Business model</td><td>4</td><td>Classify PLG, B2B SaaS, prosumer, or other motions.</td></tr>
+              <tr><td>WTP signal</td><td>5</td><td>Separate paid urgency from generic free-form needs.</td></tr>
+              <tr><td>Named account</td><td>3</td><td>Build examples for later discovery targets, not proof.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="output-paths" data-section="Output Paths">
+      <h2>Output Paths</h2>
+      <div class="feedback" id="feedback-output-paths" data-section="Output Paths">
+        <span class="muted small">Section feedback</span>
+        <button type="button" data-feedback="emphasize">Emphasize</button>
+        <button type="button" data-feedback="down">Thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+        <div class="feedback-body">
+          <textarea data-feedback-notes placeholder="Optional notes for this section"></textarea>
+          <button type="button" class="copy-btn" data-local-compile>Compile Feedback YAML</button>
+          <button type="button" class="copy-btn" data-local-copy>Copy YAML</button><span class="copy-status"></span>
+          <textarea readonly data-local-yaml></textarea>
+        </div>
+      </div>
+      <div class="table-wrap" data-tts-narrative="The output path table distinguishes the review page, future working packet, and canonical paths that will remain untouched until later approval stages.">
+        <table>
+          <thead><tr><th>Artifact</th><th>Path</th><th>Stage</th><th>Mutation Status</th></tr></thead>
+          <tbody>
+            <tr><td>Scope alignment page</td><td><code>alignment/customer-discovery-formforge.html</code></td><td>Stage 1</td><td>Written now for review.</td></tr>
+            <tr><td>Alignment index</td><td><code>alignment/index.html</code></td><td>Stage 1</td><td>Updated to include this review page.</td></tr>
+            <tr><td>Working packet</td><td><code>research/_working/preliminary-customer-discovery-research.md</code></td><td>Stage 2</td><td>Not written until scope approval.</td></tr>
+            <tr><td>Canonical ICP</td><td><code>research/icp.md</code></td><td>Stage 3</td><td>Not written until final artifact approval.</td></tr>
+            <tr><td>Search log</td><td><code>research/icp-search-log.md</code></td><td>Stage 3</td><td>Not written until final artifact approval.</td></tr>
+            <tr><td>Progress manifest</td><td><code>research/.progress.yaml</code></td><td>Stage 3 if needed</td><td>Only if approved secondary ICP paths need parking or promotion metadata.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="stage2-preview" data-section="Stage 2 Preview">
+      <h2>Stage 2 Preview / Expected Review Format</h2>
+      <div class="feedback" id="feedback-stage2-preview" data-section="Stage 2 Preview">
+        <span class="muted small">Section feedback</span>
+        <button type="button" data-feedback="emphasize">Emphasize</button>
+        <button type="button" data-feedback="down">Thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+        <div class="feedback-body">
+          <textarea data-feedback-notes placeholder="Optional notes for this section"></textarea>
+          <button type="button" class="copy-btn" data-local-compile>Compile Feedback YAML</button>
+          <button type="button" class="copy-btn" data-local-copy>Copy YAML</button><span class="copy-status"></span>
+          <textarea readonly data-local-yaml></textarea>
+        </div>
+      </div>
+      <p>If scope is approved, Stage 2 will update this same review page with a complete rendered working packet. The Markdown working packet will be supplemental; the primary review surface will be structured HTML.</p>
+      <ol>
+        <li><strong>Research Scope Approved:</strong> approved mode, sources, output paths, caveats, and any user edits.</li>
+        <li><strong>Executive Findings:</strong> only after research, with confidence labels and no unsupported recommendations.</li>
+        <li><strong>Marketplace Side Preflight:</strong> buyer, user, and respondent side coverage, including explicit exclusions.</li>
+        <li><strong>Broad Research Log:</strong> query strategy table, source categories, observations, and gaps.</li>
+        <li><strong>ICP Candidate Review:</strong> 2-5 candidates, pain evidence, accessibility, value potential, and WTP signal strength.</li>
+        <li><strong>Framework Selection:</strong> defaults and optional frameworks matched to the approved mode.</li>
+        <li><strong>Evidence Matrix:</strong> claims, source/path, inference, confidence, assumptions, and decision impact.</li>
+        <li><strong>Assumptions / Confidence Register:</strong> what is evidence-backed, provisional, or changeable.</li>
+        <li><strong>Proposed File Changes:</strong> exact Stage 3 canonical artifacts and any task updates after approval.</li>
+        <li><strong>User Format Preferences Gate:</strong> layout, tables, grouping, visuals, labels, and evidence density.</li>
+        <li><strong>Final Artifact Approval Gate:</strong> required before canonical files are created or updated.</li>
+      </ol>
+    </section>
+
+    <section id="assumptions" data-section="Assumptions And Confidence">
+      <h2>Assumptions And Confidence</h2>
+      <div class="feedback" id="feedback-assumptions" data-section="Assumptions And Confidence">
+        <span class="muted small">Section feedback</span>
+        <button type="button" data-feedback="emphasize">Emphasize</button>
+        <button type="button" data-feedback="down">Thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+        <div class="feedback-body">
+          <textarea data-feedback-notes placeholder="Optional notes for this section"></textarea>
+          <button type="button" class="copy-btn" data-local-compile>Compile Feedback YAML</button>
+          <button type="button" class="copy-btn" data-local-copy>Copy YAML</button><span class="copy-status"></span>
+          <textarea readonly data-local-yaml></textarea>
+        </div>
+      </div>
+      <div class="table-wrap" data-tts-narrative="The assumptions table shows which Stage 1 decisions are firm, provisional, or need user approval.">
+        <table>
+          <thead><tr><th>Assumption</th><th>Confidence</th><th>What Would Change It</th></tr></thead>
+          <tbody>
+            <tr><td>Flat <code>research/</code> scope is appropriate.</td><td>High</td><td>A hidden or new active product-path manifest, or user direction to scope a product path.</td></tr>
+            <tr><td>Fresh-start pre-product discovery is the right Stage 2 mode.</td><td>Medium</td><td>User provides real customer usage/feedback evidence and asks for validation instead.</td></tr>
+            <tr><td>The prior non-canonical ICP packet can be considered as seed context only if approved.</td><td>High</td><td>User asks to discard it entirely or to treat it as an approved base.</td></tr>
+            <tr><td>The first Stage 2 output should be a customer-discovery working packet, not canonical <code>research/icp.md</code>.</td><td>High</td><td>Only a final compiled YAML approval can move to canonical artifacts.</td></tr>
+            <tr><td>No downstream routing should be presented before approval.</td><td>High</td><td>This is fixed by the customer-discovery staged workflow.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="gates" data-section="Approval Gates">
+      <h2>Approval Gates</h2>
+      <div class="feedback" id="feedback-gates" data-section="Approval Gates">
+        <span class="muted small">Section feedback</span>
+        <button type="button" data-feedback="emphasize">Emphasize</button>
+        <button type="button" data-feedback="down">Thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">Clarification needed</button>
+        <div class="feedback-body">
+          <textarea data-feedback-notes placeholder="Optional notes for this section"></textarea>
+          <button type="button" class="copy-btn" data-local-compile>Compile Feedback YAML</button>
+          <button type="button" class="copy-btn" data-local-copy>Copy YAML</button><span class="copy-status"></span>
+          <textarea readonly data-local-yaml></textarea>
+        </div>
+      </div>
+
+      <div class="gate" data-gate-section="Research Scope">
+        <h3>Research Scope Gate</h3>
+        <p>Approve or revise the proposed Stage 2 scope before research begins.</p>
+        <fieldset class="question" data-required-question data-section="Research Scope" data-gate-type="scope/non-goals">
+          <legend>Which customer-discovery scope should Stage 2 use?</legend>
+          <label class="option"><input type="radio" name="q-scope" value="approve-fresh-start">Approve fresh-start pre-product discovery for FormForge's describe-edit-publish-submit-review loop.</label>
+          <div class="notes"><textarea data-notes placeholder="Optional notes"></textarea></div>
+          <label class="option"><input type="radio" name="q-scope" value="switch-validation">Switch to product-exists validation using real customer/product evidence I will provide.</label>
+          <div class="notes"><textarea data-notes placeholder="Optional notes"></textarea></div>
+          <label class="option"><input type="radio" name="q-scope" value="other">Other / None of the above</label>
+          <div class="notes"><textarea data-notes placeholder="Describe the preferred scope"></textarea></div>
+          <label class="option"><input type="radio" name="q-scope" value="needs-clarification">Need clarification</label>
+          <div class="notes"><textarea data-notes placeholder="What is unclear?"></textarea></div>
+        </fieldset>
+      </div>
+
+      <div class="gate" data-gate-section="Source Plan">
+        <h3>Source Plan Gate</h3>
+        <p>Approve or revise the Stage 2 source mix, including whether the prior non-canonical ICP packet can be used.</p>
+        <fieldset class="question" data-required-question data-section="Source Plan" data-gate-type="evidence coverage">
+          <legend>How should Stage 2 use available and external sources?</legend>
+          <label class="option"><input type="radio" name="q-source" value="approve-source-plan">Approve the 12-category web/repo source plan and allow the prior ICP working packet as seed context only.</label>
+          <div class="notes"><textarea data-notes placeholder="Optional source additions or exclusions"></textarea></div>
+          <label class="option"><input type="radio" name="q-source" value="ignore-prior-icp">Approve the source plan but ignore the prior ICP working packet.</label>
+          <div class="notes"><textarea data-notes placeholder="Optional notes"></textarea></div>
+          <label class="option"><input type="radio" name="q-source" value="other">Other / None of the above</label>
+          <div class="notes"><textarea data-notes placeholder="Describe source changes"></textarea></div>
+          <label class="option"><input type="radio" name="q-source" value="needs-clarification">Need clarification</label>
+          <div class="notes"><textarea data-notes placeholder="What is unclear?"></textarea></div>
+        </fieldset>
+      </div>
+
+      <div class="gate" data-gate-section="Artifact Destination">
+        <h3>Artifact Destination & Proposed File Changes Gate</h3>
+        <p>Approve the Stage 2 and Stage 3 output paths. Stage 2 writes only the working packet and updates this review page. Canonical files wait for later final approval.</p>
+        <fieldset class="question" data-required-question data-section="Artifact Destination" data-gate-type="artifact destination" data-target-path="research/_working/preliminary-customer-discovery-research.md">
+          <legend>Are the proposed output paths and mutation boundaries correct?</legend>
+          <label class="option"><input type="radio" name="q-paths" value="approve-paths">Approve the flat paths listed above and keep canonical files untouched until Stage 3 approval.</label>
+          <div class="notes"><textarea data-notes placeholder="Optional notes"></textarea></div>
+          <label class="option"><input type="radio" name="q-paths" value="change-paths">Use different paths or product-path scope.</label>
+          <div class="notes"><textarea data-notes placeholder="Provide desired paths or product scope"></textarea></div>
+          <label class="option"><input type="radio" name="q-paths" value="other">Other / None of the above</label>
+          <div class="notes"><textarea data-notes placeholder="Describe the desired file-change boundary"></textarea></div>
+          <label class="option"><input type="radio" name="q-paths" value="needs-clarification">Need clarification</label>
+          <div class="notes"><textarea data-notes placeholder="What is unclear?"></textarea></div>
+        </fieldset>
+      </div>
+
+      <div class="gate" data-gate-section="Completeness">
+        <h3>Research Completeness Gate</h3>
+        <p>Confirm whether the proposed Stage 2 review format and evidence treatment are sufficient before research starts.</p>
+        <fieldset class="question" data-required-question data-section="Completeness" data-gate-type="research completeness">
+          <legend>Is the planned evidence depth enough for the next review?</legend>
+          <label class="option"><input type="radio" name="q-complete" value="approve-depth">Approve the planned depth, including evidence matrix, source gaps, confidence register, and Stage 2 format gate.</label>
+          <div class="notes"><textarea data-notes placeholder="Optional notes"></textarea></div>
+          <label class="option"><input type="radio" name="q-complete" value="more-depth">Add more source depth or a different evidence format before Stage 2 starts.</label>
+          <div class="notes"><textarea data-notes placeholder="Describe additional depth"></textarea></div>
+          <label class="option"><input type="radio" name="q-complete" value="other">Other / None of the above</label>
+          <div class="notes"><textarea data-notes placeholder="Describe preferred evidence treatment"></textarea></div>
+          <label class="option"><input type="radio" name="q-complete" value="needs-clarification">Need clarification</label>
+          <div class="notes"><textarea data-notes placeholder="What is unclear?"></textarea></div>
+        </fieldset>
+      </div>
+    </section>
+
+    <section class="compile" id="compile" data-section="Compile Responses">
+      <h2>Compile Responses</h2>
+      <p>Answer any required gate questions and/or select section feedback, then compile YAML. Stage 2 starts only when the compiled YAML is complete and has <code>approval_status: ready-for-agent-review</code>.</p>
+      <button type="button" id="compileResponses">Compile Responses</button>
+      <button type="button" class="copy-btn" id="copyCompiled">Copy YAML</button>
+      <span class="copy-status" id="compileStatus"></span>
+      <div class="compile-output" id="compileOutput">
+        <textarea id="compiledYaml" readonly></textarea>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const alignmentPage = "alignment/customer-discovery-formforge.html";
+    const questionLabels = {
+      "approve-fresh-start": "Approve fresh-start pre-product discovery for FormForge's describe-edit-publish-submit-review loop.",
+      "switch-validation": "Switch to product-exists validation using real customer/product evidence I will provide.",
+      "approve-source-plan": "Approve the 12-category web/repo source plan and allow the prior ICP working packet as seed context only.",
+      "ignore-prior-icp": "Approve the source plan but ignore the prior ICP working packet.",
+      "approve-paths": "Approve the flat paths listed above and keep canonical files untouched until Stage 3 approval.",
+      "change-paths": "Use different paths or product-path scope.",
+      "approve-depth": "Approve the planned depth, including evidence matrix, source gaps, confidence register, and Stage 2 format gate.",
+      "more-depth": "Add more source depth or a different evidence format before Stage 2 starts.",
+      "other": "Other / None of the above",
+      "needs-clarification": "Need clarification"
+    };
+    const requestedAction = {
+      "emphasize": "add-weight-to-section",
+      "down": "investigate-and-revise",
+      "needs-clarification": "clarify-before-approval"
+    };
+
+    function escapeYaml(value) {
+      const text = String(value || "");
+      if (!text) return '""';
+      return JSON.stringify(text);
+    }
+
+    function yamlLine(key, value, indent = "") {
+      return `${indent}${key}: ${escapeYaml(value)}`;
+    }
+
+    function getSelectedQuestions() {
+      return Array.from(document.querySelectorAll("[data-required-question]")).map((fieldset) => {
+        const checked = fieldset.querySelector("input[type=radio]:checked");
+        const section = fieldset.dataset.section;
+        const gateType = fieldset.dataset.gateType;
+        const targetPath = fieldset.dataset.targetPath;
+        if (!checked) {
+          return { answered: false, section, gateType };
+        }
+        const option = checked.closest(".option");
+        const notes = option && option.nextElementSibling ? option.nextElementSibling.querySelector("textarea")?.value.trim() : "";
+        const status = checked.value === "other" ? "other" : checked.value === "needs-clarification" ? "needs-clarification" : "answered";
+        return {
+          answered: true,
+          section,
+          gateType,
+          status,
+          answer: questionLabels[checked.value] || checked.value,
+          notes,
+          targetPath
+        };
+      });
+    }
+
+    function getSectionFeedback() {
+      return Array.from(document.querySelectorAll(".feedback.has-feedback")).map((box) => {
+        const feedback = box.dataset.feedback;
+        const notes = box.querySelector("[data-feedback-notes]")?.value.trim() || "";
+        return {
+          section: box.dataset.section,
+          feedback,
+          notes,
+          requested_agent_action: requestedAction[feedback]
+        };
+      });
+    }
+
+    function buildYaml({ onlyFeedback } = {}) {
+      const questions = getSelectedQuestions();
+      const feedback = getSectionFeedback();
+      const answered = questions.filter((q) => q.answered);
+      const unanswered = questions.filter((q) => !q.answered).map((q) => `${q.section} (${q.gateType})`);
+      const hasNegativeFeedback = feedback.some((item) => item.feedback === "down" || item.feedback === "needs-clarification");
+      const hasClarifyingAnswer = answered.some((item) => item.status === "needs-clarification" || item.status === "other");
+      const requiredComplete = unanswered.length === 0;
+      const ready = requiredComplete && !hasNegativeFeedback && !hasClarifyingAnswer;
+      const lines = [];
+      lines.push(yamlLine("alignment_page", alignmentPage));
+      if (onlyFeedback) {
+        lines.push('feedback_status: "revision-request"');
+        lines.push('approval_status: "not-approved"');
+      } else {
+        lines.push(yamlLine("response_status", requiredComplete ? "complete" : "partial"));
+        lines.push(yamlLine("approval_status", ready ? "ready-for-agent-review" : "not-approved"));
+        lines.push(yamlLine("required_gate_status", requiredComplete ? "complete" : "incomplete"));
+      }
+      lines.push("unanswered_required_questions:");
+      if (unanswered.length) unanswered.forEach((item) => lines.push(`  - ${escapeYaml(item)}`));
+      else lines.push("  []");
+      if (!onlyFeedback && answered.length) {
+        lines.push("gate_answers:");
+        answered.forEach((item) => {
+          lines.push(`  - ${yamlLine("section", item.section).trim()}`);
+          lines.push(yamlLine("gate_type", item.gateType, "    "));
+          lines.push(yamlLine("status", item.status, "    "));
+          lines.push(yamlLine("answer", item.answer, "    "));
+          if (item.notes) lines.push(yamlLine("notes", item.notes, "    "));
+          if (item.targetPath) lines.push(yamlLine("target_path", item.targetPath, "    "));
+        });
+      }
+      if (feedback.length) {
+        lines.push("section_feedback:");
+        feedback.forEach((item) => {
+          lines.push(`  - ${yamlLine("section", item.section).trim()}`);
+          lines.push(yamlLine("feedback", item.feedback, "    "));
+          if (item.notes) lines.push(yamlLine("notes", item.notes, "    "));
+          lines.push(yamlLine("requested_agent_action", item.requested_agent_action, "    "));
+        });
+      }
+      return lines.join("\n") + "\n";
+    }
+
+    async function copyText(text, statusEl, textarea) {
+      try {
+        await navigator.clipboard.writeText(text);
+        statusEl.textContent = "Copied.";
+      } catch {
+        if (textarea) {
+          textarea.focus();
+          textarea.select();
+        }
+        statusEl.textContent = "Copy blocked; YAML selected.";
+      }
+    }
+
+    document.querySelectorAll(".feedback").forEach((box) => {
+      box.querySelectorAll("button[data-feedback]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const active = button.classList.contains("active");
+          box.querySelectorAll("button[data-feedback]").forEach((b) => b.classList.remove("active"));
+          if (active) {
+            box.classList.remove("has-feedback");
+            delete box.dataset.feedback;
+          } else {
+            button.classList.add("active");
+            box.classList.add("has-feedback");
+            box.dataset.feedback = button.dataset.feedback;
+          }
+        });
+      });
+      const localCompile = box.querySelector("[data-local-compile]");
+      const localCopy = box.querySelector("[data-local-copy]");
+      const output = box.querySelector("[data-local-yaml]");
+      const status = box.querySelector(".copy-status");
+      if (localCompile) {
+        localCompile.addEventListener("click", () => {
+          const yaml = buildYaml({ onlyFeedback: true });
+          output.value = yaml;
+          copyText(yaml, status, output);
+        });
+      }
+      if (localCopy) {
+        localCopy.addEventListener("click", () => copyText(output.value || buildYaml({ onlyFeedback: true }), status, output));
+      }
+    });
+
+    document.querySelectorAll(".question input[type=radio]").forEach((input) => {
+      input.addEventListener("change", () => {
+        const fieldset = input.closest(".question");
+        fieldset.querySelectorAll(".notes").forEach((notes) => notes.classList.remove("is-visible"));
+        const option = input.closest(".option");
+        if (option && option.nextElementSibling) option.nextElementSibling.classList.add("is-visible");
+      });
+    });
+
+    document.getElementById("compileResponses").addEventListener("click", () => {
+      const yaml = buildYaml();
+      document.getElementById("compiledYaml").value = yaml;
+      document.getElementById("compileOutput").style.display = "block";
+      copyText(yaml, document.getElementById("compileStatus"), document.getElementById("compiledYaml"));
+    });
+    document.getElementById("copyCompiled").addEventListener("click", () => {
+      const area = document.getElementById("compiledYaml");
+      copyText(area.value || buildYaml(), document.getElementById("compileStatus"), area);
+    });
+
+    document.querySelectorAll("[data-toggle-table]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const table = document.getElementById(button.dataset.toggleTable);
+        const hidden = table.hasAttribute("hidden");
+        if (hidden) {
+          table.removeAttribute("hidden");
+          button.textContent = "Hide table";
+        } else {
+          table.setAttribute("hidden", "");
+          button.textContent = "View as table";
+        }
+      });
+    });
+
+    function drawCoverageChart() {
+      const canvas = document.getElementById("coverageChart");
+      const ctx = canvas.getContext("2d");
+      const styles = getComputedStyle(document.documentElement);
+      const data = [
+        ["Persona", 5], ["Pain", 5], ["Segment", 4], ["Competitors", 5],
+        ["Community", 5], ["Jobs", 3], ["Reports", 4], ["Triggers", 5],
+        ["Adjacent", 4], ["Model", 4], ["WTP", 5], ["Accounts", 3]
+      ];
+      const width = canvas.width;
+      const height = canvas.height;
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = styles.getPropertyValue("--text").trim();
+      ctx.font = "14px system-ui, sans-serif";
+      const left = 92;
+      const top = 24;
+      const barHeight = 18;
+      const gap = 9;
+      const maxWidth = width - left - 58;
+      data.forEach(([label, value], index) => {
+        const y = top + index * (barHeight + gap);
+        const color = styles.getPropertyValue(`--chart-${(index % 8) + 1}`).trim();
+        ctx.fillStyle = styles.getPropertyValue("--text-muted").trim();
+        ctx.fillText(label, 10, y + 14);
+        ctx.fillStyle = color;
+        ctx.fillRect(left, y, (value / 5) * maxWidth, barHeight);
+        ctx.fillStyle = styles.getPropertyValue("--text").trim();
+        ctx.fillText(String(value), left + (value / 5) * maxWidth + 8, y + 14);
+      });
+    }
+    drawCoverageChart();
+  </script>
+  <script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

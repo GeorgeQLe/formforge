@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="confirmed">
+<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="review">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FormForge Porter's Five Forces - Confirmed</title>
+  <title>FormForge Porter's Five Forces - Review</title>
   <style>
     :root {
       color-scheme: dark;
@@ -52,13 +52,13 @@
       border-radius: 5px;
       padding: 1px 5px;
     }
-    section, .toc, .notice, .card, .chart-container, .table-wrap {
+    section, .toc, .notice, .card, .gate, .chart-container, .table-wrap, .compile {
       border: 1px solid var(--border);
       border-radius: 8px;
       background: var(--surface);
     }
     section { margin: 22px 0; padding: 20px; }
-    .toc, .notice { padding: 18px 20px; margin: 20px 0; }
+    .toc, .notice, .compile { padding: 18px 20px; margin: 20px 0; }
     .lede, .meta { color: var(--text-muted); }
     .status {
       display: inline-flex;
@@ -121,30 +121,61 @@
       cursor: pointer;
     }
     button.primary { border-color: var(--accent); background: var(--accent); color: #06101d; }
+    .feedback {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 8px 0 12px;
+    }
+    .feedback button { min-height: 36px; padding: 6px 10px; font-size: 0.82rem; }
+    .feedback button[data-choice="emphasize"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-choice="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-choice="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+    textarea {
+      width: 100%;
+      min-height: 92px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0d1117;
+      color: var(--text);
+      padding: 10px 12px;
+      font: inherit;
+    }
+    .gate {
+      margin: 14px 0;
+      padding: 16px;
+      background: #1c2333;
+      border-left: 4px solid var(--purple);
+    }
+    .gate-options { display: grid; gap: 8px; margin: 10px 0; }
+    label.option {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #161b22;
+    }
+    label.option input { margin-top: 5px; }
+    #compiledYaml { min-height: 260px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.86rem; }
     @media (max-width: 860px) {
       .grid, .cards { grid-template-columns: 1fr; }
       main { width: min(100% - 24px, 1160px); padding-top: 28px; }
     }
     @media (max-width: 560px) {
-      section, .toc, .notice { padding: 14px; }
+      section, .toc, .notice, .compile { padding: 14px; }
       h1 { font-size: 1.75rem; }
     }
   </style>
 </head>
 <body>
   <main>
-    <p class="status">confirmed · 2026-06-15 · visual research artifact</p>
+    <p class="status">review · 2026-06-15 · visual research artifact</p>
     <h1>FormForge Porter's Five Forces</h1>
-    <p class="lede">Confirmed Porter Five Forces intermediate for the approved flat FormForge competitive-analysis scope. The approved canonical artifact is <code>research/competitive-analysis-porter-five-forces.md</code>. This page is current for the completed alignment cycle and can be amended later only by archiving this confirmed record and highlighting the change.</p>
-
-    <section class="notice" id="confirmation">
-      <h2>Confirmation Record</h2>
-      <p><strong>alignment_status:</strong> confirmed</p>
-      <p><strong>Confirmation date:</strong> 2026-06-15</p>
-      <p><strong>Confirmed artifact paths:</strong> <code>research/competitive-analysis-porter-five-forces.md</code></p>
-      <p><strong>Archived review artifacts:</strong> <code>docs/history/archive/2026-06-15/114752/alignment/porter-five-forces-formforge.html</code> and <code>docs/history/archive/2026-06-15/114752/research/_working/preliminary-porter-five-forces-research.md</code></p>
-      <p><strong>Approval source summary:</strong> final compiled YAML approved evidence coverage with stated source gaps, the client-service intake market boundary and alternative set, the force ratings, and the canonical Porter intermediate path.</p>
-    </section>
+    <p class="lede">Stage 2 framework review for the approved flat FormForge competitive-analysis scope. This page renders the full non-canonical working packet at <code>research/_working/preliminary-porter-five-forces-research.md</code>. Approval promotes it to <code>research/competitive-analysis-porter-five-forces.md</code>; it does not run later frameworks or synthesis.</p>
 
     <nav class="toc" aria-label="Table of contents">
       <h2>Table Of Contents</h2>
@@ -157,12 +188,15 @@
         <li><a href="#risks">Structural Risks</a></li>
         <li><a href="#evidence">Evidence Matrix</a></li>
         <li><a href="#assumptions">Assumptions And Gaps</a></li>
-        <li><a href="#approval-record">Approval Decisions</a></li>
+        <li><a href="#gates">Approval Gates</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
       </ol>
     </nav>
 
     <section id="basis">
       <h2>Basis And Method</h2>
+      <div class="feedback" data-section="basis"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="basis" placeholder="Optional section feedback notes"></textarea>
       <div class="grid">
         <article class="card">
           <h3>Inputs</h3>
@@ -176,13 +210,15 @@
         <article class="card">
           <h3>Method</h3>
           <p>Pressure is rated Low, Moderate, or High. The analysis separates claim, evidence, inference, confidence, and decision impact. Product changes, positioning recommendations, and downstream routing are out of scope.</p>
-          <p><span class="pill">confirmed</span><span class="pill">canonical artifact written</span><span class="pill">Porter framework</span></p>
+          <p><span class="pill">review only</span><span class="pill">non-canonical</span><span class="pill">Porter framework</span></p>
         </article>
       </div>
     </section>
 
     <section id="boundary">
       <h2>Market Boundary</h2>
+      <div class="feedback" data-section="boundary"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="boundary" placeholder="Optional section feedback notes"></textarea>
       <p>FormForge is evaluated as an AI-assisted client-intake form builder for small client-service businesses, not as a broad survey suite, enterprise form platform, healthcare intake system, or full client-management suite.</p>
       <div class="grid">
         <article class="card">
@@ -207,6 +243,8 @@
 
     <section id="assessment">
       <h2>Force Assessment</h2>
+      <div class="feedback" data-section="assessment"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="assessment" placeholder="Optional section feedback notes"></textarea>
       <div class="chart-container" data-tts-narrative="The force chart rates rivalry, new entrants, substitutes, and buyer power as high pressure. Supplier power is moderate.">
         <button type="button" data-toggle-table="forceTable">View as table</button>
         <canvas id="forceChart" aria-label="Bar chart showing Porter force pressure ratings for FormForge: rivalry, entrants, substitutes, and buyer power high; supplier power moderate."></canvas>
@@ -239,6 +277,8 @@
 
     <section id="details">
       <h2>Force Detail</h2>
+      <div class="feedback" data-section="details"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="details" placeholder="Optional section feedback notes"></textarea>
       <h3>1. Competitive Rivalry: High</h3>
       <p><strong>Claim:</strong> Rivalry is high because buyers can choose from mature general form builders, generous free form builders, lightweight workspace substitutes, and client-service suites.</p>
       <ul>
@@ -289,6 +329,8 @@
 
     <section id="opportunities">
       <h2>Structural Opportunities</h2>
+      <div class="feedback" data-section="opportunities"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="opportunities" placeholder="Optional section feedback notes"></textarea>
       <ol>
         <li><strong>Narrow client-intake wedge.</strong> General builders cover broad collection jobs, but the approved ICP has a specific repeated setup and client-information problem.</li>
         <li><strong>Anti-suite evidence for synthesis.</strong> HoneyBook and Dubsado bundle intake with CRM, invoices, contracts, portals, scheduling, and workflows, creating possible room for users who want better intake without full-suite migration.</li>
@@ -299,6 +341,8 @@
 
     <section id="risks">
       <h2>Structural Risks</h2>
+      <div class="feedback" data-section="risks"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="risks" placeholder="Optional section feedback notes"></textarea>
       <ol>
         <li><strong>AI generation commoditization.</strong> AI form creation is already visible in incumbent products and accessible to new entrants.</li>
         <li><strong>Generic feature parity.</strong> Conditional logic, file uploads, redirects, payments, analytics, and integrations are already common.</li>
@@ -310,6 +354,8 @@
 
     <section id="evidence">
       <h2>Evidence Matrix</h2>
+      <div class="feedback" data-section="evidence"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="evidence" placeholder="Optional section feedback notes"></textarea>
       <div class="table-wrap" data-tts-narrative="The evidence matrix maps each major claim to source type, inference, and confidence.">
         <table>
           <thead><tr><th>Claim</th><th>Source</th><th>Evidence Type</th><th>Inference</th><th>Confidence</th><th>Decision Impact</th></tr></thead>
@@ -328,6 +374,8 @@
 
     <section id="assumptions">
       <h2>Assumptions And Gaps</h2>
+      <div class="feedback" data-section="assumptions"><span class="meta">Section feedback:</span><button type="button" data-choice="emphasize">emphasize</button><button type="button" data-choice="down">thumbs down</button><button type="button" data-choice="needs-clarification">clarification needed</button></div>
+      <textarea hidden data-feedback-notes="assumptions" placeholder="Optional section feedback notes"></textarea>
       <div class="table-wrap" data-tts-narrative="The assumptions register shows which conclusions are evidence-backed and what would change them.">
         <table>
           <thead><tr><th>Assumption</th><th>Status</th><th>Confidence</th><th>What Would Change It</th></tr></thead>
@@ -348,46 +396,59 @@
         <li>Pricing is current as checked on 2026-06-15 and should be rechecked if substantial time passes.</li>
       </ul>
     </section>
-    <section id="approval-record">
-      <h2>Approval Decisions</h2>
-      <div class="table-wrap" data-tts-narrative="The approval record confirms evidence coverage with source gaps, the client-service intake boundary, all five force ratings, and the canonical artifact path.">
-        <table>
-          <thead><tr><th>Gate</th><th>Decision</th><th>Artifact Path</th></tr></thead>
-          <tbody>
-            <tr><td>Evidence Coverage</td><td>Approve evidence coverage with the stated source gaps.</td><td></td></tr>
-            <tr><td>Market Boundary</td><td>Approve client-service intake market boundary and alternative set.</td><td></td></tr>
-            <tr><td>Force Ratings</td><td>Approve force ratings: rivalry high, new entrants high, substitutes high, buyer power high, supplier power moderate.</td><td></td></tr>
-            <tr><td>Artifact Destination</td><td>Approve canonical Porter intermediate.</td><td><code>research/competitive-analysis-porter-five-forces.md</code></td></tr>
-          </tbody>
-        </table>
+
+    <section id="gates">
+      <h2>Approval Gates</h2>
+      <p>Answer the required gates below. The compiled YAML can approve promotion to the canonical Porter intermediate, request revisions, or flag clarification needs.</p>
+      <div class="gate" data-gate="evidence coverage">
+        <h3>Gate 1: Evidence Coverage</h3>
+        <p>Is the cited source set sufficient for this Porter intermediate, with the stated source gaps preserved?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="evidence" value="approved" data-answer="Approve evidence coverage with the stated source gaps."> Approve evidence coverage.</label>
+          <label class="option"><input type="radio" name="evidence" value="needs-clarification" data-answer="Evidence coverage needs clarification before canonical promotion."> Need clarification.</label>
+          <label class="option"><input type="radio" name="evidence" value="other"> Other / None of the above.</label>
+        </div>
+        <textarea data-notes="evidence" placeholder="Optional notes or required evidence changes"></textarea>
       </div>
-      <h3>Compiled Approval YAML</h3>
-      <pre><code>alignment_page: alignment/porter-five-forces-formforge.html
-response_status: complete
-approval_status: ready-for-agent-review
-required_gate_status: complete
-unanswered_required_questions:
-  []
-gate_answers:
-  - section: gates
-    gate_type: evidence
-    status: answered
-    answer: "Approve evidence coverage with the stated source gaps."
-  - section: gates
-    gate_type: boundary
-    status: answered
-    answer: "Approve client-service intake market boundary and alternative set."
-  - section: gates
-    gate_type: ratings
-    status: answered
-    answer: "Approve force ratings: rivalry high, new entrants high, substitutes high, buyer power high, supplier power moderate."
-  - section: gates
-    gate_type: artifact
-    status: answered
-    answer: "Approve canonical Porter intermediate at research/competitive-analysis-porter-five-forces.md."
-    target_path: research/competitive-analysis-porter-five-forces.md
-section_feedback:
-  []</code></pre>
+      <div class="gate" data-gate="market boundary">
+        <h3>Gate 2: Market Boundary</h3>
+        <p>Approve the client-service intake boundary and included/excluded alternative set?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="boundary" value="approved" data-answer="Approve client-service intake market boundary and alternative set."> Approve boundary.</label>
+          <label class="option"><input type="radio" name="boundary" value="needs-clarification" data-answer="Market boundary needs clarification before canonical promotion."> Need clarification.</label>
+          <label class="option"><input type="radio" name="boundary" value="other"> Other / None of the above.</label>
+        </div>
+        <textarea data-notes="boundary" placeholder="Optional boundary notes"></textarea>
+      </div>
+      <div class="gate" data-gate="force ratings">
+        <h3>Gate 3: Force Ratings</h3>
+        <p>Approve High rivalry, High new entrants, High substitutes, High buyer power, and Moderate supplier power?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="ratings" value="approved" data-answer="Approve force ratings: rivalry high, new entrants high, substitutes high, buyer power high, supplier power moderate."> Approve ratings.</label>
+          <label class="option"><input type="radio" name="ratings" value="needs-clarification" data-answer="Force ratings need clarification before canonical promotion."> Need clarification.</label>
+          <label class="option"><input type="radio" name="ratings" value="other"> Other / None of the above.</label>
+        </div>
+        <textarea data-notes="ratings" placeholder="Optional rating corrections"></textarea>
+      </div>
+      <div class="gate" data-gate="artifact destination">
+        <h3>Gate 4: Artifact Destination & Proposed File Change</h3>
+        <p>Approve promoting the reviewed packet to <code>research/competitive-analysis-porter-five-forces.md</code> after final YAML approval?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="artifact" value="approved" data-answer="Approve canonical Porter intermediate at research/competitive-analysis-porter-five-forces.md."> Approve destination and file change.</label>
+          <label class="option"><input type="radio" name="artifact" value="needs-clarification" data-answer="Artifact destination or file-change scope needs clarification."> Need clarification.</label>
+          <label class="option"><input type="radio" name="artifact" value="other"> Other / None of the above.</label>
+        </div>
+        <textarea data-notes="artifact" placeholder="Optional destination/file-change notes"></textarea>
+      </div>
+    </section>
+
+    <section id="compile" class="compile">
+      <h2>Compile Responses</h2>
+      <p>Use this after setting gate answers or selecting section feedback. The generated YAML is the payload to paste back into Codex for this Porter framework review.</p>
+      <button type="button" class="primary" id="compileButton">Compile Responses</button>
+      <button type="button" id="copyButton">Copy YAML</button>
+      <p class="meta" id="copyStatus">No YAML compiled yet.</p>
+      <textarea id="compiledYaml" readonly placeholder="Compiled YAML will appear here."></textarea>
     </section>
   </main>
 
@@ -399,6 +460,7 @@ section_feedback:
       { label: "Buyer Power", value: 3, color: "--chart-5" },
       { label: "Supplier Power", value: 2, color: "--chart-3" }
     ];
+    const gateNames = ["evidence", "boundary", "ratings", "artifact"];
     function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
     function drawForceChart() {
       const canvas = document.getElementById("forceChart");
@@ -443,8 +505,97 @@ section_feedback:
       canvas.hidden = showTable;
       event.target.textContent = showTable ? "View as chart" : "View as table";
     });
+    document.querySelectorAll(".feedback button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const wrapper = button.closest(".feedback");
+        const active = button.classList.contains("active");
+        wrapper.querySelectorAll("button").forEach((item) => item.classList.remove("active"));
+        const notes = document.querySelector(`[data-feedback-notes="${wrapper.dataset.section}"]`);
+        if (active) {
+          delete wrapper.dataset.feedback;
+          notes.hidden = true;
+        } else {
+          button.classList.add("active");
+          wrapper.dataset.feedback = button.dataset.choice;
+          notes.hidden = false;
+        }
+      });
+    });
+    function yamlEscape(value) {
+      return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    }
+    function selectedGate(name) {
+      const selected = document.querySelector(`input[name="${name}"]:checked`);
+      const notes = document.querySelector(`[data-notes="${name}"]`).value.trim();
+      if (!selected) return { name, status: "unanswered", answer: "", notes };
+      const answer = selected.value === "other" ? notes : selected.dataset.answer;
+      const status = selected.value === "needs-clarification" ? "needs-clarification" : (selected.value === "other" ? "other" : "answered");
+      return { name, status, answer, notes };
+    }
+    function feedbackItems() {
+      return Array.from(document.querySelectorAll(".feedback[data-feedback]")).map((wrapper) => {
+        const feedback = wrapper.dataset.feedback;
+        const notes = document.querySelector(`[data-feedback-notes="${wrapper.dataset.section}"]`).value.trim();
+        const action = feedback === "emphasize" ? "add-weight-to-section" : (feedback === "down" ? "investigate-and-revise" : "clarify-before-approval");
+        return { section: wrapper.dataset.section, feedback, notes, action };
+      });
+    }
+    async function copyYaml() {
+      const textarea = document.getElementById("compiledYaml");
+      const status = document.getElementById("copyStatus");
+      if (!textarea.value.trim()) {
+        status.textContent = "Compile YAML before copying.";
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(textarea.value);
+        status.textContent = "YAML copied to clipboard.";
+      } catch {
+        textarea.select();
+        status.textContent = "Clipboard blocked. YAML selected for manual copy.";
+      }
+    }
+    function compileResponses() {
+      const gates = gateNames.map(selectedGate);
+      const feedback = feedbackItems();
+      const unanswered = gates.filter((gate) => gate.status === "unanswered").map((gate) => gate.name);
+      const blocked = gates.some((gate) => gate.status === "needs-clarification" || (gate.status === "other" && !gate.answer)) || feedback.some((item) => item.feedback === "down" || item.feedback === "needs-clarification");
+      const complete = unanswered.length === 0;
+      const lines = [
+        "alignment_page: alignment/porter-five-forces-formforge.html",
+        "response_status: " + (complete ? "complete" : "partial"),
+        "approval_status: " + (complete && !blocked ? "ready-for-agent-review" : "not-approved"),
+        "required_gate_status: " + (complete ? "complete" : "incomplete"),
+        "unanswered_required_questions:"
+      ];
+      if (unanswered.length === 0) lines.push("  []"); else unanswered.forEach((item) => lines.push("  - " + item));
+      lines.push("gate_answers:");
+      gates.forEach((gate) => {
+        lines.push("  - section: gates");
+        lines.push("    gate_type: " + gate.name);
+        lines.push("    status: " + gate.status);
+        lines.push('    answer: "' + yamlEscape(gate.answer) + '"');
+        if (gate.notes) lines.push('    notes: "' + yamlEscape(gate.notes) + '"');
+        if (gate.name === "artifact") lines.push("    target_path: research/competitive-analysis-porter-five-forces.md");
+      });
+      lines.push("section_feedback:");
+      if (feedback.length === 0) {
+        lines.push("  []");
+      } else {
+        feedback.forEach((item) => {
+          lines.push("  - section: " + item.section);
+          lines.push("    feedback: " + item.feedback);
+          if (item.notes) lines.push('    notes: "' + yamlEscape(item.notes) + '"');
+          lines.push("    requested_agent_action: " + item.action);
+        });
+      }
+      document.getElementById("compiledYaml").value = lines.join("\n");
+      copyYaml();
+    }
     window.addEventListener("resize", drawForceChart);
     window.addEventListener("load", drawForceChart);
+    document.getElementById("compileButton").addEventListener("click", compileResponses);
+    document.getElementById("copyButton").addEventListener("click", copyYaml);
   </script>
   <script src="../scripts/alignment-tts-kokoro.js"></script>
 </body>

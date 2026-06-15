@@ -62,6 +62,39 @@ The user provided compiled YAML on 2026-06-15 approving:
 
 ---
 
+# FormForge Porter Five Forces Stage 3 Finalization Roadmap
+
+## Objective
+
+Consume the approved Porter Five Forces artifact YAML, write the canonical Porter artifact, archive the approved working packet, and mark the alignment page confirmed.
+
+## Approval Input
+
+The user provided final compiled YAML on 2026-06-15 approving:
+
+- Evidence coverage with stated source gaps.
+- Client-service intake market boundary and alternative set.
+- Force ratings: rivalry high, new entrants high, substitutes high, buyer power high, supplier power moderate.
+- Canonical artifact destination: `research/competitive-analysis-porter-five-forces.md`.
+
+## Non-Goals
+
+- Do not run new framework research unless verification finds a substantive blocker.
+- Do not run SWOT, Feature/Pricing Matrix, Strategic Group Map, or competitive-analysis synthesis in this step.
+- Do not change product code or GitHub Actions.
+
+## Plan
+
+- [x] Reconcile the approval YAML against the active working packet and review page.
+- [x] Archive the current Porter review alignment page and working packet.
+- [x] Write `research/competitive-analysis-porter-five-forces.md` from the approved packet.
+- [x] Convert `alignment/porter-five-forces-formforge.html` to confirmed and preserve approval decisions.
+- [x] Update `alignment/index.html` if confirmation metadata changes.
+- [x] Verify canonical artifact, archive state, confirmed page controls, and git diff.
+- [ ] Commit and push intended tracked changes.
+
+---
+
 # FormForge Stage 3 ICP Finalization Roadmap
 
 ## Objective

@@ -1,3 +1,22 @@
+# Active Competitive Analysis SWOT Framework Review
+
+- [x] Gather FormForge ICP/product context, Porter context, and repo evidence.
+- [x] Run current cited source research for SWOT opportunities and threats.
+- [x] Write non-canonical working packet: `research/_working/preliminary-swot-research.md`.
+- [x] Build review page: `alignment/swot-formforge.html`.
+- [x] Update central alignment index if needed.
+- [x] Verify framework-review outputs and git diff.
+- [x] Commit and push intended tracked changes.
+
+### Review
+
+- Stage 2 SWOT framework review drafted on 2026-06-16. The working packet frames FormForge's repo-backed strengths around the describe/edit/publish/submit/review/export loop, weaknesses around generic framing and thin post-submission handoff, opportunities around client-service intake without suite migration, and threats from incumbent AI, free tiers, and suite breadth.
+- Non-canonical review artifacts are `research/_working/preliminary-swot-research.md` and `alignment/swot-formforge.html`; the canonical SWOT intermediate remains unwritten pending final compiled YAML approval.
+- Verification: confirmed the working packet and review page exist; confirmed `research/competitive-analysis-swot.md` does not exist; confirmed the page reports `data-alignment-status="review"` and includes required SWOT, evidence, assumption, artifact-destination, and file-change gates; inline page scripts parse; `alignment/index.html` includes the SWOT page; `git diff --check` passed.
+- The packaged alignment open helper failed because restricted network access could not resolve `registry.npmjs.org`; fallback `open alignment/swot-formforge.html` succeeded.
+
+---
+
 # FormForge - Project Vision & Next Steps
 
 ## Active Porter Five Forces Stage 3 Finalization

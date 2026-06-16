@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="review">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FormForge SWOT Competitive Analysis - Review</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+      --chart-1: #58a6ff;
+      --chart-2: #3fb950;
+      --chart-3: #d29922;
+      --chart-4: #bc8cff;
+      --chart-5: #f85149;
+      --chart-6: #79c0ff;
+      --chart-7: #f0883e;
+      --chart-8: #a5d6ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1160px, calc(100% - 32px));
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 40px 0 72px;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { letter-spacing: 0; line-height: 1.16; color: #fff; }
+    h1 { margin: 0 0 10px; font-size: 2.1rem; }
+    h2 { margin: 0 0 14px; color: var(--accent); font-size: 1.5rem; }
+    h3 { margin: 20px 0 10px; font-size: 1.1rem; }
+    a { color: var(--accent); }
+    code {
+      background: #222a35;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 1px 5px;
+    }
+    section, .toc, .notice, .card, .chart-container, .table-wrap, .compile {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+    section { margin: 22px 0; padding: 20px; }
+    .toc, .notice, .compile { padding: 18px 20px; margin: 20px 0; }
+    .lede, .meta { color: var(--text-muted); }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 12px;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.84rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(min(210px, 100%), 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(min(210px, 100%), 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .card { padding: 15px; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin: 2px 4px 2px 0;
+      background: #1c2333;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+    .strength { color: var(--green); }
+    .weakness { color: var(--orange); }
+    .opportunity { color: var(--accent); }
+    .threat { color: var(--red); }
+    .table-wrap, .chart-container { padding: 14px; margin: 14px 0; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 11px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.9rem;
+    }
+    th { background: #1c2333; color: #fff; }
+    tr:last-child td { border-bottom: 0; }
+    canvas { width: 100%; height: 260px; display: block; }
+    button {
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #21262d;
+      color: var(--text);
+      padding: 10px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.primary { border-color: var(--accent); background: var(--accent); color: #06101d; }
+    .question-block {
+      border: 1px solid #33425b;
+      border-left: 4px solid var(--purple);
+      border-radius: 8px;
+      background: #1c2333;
+      padding: 14px;
+      margin-top: 14px;
+    }
+    .gate-options { display: grid; gap: 8px; margin-top: 10px; }
+    label.option {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0d1117;
+      padding: 10px 12px;
+    }
+    label.option input { margin-top: 4px; }
+    textarea {
+      width: 100%;
+      min-height: 96px;
+      resize: vertical;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font: inherit;
+      background: #0d1117;
+      color: var(--text);
+      margin-top: 10px;
+    }
+    .feedback {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 0 0 12px;
+    }
+    .feedback button { min-height: 36px; padding: 7px 10px; font-size: 0.84rem; }
+    .feedback button[data-feedback="emphasize"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-feedback="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-feedback="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+    .feedback-panel[hidden], .conditional[hidden], .table-wrap[hidden] { display: none; }
+    #compiledYaml, .local-yaml {
+      min-height: 220px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.84rem;
+    }
+    @media (max-width: 860px) {
+      .grid, .cards { grid-template-columns: 1fr; }
+      main { width: min(100% - 24px, 1160px); padding-top: 28px; }
+    }
+    @media (max-width: 560px) {
+      section, .toc, .notice { padding: 14px; }
+      h1 { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="status">review · 2026-06-16 · visual research artifact</p>
+    <h1>FormForge SWOT Competitive Analysis</h1>
+    <p class="lede">Review-stage SWOT intermediate for the approved flat FormForge competitive-analysis scope. This page renders the full proposed working packet and approval gates before the canonical artifact <code>research/competitive-analysis-swot.md</code> is written.</p>
+
+    <section class="notice" id="review-status">
+      <h2>Review Status</h2>
+      <p><strong>alignment_status:</strong> review</p>
+      <p><strong>Working packet:</strong> <code>research/_working/preliminary-swot-research.md</code></p>
+      <p><strong>Proposed canonical artifact:</strong> <code>research/competitive-analysis-swot.md</code></p>
+      <p><strong>Loop position:</strong> 1 of 4 selected frameworks is complete. SWOT is the second selected framework and remains pending final artifact approval.</p>
+    </section>
+
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Table Of Contents</h2>
+      <ol>
+        <li><a href="#basis">Basis And Method</a></li>
+        <li><a href="#scope">Scope</a></li>
+        <li><a href="#swot-summary">SWOT Summary</a></li>
+        <li><a href="#swot-matrix">SWOT Matrix</a></li>
+        <li><a href="#tensions">Strategic Tensions</a></li>
+        <li><a href="#evidence">Evidence Matrix</a></li>
+        <li><a href="#sources">Source Notes</a></li>
+        <li><a href="#assumptions">Assumptions And Gaps</a></li>
+        <li><a href="#file-changes">Proposed File Changes</a></li>
+        <li><a href="#approval">Compile Responses</a></li>
+      </ol>
+    </nav>
+
+    <section id="basis">
+      <div class="feedback" data-section="Basis And Method">
+        <button type="button" data-feedback="emphasize">emphasize</button>
+        <button type="button" data-feedback="down">thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">clarification needed</button>
+      </div>
+      <h2>Basis And Method</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Inputs</h3>
+          <ul>
+            <li>Selected-framework manifest: <code>research/_working/competitive-analysis-run.yaml</code>.</li>
+            <li>Confirmed ICP: client-service solo consultants, coaches, and small agencies doing client intake/onboarding.</li>
+            <li>Completed Porter intermediate: <code>research/competitive-analysis-porter-five-forces.md</code>.</li>
+            <li>Repo evidence from AI generation, schema, form router, response router, submit route, public renderer, dashboard, and README paths.</li>
+            <li>Public source checks on 2026-06-16 across form builders, suite incumbents, vertical intake, and small-business AI adoption.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Method Rules</h3>
+          <ul>
+            <li>Strengths and weaknesses use repo or approved research evidence.</li>
+            <li>Opportunities and threats use competitor, market, or customer-context evidence.</li>
+            <li>Each item is scored for confidence and parent-synthesis implication.</li>
+            <li>No positioning, product planning, or downstream routing is included.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="feedback-panel" hidden>
+        <textarea placeholder="Optional section feedback notes"></textarea>
+        <button type="button" class="local-compile">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+        <textarea class="local-yaml" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="scope">
+      <div class="feedback" data-section="Scope">
+        <button type="button" data-feedback="emphasize">emphasize</button>
+        <button type="button" data-feedback="down">thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">clarification needed</button>
+      </div>
+      <h2>Scope</h2>
+      <p>FormForge is evaluated as an AI-assisted client-intake form builder for small client-service businesses. The active buyer frame is consultants, coaches, boutique agencies, creative studios, fractional operators, accountants/bookkeepers, and similar service providers who need polished intake/onboarding forms without adopting a full client-management suite.</p>
+      <p><span class="pill">flat research scope</span><span class="pill">client-service intake</span><span class="pill">SWOT framework</span></p>
+      <div class="feedback-panel" hidden>
+        <textarea placeholder="Optional section feedback notes"></textarea>
+        <button type="button" class="local-compile">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+        <textarea class="local-yaml" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="swot-summary">
+      <div class="feedback" data-section="SWOT Summary">
+        <button type="button" data-feedback="emphasize">emphasize</button>
+        <button type="button" data-feedback="down">thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">clarification needed</button>
+      </div>
+      <h2>SWOT Summary</h2>
+      <div class="chart-container" data-tts-narrative="The SWOT summary shows four strengths, four weaknesses, four opportunities, and four threats. Confidence is highest for current repo capabilities and broad competitor feature parity, and lower where buyer willingness to pay still needs interviews.">
+        <button type="button" data-toggle-table="swotCountTable">View as table</button>
+        <canvas id="swotCountChart" aria-label="Bar chart showing four SWOT items in each quadrant: strengths, weaknesses, opportunities, and threats."></canvas>
+        <div class="table-wrap" id="swotCountTable" hidden>
+          <table>
+            <thead><tr><th>Quadrant</th><th>Items</th><th>Confidence Pattern</th></tr></thead>
+            <tbody>
+              <tr><td>Strengths</td><td>4</td><td>High, repo-backed</td></tr>
+              <tr><td>Weaknesses</td><td>4</td><td>Medium-high to high</td></tr>
+              <tr><td>Opportunities</td><td>4</td><td>Medium to medium-high</td></tr>
+              <tr><td>Threats</td><td>4</td><td>High</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card"><h3 class="strength">Strengths</h3><p>Current repo implements a real end-to-end form loop with AI generation, publish snapshots, response handling, analytics, and export.</p></article>
+        <article class="card"><h3 class="weakness">Weaknesses</h3><p>The product is still generic relative to the approved client-intake ICP and lacks deeper post-submission workflow handoff.</p></article>
+        <article class="card"><h3 class="opportunity">Opportunities</h3><p>There is plausible whitespace between free/generic form builders and heavy client-management suites, but buyer interviews remain missing.</p></article>
+        <article class="card"><h3 class="threat">Threats</h3><p>Incumbents already offer AI, logic, integrations, workflow suites, or generous free tiers, which compresses the generic AI-form-builder story.</p></article>
+      </div>
+      <div class="feedback-panel" hidden>
+        <textarea placeholder="Optional section feedback notes"></textarea>
+        <button type="button" class="local-compile">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+        <textarea class="local-yaml" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="swot-matrix">
+      <div class="feedback" data-section="SWOT Matrix">
+        <button type="button" data-feedback="emphasize">emphasize</button>
+        <button type="button" data-feedback="down">thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">clarification needed</button>
+      </div>
+      <h2>SWOT Matrix</h2>
+      <div class="table-wrap" data-tts-narrative="The SWOT matrix maps each strength, weakness, opportunity, and threat to repo or market evidence, confidence, and parent synthesis implication.">
+        <table>
+          <thead><tr><th>Quadrant</th><th>Item</th><th>Evidence</th><th>Confidence</th><th>Synthesis Implication</th></tr></thead>
+          <tbody>
+            <tr><td class="strength">Strength</td><td>Implemented describe-to-form loop.</td><td>GPT-4o form generation, schema validation, persisted fields, and AI regeneration are implemented in the repo.</td><td>High</td><td>Treat AI-assisted first draft as current capability, while testing differentiation.</td></tr>
+            <tr><td class="strength">Strength</td><td>Minimum client-intake path exists.</td><td>README and repo cover describe, edit, publish, submit, review, analytics, and CSV export.</td><td>High</td><td>Customer discovery can test a complete intake loop, not a prompt demo.</td></tr>
+            <tr><td class="strength">Strength</td><td>Published forms use immutable snapshots.</td><td>Versioned snapshots are created on publish and used by the submit route.</td><td>High</td><td>Supports trust for client-facing intake where form drift matters.</td></tr>
+            <tr><td class="strength">Strength</td><td>Pragmatic intake-quality features are present.</td><td>Conditional logic, file uploads, success/redirect settings, close dates, response limits, GDPR consent, Turnstile, notifications, analytics, and CSV export appear in repo paths and tests.</td><td>High</td><td>Feature set aligns with complete submissions and reduced follow-up, though not uniquely.</td></tr>
+            <tr><td class="weakness">Weakness</td><td>Generic product framing remains.</td><td>ICP says to avoid "AI form builder for everyone"; landing and repo language still emphasize natural-language forms broadly.</td><td>High</td><td>Do not overclaim vertical differentiation.</td></tr>
+            <tr><td class="weakness">Weakness</td><td>Post-submission handoff is thin.</td><td>ICP names manual copy/paste into docs, CRM, Notion, kickoff notes, and spreadsheets; repo has CSV export and notifications but no durable workflow integrations in the validation scope.</td><td>High</td><td>Product may solve setup while missing the highest-value operational pain.</td></tr>
+            <tr><td class="weakness">Weakness</td><td>AI generation is table stakes.</td><td>ICP states this directly; Typeform and HoneyBook advertise AI form/workflow capabilities.</td><td>High</td><td>Generation is a capability strength, not a durable moat.</td></tr>
+            <tr><td class="weakness">Weakness</td><td>Current proof is not customer-led.</td><td>Porter records no direct target-buyer interviews, win/loss notes, or sales calls.</td><td>Medium-high</td><td>Keep interview and WTP gaps visible.</td></tr>
+            <tr><td class="opportunity">Opportunity</td><td>Intake without suite migration.</td><td>HoneyBook and Dubsado bundle broad client operations; ICP says some buyers resist moving CRM, invoicing, and calendar just to solve intake.</td><td>Medium-high</td><td>Whitespace is plausible for users who want better intake without suite adoption.</td></tr>
+            <tr><td class="opportunity">Opportunity</td><td>Small-business AI adoption creates trial permission.</td><td>U.S. Bank reports 36% of small business owners use generative AI and 21% plan to implement it within 12 months; Axios notes most current spend is low.</td><td>Medium</td><td>AI can be a trial hook, but WTP likely depends on workflow value.</td></tr>
+            <tr><td class="opportunity">Opportunity</td><td>Specialized intake can support paid pricing.</td><td>IntakeQ, HoneyBook, and Dubsado show paid willingness around intake plus workflow, reminders, signatures, secure sharing, portals, or payments.</td><td>Medium</td><td>Paid value likely comes from operational outcomes, not form creation alone.</td></tr>
+            <tr><td class="opportunity">Opportunity</td><td>Free-tier pressure clarifies the value bar.</td><td>Tally, Fillout, and Google Forms set low-cost/free benchmarks for basic forms.</td><td>Medium</td><td>FormForge must prove saved setup and follow-up time.</td></tr>
+            <tr><td class="threat">Threat</td><td>Broad builders already cover visible features.</td><td>Typeform, Jotform, Fillout, Tally, and Google Forms cover AI, logic, uploads, payments, responses, analytics, integrations, or free usage.</td><td>High</td><td>Generic feature comparison is risky.</td></tr>
+            <tr><td class="threat">Threat</td><td>Free and low-cost alternatives cap pricing.</td><td>Tally, Fillout, and Google Forms create strong good-enough substitutes; Axios notes many small businesses spend less than $50/month on AI.</td><td>High</td><td>Price sensitivity is structural unless user interviews show strong urgency.</td></tr>
+            <tr><td class="threat">Threat</td><td>Suite incumbents can absorb intake.</td><td>HoneyBook and Dubsado bundle lead capture, portals, contracts/proposals, scheduling, payments, workflows, and integrations.</td><td>High</td><td>End-to-end operations buyers may prefer suites.</td></tr>
+            <tr><td class="threat">Threat</td><td>Incumbent AI compresses novelty.</td><td>Typeform markets AI form creation/editing/translation/follow-up; HoneyBook markets AI chat and automations builder.</td><td>High</td><td>Test workflow specificity and distribution, not AI presence alone.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="question-block" data-gate="swot_matrix" data-gate-type="evidence coverage">
+        <h3>Required Gate: SWOT Matrix</h3>
+        <p>Is this SWOT matrix sufficient as the reviewed framework intermediate for parent synthesis?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="gate_swot_matrix" value="approve_matrix"> Approve the SWOT matrix with the stated confidence levels.</label>
+          <label class="option"><input type="radio" name="gate_swot_matrix" value="approve_with_edits"> Approve only after the notes below are applied.</label>
+          <label class="option"><input type="radio" name="gate_swot_matrix" value="other"> Other / None of the above.</label>
+          <label class="option"><input type="radio" name="gate_swot_matrix" value="needs-clarification"> Need clarification.</label>
+        </div>
+        <textarea class="conditional" data-for="gate_swot_matrix" hidden placeholder="Optional notes, edits, or clarification request"></textarea>
+      </div>
+      <div class="feedback-panel" hidden>
+        <textarea placeholder="Optional section feedback notes"></textarea>
+        <button type="button" class="local-compile">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+        <textarea class="local-yaml" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="tensions">
+      <div class="feedback" data-section="Strategic Tensions">
+        <button type="button" data-feedback="emphasize">emphasize</button>
+        <button type="button" data-feedback="down">thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">clarification needed</button>
+      </div>
+      <h2>Strategic Tensions</h2>
+      <ol>
+        <li><strong>Built loop vs. generic framing.</strong> A real end-to-end form loop can still lose if synthesized as broad "AI forms" rather than client-service intake.</li>
+        <li><strong>Fast setup vs. downstream work.</strong> AI reduces blank-page work, but the strongest ICP pain includes missing assets and moving answers into project systems.</li>
+        <li><strong>Focused intake vs. suite gravity.</strong> Lightweight focus can appeal to suite-resistant buyers, but can lose buyers who want contracts, invoices, scheduling, portals, and automations in one system.</li>
+        <li><strong>AI adoption vs. AI willingness to pay.</strong> AI can lower trial friction, but public small-business survey evidence points to low current AI spend.</li>
+        <li><strong>Prototype depth vs. mature competitors.</strong> FormForge has useful depth, while competitors have deeper integrations, compliance, workflows, collaboration, and brand ecosystems.</li>
+      </ol>
+      <div class="feedback-panel" hidden>
+        <textarea placeholder="Optional section feedback notes"></textarea>
+        <button type="button" class="local-compile">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+        <textarea class="local-yaml" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="evidence">
+      <div class="feedback" data-section="Evidence Matrix">
+        <button type="button" data-feedback="emphasize">emphasize</button>
+        <button type="button" data-feedback="down">thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">clarification needed</button>
+      </div>
+      <h2>Evidence Matrix</h2>
+      <div class="table-wrap" data-tts-narrative="The evidence matrix maps major claims to repo files, approved research, or public competitor and market sources, then states the inference and confidence.">
+        <table>
+          <thead><tr><th>Claim</th><th>Source</th><th>Evidence Type</th><th>Inference</th><th>Confidence</th></tr></thead>
+          <tbody>
+            <tr><td>FormForge implements AI form generation and regeneration.</td><td><code>src/server/ai/generate-form.ts</code>; <code>src/server/trpc/routers/form.ts</code></td><td>Repo</td><td>The product can create and replace form definitions from prompts.</td><td>High</td></tr>
+            <tr><td>FormForge has a minimum publish-submit-review-export loop.</td><td><code>README.md</code>; schema, form router, submit route, response router</td><td>Repo</td><td>The product is a usable intake-loop prototype.</td><td>High</td></tr>
+            <tr><td>The active ICP is client-service intake.</td><td><code>research/icp.md</code></td><td>Approved research</td><td>Fit should be judged against client intake, polish, completeness, and handoff pains.</td><td>High</td></tr>
+            <tr><td>AI generation is table stakes.</td><td><code>research/icp.md</code>; <a href="https://www.typeform.com/ai/">Typeform AI</a>; <a href="https://www.honeybook.com/pricing">HoneyBook pricing</a></td><td>Research + competitor</td><td>AI is useful but insufficient as standalone differentiation.</td><td>High</td></tr>
+            <tr><td>Post-submission workflow depth is thin.</td><td><code>research/icp.md</code>; repo scan</td><td>Research + repo</td><td>CSV export does not fully solve CRM, Notion, docs, or project handoff.</td><td>High</td></tr>
+            <tr><td>Broad form-builder parity is strong.</td><td><a href="https://www.typeform.com/pricing">Typeform</a>; <a href="https://www.jotform.com/pricing/">Jotform</a>; <a href="https://www.fillout.com/pricing">Fillout</a>; <a href="https://tally.so/pricing">Tally</a>; <a href="https://workspace.google.com/products/forms/">Google Forms</a></td><td>Competitor</td><td>Competitors already cover many visible product features.</td><td>High</td></tr>
+            <tr><td>Suite incumbents threaten from above.</td><td><a href="https://www.honeybook.com/pricing">HoneyBook</a>; <a href="https://www.dubsado.com/pricing">Dubsado</a></td><td>Competitor</td><td>Suites can absorb intake into broader client operations.</td><td>High</td></tr>
+            <tr><td>Anti-suite whitespace is plausible.</td><td><code>research/icp.md</code>; HoneyBook and Dubsado feature breadth</td><td>Research + competitor</td><td>Some buyers may want better intake without full suite migration.</td><td>Medium-high</td></tr>
+            <tr><td>Specialized intake can support paid pricing.</td><td><a href="https://intakeq.com/pricing">IntakeQ</a>; HoneyBook; Dubsado</td><td>Vertical/suite pricing</td><td>Buyers pay more when intake connects to operational workflows.</td><td>Medium</td></tr>
+            <tr><td>Small-business AI adoption supports trial interest but not high AI spend by itself.</td><td><a href="https://www.usbank.com/business-banking/business-resource-center/small-business-survey.html">U.S. Bank 2025 survey</a>; <a href="https://www.axios.com/2025/06/20/small-business-ai-use">Axios</a></td><td>Market</td><td>AI can be an adoption hook, but pricing must connect to operational value.</td><td>Medium</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="question-block" data-gate="research_completeness" data-gate-type="research completeness">
+        <h3>Required Gate: Research Completeness</h3>
+        <p>Is the evidence coverage sufficient for the SWOT intermediate, given the stated source gaps?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="gate_research_completeness" value="sufficient_with_gaps"> Sufficient with the stated gaps preserved.</label>
+          <label class="option"><input type="radio" name="gate_research_completeness" value="needs_more_sources"> Needs more source work before approval.</label>
+          <label class="option"><input type="radio" name="gate_research_completeness" value="other"> Other / None of the above.</label>
+          <label class="option"><input type="radio" name="gate_research_completeness" value="needs-clarification"> Need clarification.</label>
+        </div>
+        <textarea class="conditional" data-for="gate_research_completeness" hidden placeholder="Optional notes, claims needing more support, or missing context"></textarea>
+      </div>
+      <div class="feedback-panel" hidden>
+        <textarea placeholder="Optional section feedback notes"></textarea>
+        <button type="button" class="local-compile">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+        <textarea class="local-yaml" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="sources">
+      <div class="feedback" data-section="Source Notes">
+        <button type="button" data-feedback="emphasize">emphasize</button>
+        <button type="button" data-feedback="down">thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">clarification needed</button>
+      </div>
+      <h2>Source Notes</h2>
+      <div class="grid">
+        <article class="card"><h3>Public Sources</h3><ul>
+          <li><a href="https://www.typeform.com/pricing">Typeform pricing</a> and <a href="https://www.typeform.com/ai/">Typeform AI</a></li>
+          <li><a href="https://www.jotform.com/pricing/">Jotform pricing</a></li>
+          <li><a href="https://tally.so/pricing">Tally pricing</a></li>
+          <li><a href="https://www.fillout.com/pricing">Fillout pricing</a></li>
+          <li><a href="https://workspace.google.com/products/forms/">Google Forms</a></li>
+          <li><a href="https://www.honeybook.com/pricing">HoneyBook pricing</a></li>
+          <li><a href="https://www.dubsado.com/pricing">Dubsado pricing</a></li>
+          <li><a href="https://intakeq.com/pricing">IntakeQ pricing</a></li>
+          <li><a href="https://www.usbank.com/business-banking/business-resource-center/small-business-survey.html">U.S. Bank 2025 Small Business Survey</a></li>
+          <li><a href="https://www.axios.com/2025/06/20/small-business-ai-use">Axios small-business AI coverage</a></li>
+        </ul></article>
+        <article class="card"><h3>Repo Sources</h3><ul>
+          <li><code>README.md</code></li>
+          <li><code>research/icp.md</code></li>
+          <li><code>research/competitive-analysis-porter-five-forces.md</code></li>
+          <li><code>src/server/ai/generate-form.ts</code></li>
+          <li><code>src/server/db/schema.ts</code></li>
+          <li><code>src/server/trpc/routers/form.ts</code></li>
+          <li><code>src/server/trpc/routers/response.ts</code></li>
+          <li><code>src/app/api/submit/[slug]/route.ts</code></li>
+        </ul></article>
+      </div>
+      <div class="feedback-panel" hidden>
+        <textarea placeholder="Optional section feedback notes"></textarea>
+        <button type="button" class="local-compile">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+        <textarea class="local-yaml" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="assumptions">
+      <div class="feedback" data-section="Assumptions And Gaps">
+        <button type="button" data-feedback="emphasize">emphasize</button>
+        <button type="button" data-feedback="down">thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">clarification needed</button>
+      </div>
+      <h2>Assumptions And Gaps</h2>
+      <div class="table-wrap" data-tts-narrative="The assumptions table shows which conclusions are approved, evidence-backed, or inferred, and what evidence could change them.">
+        <table>
+          <thead><tr><th>Assumption</th><th>Status</th><th>Confidence</th><th>What Would Change It</th></tr></thead>
+          <tbody>
+            <tr><td>The active boundary remains client-service intake under flat <code>research/</code>.</td><td>Approved by ICP and run manifest</td><td>High</td><td>New approved scope or product path.</td></tr>
+            <tr><td>Repo features represent available product capability.</td><td>Evidence-backed</td><td>Medium-high</td><td>Codebase reset, hidden deployment constraint, or user correction narrowing product capability.</td></tr>
+            <tr><td>Suite-resistant buyers are a meaningful segment.</td><td>Inferred from ICP and suite breadth</td><td>Medium</td><td>Interviews showing target buyers prefer either suites or generic free forms.</td></tr>
+            <tr><td>AI adoption creates trial permission but not automatic WTP.</td><td>Evidence-backed</td><td>Medium</td><td>Customer interviews showing high paid urgency specifically for AI-generated intake setup.</td></tr>
+            <tr><td>CSV export helps some early users but does not fully solve strongest handoff pain.</td><td>Inferred from ICP and repo evidence</td><td>Medium-high</td><td>Discovery showing CSV/email notifications satisfy target workflow needs.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Source Coverage Gaps</h3>
+      <ul>
+        <li>No direct target-buyer interviews, customer support logs, sales calls, or win/loss data.</li>
+        <li>No hands-on competitor trials; competitor facts are from public pricing/product pages.</li>
+        <li>No quantified traffic, market share, retention, or conversion data.</li>
+        <li>No pricing sensitivity interviews for the approved ICP.</li>
+        <li>Public competitor pages are time-sensitive and should be rechecked before final synthesis if substantial time passes.</li>
+      </ul>
+      <div class="question-block" data-gate="assumptions_confidence" data-gate-type="assumptions/confidence">
+        <h3>Required Gate: Assumptions And Confidence</h3>
+        <p>Should these assumptions and coverage gaps be preserved in the canonical SWOT intermediate?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="gate_assumptions_confidence" value="preserve"> Preserve assumptions and gaps as written.</label>
+          <label class="option"><input type="radio" name="gate_assumptions_confidence" value="revise"> Revise assumptions or gaps using the notes below.</label>
+          <label class="option"><input type="radio" name="gate_assumptions_confidence" value="other"> Other / None of the above.</label>
+          <label class="option"><input type="radio" name="gate_assumptions_confidence" value="needs-clarification"> Need clarification.</label>
+        </div>
+        <textarea class="conditional" data-for="gate_assumptions_confidence" hidden placeholder="Optional notes about confidence, caveats, or missing assumptions"></textarea>
+      </div>
+      <div class="feedback-panel" hidden>
+        <textarea placeholder="Optional section feedback notes"></textarea>
+        <button type="button" class="local-compile">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+        <textarea class="local-yaml" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="file-changes">
+      <div class="feedback" data-section="Proposed File Changes">
+        <button type="button" data-feedback="emphasize">emphasize</button>
+        <button type="button" data-feedback="down">thumbs down</button>
+        <button type="button" data-feedback="needs-clarification">clarification needed</button>
+      </div>
+      <h2>Proposed File Changes</h2>
+      <p>After final compiled YAML approval with no unresolved negative feedback, the next invocation should write the approved canonical SWOT artifact and keep the competitive-analysis run manifest active for the remaining selected frameworks.</p>
+      <ul>
+        <li>Write <code>research/competitive-analysis-swot.md</code> from the approved packet.</li>
+        <li>Archive <code>research/_working/preliminary-swot-research.md</code>.</li>
+        <li>Convert <code>alignment/swot-formforge.html</code> to confirmed and preserve the approval record.</li>
+        <li>Leave <code>research/_working/competitive-analysis-run.yaml</code> active because Feature/Pricing Matrix and Strategic Group Map remain pending.</li>
+      </ul>
+      <div class="question-block" data-gate="artifact_destination" data-gate-type="artifact destination">
+        <h3>Required Gate: Artifact Destination</h3>
+        <p>Approve the proposed canonical destination for the SWOT intermediate?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="gate_artifact_destination" value="approve_path"> Approve <code>research/competitive-analysis-swot.md</code>.</label>
+          <label class="option"><input type="radio" name="gate_artifact_destination" value="change_path"> Approve a different path in notes.</label>
+          <label class="option"><input type="radio" name="gate_artifact_destination" value="other"> Other / None of the above.</label>
+          <label class="option"><input type="radio" name="gate_artifact_destination" value="needs-clarification"> Need clarification.</label>
+        </div>
+        <textarea class="conditional" data-for="gate_artifact_destination" hidden placeholder="Optional destination notes"></textarea>
+      </div>
+      <div class="question-block" data-gate="proposed_file_changes" data-gate-type="proposed file changes">
+        <h3>Required Gate: Proposed File Changes</h3>
+        <p>Approve the file mutation scope after artifact approval?</p>
+        <div class="gate-options">
+          <label class="option"><input type="radio" name="gate_proposed_file_changes" value="approve_scope"> Approve only the proposed SWOT artifact, archive, alignment confirmation, task docs, and index updates.</label>
+          <label class="option"><input type="radio" name="gate_proposed_file_changes" value="revise_scope"> Revise the allowed file set using notes.</label>
+          <label class="option"><input type="radio" name="gate_proposed_file_changes" value="other"> Other / None of the above.</label>
+          <label class="option"><input type="radio" name="gate_proposed_file_changes" value="needs-clarification"> Need clarification.</label>
+        </div>
+        <textarea class="conditional" data-for="gate_proposed_file_changes" hidden placeholder="Optional file-change notes"></textarea>
+      </div>
+      <div class="feedback-panel" hidden>
+        <textarea placeholder="Optional section feedback notes"></textarea>
+        <button type="button" class="local-compile">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+        <textarea class="local-yaml" readonly></textarea>
+      </div>
+    </section>
+
+    <section class="compile" id="approval">
+      <h2>Compile Responses</h2>
+      <p class="meta">Answer one or more gates or select section feedback, then compile YAML. Send partial YAML for revision requests or complete YAML for final artifact approval.</p>
+      <button type="button" class="primary" id="compileResponses">Compile Responses</button>
+      <button type="button" id="copyCompiled">Copy YAML</button>
+      <p id="compileStatus" class="meta" aria-live="polite"></p>
+      <textarea id="compiledYaml" readonly></textarea>
+    </section>
+  </main>
+
+  <script>
+    const pagePath = "alignment/swot-formforge.html";
+    const gateNames = [
+      "gate_swot_matrix",
+      "gate_research_completeness",
+      "gate_assumptions_confidence",
+      "gate_artifact_destination",
+      "gate_proposed_file_changes"
+    ];
+    const gateMeta = {
+      gate_swot_matrix: { section: "SWOT Matrix", gate_type: "evidence coverage" },
+      gate_research_completeness: { section: "Evidence Matrix", gate_type: "research completeness" },
+      gate_assumptions_confidence: { section: "Assumptions And Gaps", gate_type: "assumptions/confidence" },
+      gate_artifact_destination: { section: "Proposed File Changes", gate_type: "artifact destination", target_path: "research/competitive-analysis-swot.md" },
+      gate_proposed_file_changes: { section: "Proposed File Changes", gate_type: "proposed file changes" }
+    };
+
+    function escapeYaml(value) {
+      return String(value ?? "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    }
+
+    function toYaml(data) {
+      const lines = [];
+      lines.push(`alignment_page: ${data.alignment_page}`);
+      if (data.response_status) lines.push(`response_status: ${data.response_status}`);
+      lines.push(`approval_status: ${data.approval_status}`);
+      if (data.required_gate_status) lines.push(`required_gate_status: ${data.required_gate_status}`);
+      lines.push("unanswered_required_questions:");
+      if (data.unanswered_required_questions.length) {
+        data.unanswered_required_questions.forEach((item) => lines.push(`  - "${escapeYaml(item)}"`));
+      } else {
+        lines.push("  []");
+      }
+      if (data.gate_answers?.length) {
+        lines.push("gate_answers:");
+        data.gate_answers.forEach((answer) => {
+          lines.push(`  - section: "${escapeYaml(answer.section)}"`);
+          lines.push(`    gate_type: "${escapeYaml(answer.gate_type)}"`);
+          lines.push(`    status: "${escapeYaml(answer.status)}"`);
+          lines.push(`    answer: "${escapeYaml(answer.answer)}"`);
+          if (answer.target_path) lines.push(`    target_path: "${escapeYaml(answer.target_path)}"`);
+          if (answer.notes) lines.push(`    notes: "${escapeYaml(answer.notes)}"`);
+        });
+      }
+      if (data.section_feedback?.length) {
+        lines.push("section_feedback:");
+        data.section_feedback.forEach((entry) => {
+          lines.push(`  - section: "${escapeYaml(entry.section)}"`);
+          lines.push(`    feedback: "${escapeYaml(entry.feedback)}"`);
+          lines.push(`    requested_agent_action: "${escapeYaml(entry.requested_agent_action)}"`);
+          if (entry.notes) lines.push(`    notes: "${escapeYaml(entry.notes)}"`);
+        });
+      }
+      return `${lines.join("\n")}\n`;
+    }
+
+    function compileSectionFeedback(control) {
+      const section = control.dataset.section;
+      const active = control.querySelector("button.active");
+      if (!active) return null;
+      const panel = control.parentElement.querySelector(".feedback-panel");
+      const notes = panel?.querySelector("textarea")?.value.trim() ?? "";
+      const feedback = active.dataset.feedback;
+      const action = feedback === "emphasize"
+        ? "add-weight-to-section"
+        : feedback === "down"
+          ? "investigate-and-revise"
+          : "clarify-before-approval";
+      return { section, feedback, notes, requested_agent_action: action };
+    }
+
+    document.querySelectorAll(".feedback").forEach((control) => {
+      const panel = control.parentElement.querySelector(".feedback-panel");
+      control.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const wasActive = button.classList.contains("active");
+          control.querySelectorAll("button").forEach((btn) => btn.classList.remove("active"));
+          if (!wasActive) button.classList.add("active");
+          if (panel) panel.hidden = !control.querySelector("button.active");
+        });
+      });
+      panel?.querySelector(".local-compile")?.addEventListener("click", () => {
+        const entry = compileSectionFeedback(control);
+        if (!entry) return;
+        const yaml = toYaml({
+          alignment_page: pagePath,
+          feedback_status: "revision-request",
+          approval_status: "not-approved",
+          unanswered_required_questions: gateNames.filter((name) => !document.querySelector(`input[name="${name}"]:checked`)).map((name) => gateMeta[name].section),
+          section_feedback: [entry]
+        });
+        panel.querySelector(".local-yaml").value = yaml;
+        navigator.clipboard?.writeText(yaml).catch(() => {});
+      });
+      panel?.querySelector(".local-copy")?.addEventListener("click", () => {
+        const yamlBox = panel.querySelector(".local-yaml");
+        navigator.clipboard?.writeText(yamlBox.value).catch(() => yamlBox.select());
+      });
+    });
+
+    gateNames.forEach((name) => {
+      document.querySelectorAll(`input[name="${name}"]`).forEach((input) => {
+        input.addEventListener("change", () => {
+          const notes = document.querySelector(`textarea[data-for="${name}"]`);
+          if (notes) notes.hidden = false;
+        });
+      });
+    });
+
+    document.querySelectorAll("[data-toggle-table]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const table = document.getElementById(button.dataset.toggleTable);
+        if (!table) return;
+        table.hidden = !table.hidden;
+        button.textContent = table.hidden ? "View as table" : "Hide table";
+      });
+    });
+
+    function compileResponses() {
+      const gate_answers = [];
+      const unanswered = [];
+      let hasNegative = false;
+      gateNames.forEach((name) => {
+        const checked = document.querySelector(`input[name="${name}"]:checked`);
+        const meta = gateMeta[name];
+        if (!checked) {
+          unanswered.push(meta.section);
+          return;
+        }
+        const notes = document.querySelector(`textarea[data-for="${name}"]`)?.value.trim() ?? "";
+        const status = checked.value === "other" ? "other" : checked.value === "needs-clarification" ? "needs-clarification" : "answered";
+        if (status !== "answered" || checked.value.includes("revise") || checked.value.includes("needs_more") || checked.value.includes("change") || checked.value.includes("edit")) hasNegative = true;
+        gate_answers.push({
+          section: meta.section,
+          gate_type: meta.gate_type,
+          status,
+          answer: checked.value,
+          notes,
+          target_path: meta.target_path
+        });
+      });
+      const section_feedback = Array.from(document.querySelectorAll(".feedback")).map(compileSectionFeedback).filter(Boolean);
+      if (section_feedback.some((entry) => entry.feedback !== "emphasize")) hasNegative = true;
+      const complete = unanswered.length === 0;
+      const approvalReady = complete && !hasNegative;
+      return {
+        alignment_page: pagePath,
+        response_status: complete ? "complete" : "partial",
+        approval_status: approvalReady ? "ready-for-agent-review" : "not-approved",
+        required_gate_status: complete ? "complete" : "incomplete",
+        unanswered_required_questions: unanswered,
+        gate_answers,
+        section_feedback
+      };
+    }
+
+    const compiledYaml = document.getElementById("compiledYaml");
+    const compileStatus = document.getElementById("compileStatus");
+    document.getElementById("compileResponses").addEventListener("click", () => {
+      const data = compileResponses();
+      if (!data.gate_answers.length && !data.section_feedback.length) {
+        compileStatus.textContent = "Answer a gate question or select section feedback before compiling.";
+        return;
+      }
+      const yaml = toYaml(data);
+      compiledYaml.value = yaml;
+      compileStatus.textContent = data.approval_status === "ready-for-agent-review"
+        ? "Complete approval YAML compiled and copied when browser permissions allow."
+        : "Partial or revision YAML compiled and copied when browser permissions allow.";
+      navigator.clipboard?.writeText(yaml).catch(() => {});
+    });
+    document.getElementById("copyCompiled").addEventListener("click", () => {
+      navigator.clipboard?.writeText(compiledYaml.value).catch(() => compiledYaml.select());
+    });
+
+    function drawBarChart(canvasId, rows) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const ratio = window.devicePixelRatio || 1;
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      canvas.width = width * ratio;
+      canvas.height = height * ratio;
+      ctx.scale(ratio, ratio);
+      ctx.clearRect(0, 0, width, height);
+      const styles = getComputedStyle(document.documentElement);
+      const colors = [styles.getPropertyValue("--chart-1"), styles.getPropertyValue("--chart-2"), styles.getPropertyValue("--chart-3"), styles.getPropertyValue("--chart-5")];
+      const max = Math.max(...rows.map((row) => row.value), 1);
+      const pad = 36;
+      const barW = (width - pad * 2) / rows.length - 18;
+      rows.forEach((row, index) => {
+        const x = pad + index * (barW + 18);
+        const barH = ((height - 92) * row.value) / max;
+        const y = height - 54 - barH;
+        ctx.fillStyle = colors[index % colors.length].trim();
+        ctx.fillRect(x, y, barW, barH);
+        ctx.fillStyle = styles.getPropertyValue("--text").trim();
+        ctx.font = "700 13px system-ui";
+        ctx.fillText(String(row.value), x + barW / 2 - 4, y - 8);
+        ctx.font = "12px system-ui";
+        ctx.fillText(row.label, x, height - 28);
+      });
+    }
+    drawBarChart("swotCountChart", [
+      { label: "Strength", value: 4 },
+      { label: "Weakness", value: 4 },
+      { label: "Opportunity", value: 4 },
+      { label: "Threat", value: 4 }
+    ]);
+  </script>
+  <script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

@@ -1,3 +1,35 @@
+# FormForge Competitive Analysis SWOT Framework Roadmap
+
+## Objective
+
+Run the next pending competitive-analysis framework, SWOT, for the flat FormForge client-service intake ICP and produce review-stage artifacts only.
+
+## Scope Basis
+
+- Active product path: `research/`
+- Approved framework manifest: `research/_working/competitive-analysis-run.yaml`
+- Completed framework: `research/competitive-analysis-porter-five-forces.md`
+- Next pending framework: `swot`
+
+## Non-Goals
+
+- Do not write canonical `research/competitive-analysis-swot.md` before artifact approval.
+- Do not run Feature/Pricing Matrix, Strategic Group Map, or synthesis in this session.
+- Do not change product code, dependencies, lockfiles, or GitHub Actions.
+- Do not touch unrelated local changes in `.agents/project.json` or `desk-flip-report.md`.
+
+## Plan
+
+- [x] Gather current repo, ICP, and Porter context for product-grounded strengths/weaknesses.
+- [x] Run cited web/source research for external opportunities and threats.
+- [x] Write the non-canonical SWOT working packet.
+- [x] Build the SWOT review alignment page.
+- [x] Update the central alignment index if needed.
+- [x] Verify review artifacts, task docs, and git diff.
+- [x] Commit and push intended tracked changes.
+
+---
+
 # FormForge Competitive Analysis Scope Approval Roadmap
 
 ## Objective

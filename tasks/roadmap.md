@@ -28,6 +28,16 @@ Run the next pending competitive-analysis framework, SWOT, for the flat FormForg
 - [x] Verify review artifacts, task docs, and git diff.
 - [x] Commit and push intended tracked changes.
 
+## Stage 2 Revision
+
+The user returned complete gate answers with `approval_status: not-approved` and an approved-with-edits note asking whether agent-first MCP and CLI access could be a compelling competitive wedge.
+
+- [x] Check current competitor/API evidence for whether MCP/CLI-style agent-first access is a differentiated wedge.
+- [x] Revise the non-canonical SWOT working packet and review page with the finding.
+- [x] Keep canonical `research/competitive-analysis-swot.md` unwritten until a final approval payload is returned.
+- [x] Verify review artifacts, task docs, and git diff.
+- [x] Commit and push intended tracked changes.
+
 ---
 
 # FormForge Competitive Analysis Scope Approval Roadmap

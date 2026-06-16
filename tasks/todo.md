@@ -7,6 +7,9 @@
 - [x] Update central alignment index if needed.
 - [x] Verify framework-review outputs and git diff.
 - [x] Commit and push intended tracked changes.
+- [x] Revise SWOT review for agent-first MCP/CLI wedge feedback.
+- [x] Verify revised review artifacts remain non-canonical.
+- [x] Commit and push the revision.
 
 ### Review
 
@@ -14,6 +17,9 @@
 - Non-canonical review artifacts are `research/_working/preliminary-swot-research.md` and `alignment/swot-formforge.html`; the canonical SWOT intermediate remains unwritten pending final compiled YAML approval.
 - Verification: confirmed the working packet and review page exist; confirmed `research/competitive-analysis-swot.md` does not exist; confirmed the page reports `data-alignment-status="review"` and includes required SWOT, evidence, assumption, artifact-destination, and file-change gates; inline page scripts parse; `alignment/index.html` includes the SWOT page; `git diff --check` passed.
 - The packaged alignment open helper failed because restricted network access could not resolve `registry.npmjs.org`; fallback `open alignment/swot-formforge.html` succeeded.
+- Revision input received on 2026-06-16: complete gate answers with `approval_status: not-approved`; SWOT Matrix gate answered `approve_with_edits` with the note, "would providing agent-first access via MCP and cli access be a compelling competitive wedge?"
+- Revision applied on 2026-06-16: the working packet and review page now treat agent-first MCP/CLI access as a medium-confidence opportunity when tied to client-intake handoff, and as a medium-high threat because Typeform already has a beta MCP server and mature developer APIs exist.
+- Revision verification: confirmed `research/competitive-analysis-swot.md` remains absent; confirmed `alignment/swot-formforge.html` remains `data-alignment-status="review"`; confirmed the revised MCP/CLI rows and source notes render in the page and working packet; inline page script parses; `git diff --check` passed; `open alignment/swot-formforge.html` succeeded.
 
 ---
 

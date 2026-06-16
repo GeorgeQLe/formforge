@@ -12,7 +12,7 @@
 - Confirmed ICP: client-service solo consultants, coaches, and small agencies doing client intake/onboarding (`research/icp.md`).
 - Completed Porter intermediate: `research/competitive-analysis-porter-five-forces.md`.
 - Repo evidence from `README.md`, `src/server/ai/generate-form.ts`, `src/server/db/schema.ts`, `src/server/trpc/routers/form.ts`, `src/server/trpc/routers/response.ts`, `src/app/api/submit/[slug]/route.ts`, and dashboard/public renderer paths.
-- Public source checks on 2026-06-16 across Typeform, Jotform, Tally, Fillout, Google Forms, HoneyBook, Dubsado, IntakeQ, U.S. Bank, and Axios.
+- Public source checks on 2026-06-16 across Typeform, Jotform, Tally, Fillout, Google Forms, HoneyBook, Dubsado, IntakeQ, U.S. Bank, Axios, Typeform developer/MCP docs, Jotform developer docs, Tally webhooks docs, and the Model Context Protocol docs.
 
 ## Methodology
 
@@ -43,10 +43,12 @@ FormForge is evaluated as an AI-assisted client-intake form builder for small cl
 | Opportunity | Small businesses are adopting generative AI, creating permission to try AI-assisted setup. | U.S. Bank's 2025 survey says 36% of small business owners use generative AI and 21% plan to implement it within 12 months; Axios reports the same survey and notes most current spend is free or low-cost. | Medium | AI adoption supports a trial hook, but willingness to pay likely depends on workflow-specific value rather than AI novelty. |
 | Opportunity | Specialized intake can command more than generic-form pricing when it includes workflow, reminders, attachments, signatures, security, or compliance. | IntakeQ lists a Forms Only plan at $54.90/month with branded custom forms, attachments, e-signatures, reminders, secure document sharing, export, and HIPAA BAA; HoneyBook and Dubsado charge paid suite prices for broader client workflow. | Medium | This supports the hypothesis that buyers pay for intake when it is tied to operational outcomes, not just form creation. |
 | Opportunity | Free-tier pressure creates a visible chance to define value around saved setup and follow-up time. | Tally offers unlimited forms and submissions free within fair-use limits, Fillout offers free unlimited forms/seats with 1,000 responses/month, and Google Forms covers basic creation, logic, charts, and Sheets export. | Medium | If FormForge wins, it must do so by reducing blank-page setup and back-and-forth, not by matching commodity form features. |
+| Opportunity | Agent-first MCP and CLI access could be a compelling wedge if it is tied to client-intake workflow handoff rather than generic form CRUD. | MCP is positioned as a standard way for AI applications and agents to access external systems and take actions; Typeform already exposes a beta MCP server, but it currently advertises limited tools for read-only Forms and read-write Contacts; Jotform exposes broad REST APIs and SDKs, while Tally documents webhooks. | Medium | Parent synthesis should treat agent-first access as a promising differentiation hypothesis for AI-forward consultants, agencies, and technical operators, especially if it creates, updates, publishes, and routes intake data into client docs, CRM, Notion, or project systems. |
 | Threat | Broad form builders already cover much of FormForge's visible feature set. | Typeform includes AI-powered creation, conditional logic, webhooks, integrations, and response tiers; Jotform advertises AI, secure/HIPAA forms, payments, widgets, 200+ integrations, and Jotform Workflows/Sign; Fillout includes 50+ field types, conditional logic, payments, PDF generation, review pages, file uploads, analytics, and custom domains. | High | Feature parity pressure is high; a generic "AI + forms" story risks direct comparison against more mature tools. |
 | Threat | Free and low-cost alternatives cap pricing power for generic intake forms. | Tally, Fillout, and Google Forms create a strong "good enough" substitute set; Axios reports 68% of surveyed small businesses using generative AI spend less than $50/month on AI services. | High | Parent synthesis should treat price sensitivity as structural unless user interviews show high urgency and saved-time value. |
 | Threat | Suite incumbents can absorb intake as part of broader client workflow. | HoneyBook includes lead forms, proposals/contracts, client portal, automations, payments, scheduling, and AI; Dubsado includes client portals, form/email templates, lead capture forms, scheduling, workflows, proposals, invoices, and Zapier integration. | High | Buyers who want end-to-end client operations may choose suites rather than a focused form tool. |
 | Threat | Incumbent AI and workflow launches can compress FormForge's novelty window. | Typeform markets AI form builder/import/brand kit/translation/content optimization and AI follow-up questions; HoneyBook markets AI chat, AI automations builder, email drafts, meeting notes, meeting prep, lead enrichment, and business trends. | High | The window for AI as novelty is narrow; synthesis should test workflow specificity and distribution, not AI presence alone. |
+| Threat | Agent-first access is already becoming table stakes for mature developer-platform form builders. | Typeform's developer docs include an official beta MCP server at `https://api.typeform.com/mcp`, with OAuth planned; Typeform also has Create, Responses, Webhooks, and Embed APIs, and Jotform says its REST API can access accounts, forms, submissions, and even create/edit forms with SDKs in 11 languages. | Medium-high | MCP/CLI should not be framed as durable defensibility unless FormForge can own a sharper client-intake agent workflow or distribution channel before incumbents expand their agent surfaces. |
 
 ## Strategic Tensions
 
@@ -54,7 +56,8 @@ FormForge is evaluated as an AI-assisted client-intake form builder for small cl
 2. **Fast setup vs. downstream work.** AI form generation reduces blank-page work, but the ICP's strongest operational pain includes chasing missing assets and moving answers into project systems. CSV export helps, yet lack of integrations or workflow handoff may block the highest-value opportunity.
 3. **Focused intake vs. suite gravity.** A lightweight intake tool can appeal to buyers who do not want HoneyBook or Dubsado migration. The same focus can lose buyers who decide contracts, invoices, scheduling, portals, and automation belong in one system.
 4. **AI adoption vs. AI willingness to pay.** Small businesses are using generative AI, but public survey coverage indicates many use free or low-cost tiers. AI can reduce trial friction, but paid conversion likely needs evidence of client-workflow ROI.
-5. **Pragmatic prototype depth vs. mature competitors.** FormForge already has snapshots, Turnstile, consent settings, response limits, analytics, and export. Competitors still have deeper integrations, templates, compliance, workflows, collaboration, and brand ecosystems.
+5. **Agent-first access vs. incumbent developer platforms.** MCP and CLI access could turn FormForge into a tool agents can use during client onboarding, but Typeform already has a beta MCP server and mature APIs. The wedge is more compelling if it focuses on opinionated client-intake jobs and downstream handoff than if it simply exposes generic form CRUD.
+6. **Pragmatic prototype depth vs. mature competitors.** FormForge already has snapshots, Turnstile, consent settings, response limits, analytics, and export. Competitors still have deeper integrations, templates, compliance, workflows, collaboration, and brand ecosystems.
 
 ## Evidence Matrix
 
@@ -70,13 +73,19 @@ FormForge is evaluated as an AI-assisted client-intake form builder for small cl
 | A lightweight anti-suite wedge remains plausible. | `research/icp.md`; HoneyBook and Dubsado feature breadth | Research plus competitor evidence | Some buyers may prefer better intake without broader suite migration. | Medium-high |
 | Specialized intake can support paid pricing. | IntakeQ pricing; HoneyBook pricing; Dubsado pricing | Vertical/suite pricing evidence | Buyers pay more when intake is tied to reminders, signatures, secure sharing, portals, payments, or operations. | Medium |
 | Small business AI adoption supports trial interest but not high AI spend by itself. | U.S. Bank 2025 Small Business Survey; Axios summary of the same survey | Market evidence | AI can be an adoption hook, but pricing must connect to operational value. | Medium |
+| Agent-first MCP/CLI access may be a wedge only if FormForge owns a client-intake-specific agent workflow. | Model Context Protocol docs; Typeform MCP server docs; Typeform Developer Platform; Jotform developer docs; Tally webhooks docs | Protocol plus competitor developer-platform evidence | MCP support is directionally aligned with AI-agent adoption, but Typeform's beta MCP server and mature APIs weaken any claim that agent access alone is unique. | Medium |
 
 ## Source Notes
 
 - Typeform pricing: https://www.typeform.com/pricing
 - Typeform AI: https://www.typeform.com/ai/
+- Typeform Developer Platform: https://www.typeform.com/developers/
+- Typeform Create API: https://www.typeform.com/developers/create/
+- Typeform MCP server: https://www.typeform.com/developers/get-started/mcp/
 - Jotform pricing: https://www.jotform.com/pricing/
+- Jotform developers: https://www.jotform.com/developers/
 - Tally pricing: https://tally.so/pricing
+- Tally webhooks: https://tally.so/help/webhooks
 - Fillout pricing: https://www.fillout.com/pricing
 - Google Forms product page: https://workspace.google.com/products/forms/
 - HoneyBook pricing: https://www.honeybook.com/pricing
@@ -84,6 +93,7 @@ FormForge is evaluated as an AI-assisted client-intake form builder for small cl
 - IntakeQ pricing: https://intakeq.com/pricing
 - U.S. Bank 2025 Small Business Survey: https://www.usbank.com/business-banking/business-resource-center/small-business-survey.html
 - Axios small business AI coverage: https://www.axios.com/2025/06/20/small-business-ai-use
+- Model Context Protocol introduction: https://modelcontextprotocol.io/docs/getting-started/intro
 
 ## Assumptions And Confidence Register
 
@@ -94,6 +104,7 @@ FormForge is evaluated as an AI-assisted client-intake form builder for small cl
 | Buyers who resist HoneyBook/Dubsado-style suites are a meaningful segment. | Inferred from ICP and suite breadth | Medium | Interviews showing most target buyers either accept suites or prefer generic free forms. |
 | AI adoption creates trial permission but not automatic WTP. | Evidence-backed by U.S. Bank/Axios and competitor AI presence | Medium | Customer interviews showing high paid urgency specifically for AI-generated intake setup. |
 | CSV export is enough for some early users but not enough for the strongest handoff pain. | Inferred from ICP and repo evidence | Medium-high | Discovery showing CSV/email notification satisfies target users' downstream workflow needs. |
+| Agent-first access is a differentiated wedge only when attached to a specific client-intake job. | Inferred from MCP docs, Typeform MCP beta, Typeform/Jotform APIs, and ICP handoff pains | Medium | Competitor trials showing mature agent support for client-intake handoff, or buyer interviews showing nontechnical ICP users do not value MCP/CLI access. |
 
 ## Source Coverage Gaps
 
@@ -101,6 +112,8 @@ FormForge is evaluated as an AI-assisted client-intake form builder for small cl
 - No hands-on competitor trials; competitor facts are from public pricing/product pages.
 - No quantified traffic, market share, retention, or conversion data.
 - No pricing sensitivity interviews for the approved ICP.
+- No direct interviews with AI-forward consultants, agencies, or technical operators about whether MCP/CLI access changes adoption or willingness to pay.
+- No hands-on trial of Typeform's beta MCP server or competitor APIs to compare agent execution quality.
 - Public competitor pages are time-sensitive and should be rechecked before final synthesis if substantial time passes.
 
 ## Proposed Canonical File Changes After Approval

@@ -168,6 +168,22 @@
     .feedback button[data-feedback="down"].active { border-color: var(--red); color: var(--red); }
     .feedback button[data-feedback="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
     .feedback-panel[hidden], .conditional[hidden], .table-wrap[hidden] { display: none; }
+    .changed {
+      border-left: 4px solid var(--orange);
+      background: #1c2333;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border: 1px solid var(--orange);
+      border-radius: 999px;
+      padding: 1px 8px;
+      color: var(--orange);
+      font-weight: 800;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
     #compiledYaml, .local-yaml {
       min-height: 220px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -195,6 +211,7 @@
       <p><strong>Working packet:</strong> <code>research/_working/preliminary-swot-research.md</code></p>
       <p><strong>Proposed canonical artifact:</strong> <code>research/competitive-analysis-swot.md</code></p>
       <p><strong>Loop position:</strong> 1 of 4 selected frameworks is complete. SWOT is the second selected framework and remains pending final artifact approval.</p>
+      <p class="changed"><span class="badge">Updated</span> Revision note: the 2026-06-16 gate response asked whether agent-first MCP and CLI access could be a compelling competitive wedge. This review now treats it as a medium-confidence opportunity and a medium-high threat: promising when tied to client-intake handoff, but not unique as generic agent access because Typeform already has a beta MCP server and mature form APIs exist.</p>
     </section>
 
     <nav class="toc" aria-label="Table of contents">
@@ -228,7 +245,7 @@
             <li>Confirmed ICP: client-service solo consultants, coaches, and small agencies doing client intake/onboarding.</li>
             <li>Completed Porter intermediate: <code>research/competitive-analysis-porter-five-forces.md</code>.</li>
             <li>Repo evidence from AI generation, schema, form router, response router, submit route, public renderer, dashboard, and README paths.</li>
-            <li>Public source checks on 2026-06-16 across form builders, suite incumbents, vertical intake, and small-business AI adoption.</li>
+            <li>Public source checks on 2026-06-16 across form builders, suite incumbents, vertical intake, small-business AI adoption, and agent/developer access including Typeform MCP, Typeform APIs, Jotform developers, Tally webhooks, and MCP docs.</li>
           </ul>
         </article>
         <article class="card">
@@ -273,17 +290,17 @@
         <button type="button" data-feedback="needs-clarification">clarification needed</button>
       </div>
       <h2>SWOT Summary</h2>
-      <div class="chart-container" data-tts-narrative="The SWOT summary shows four strengths, four weaknesses, four opportunities, and four threats. Confidence is highest for current repo capabilities and broad competitor feature parity, and lower where buyer willingness to pay still needs interviews.">
+      <div class="chart-container" data-tts-narrative="The SWOT summary shows four strengths, four weaknesses, five opportunities, and five threats. Confidence is highest for current repo capabilities and broad competitor feature parity, and lower where buyer willingness to pay and agent-first access still need interviews.">
         <button type="button" data-toggle-table="swotCountTable">View as table</button>
-        <canvas id="swotCountChart" aria-label="Bar chart showing four SWOT items in each quadrant: strengths, weaknesses, opportunities, and threats."></canvas>
+        <canvas id="swotCountChart" aria-label="Bar chart showing four strengths, four weaknesses, five opportunities, and five threats."></canvas>
         <div class="table-wrap" id="swotCountTable" hidden>
           <table>
             <thead><tr><th>Quadrant</th><th>Items</th><th>Confidence Pattern</th></tr></thead>
             <tbody>
               <tr><td>Strengths</td><td>4</td><td>High, repo-backed</td></tr>
               <tr><td>Weaknesses</td><td>4</td><td>Medium-high to high</td></tr>
-              <tr><td>Opportunities</td><td>4</td><td>Medium to medium-high</td></tr>
-              <tr><td>Threats</td><td>4</td><td>High</td></tr>
+              <tr class="changed"><td>Opportunities</td><td>5</td><td>Medium to medium-high</td></tr>
+              <tr class="changed"><td>Threats</td><td>5</td><td>Medium-high to high</td></tr>
             </tbody>
           </table>
         </div>
@@ -291,8 +308,8 @@
       <div class="cards">
         <article class="card"><h3 class="strength">Strengths</h3><p>Current repo implements a real end-to-end form loop with AI generation, publish snapshots, response handling, analytics, and export.</p></article>
         <article class="card"><h3 class="weakness">Weaknesses</h3><p>The product is still generic relative to the approved client-intake ICP and lacks deeper post-submission workflow handoff.</p></article>
-        <article class="card"><h3 class="opportunity">Opportunities</h3><p>There is plausible whitespace between free/generic form builders and heavy client-management suites, but buyer interviews remain missing.</p></article>
-        <article class="card"><h3 class="threat">Threats</h3><p>Incumbents already offer AI, logic, integrations, workflow suites, or generous free tiers, which compresses the generic AI-form-builder story.</p></article>
+        <article class="card changed"><h3 class="opportunity">Opportunities</h3><p>There is plausible whitespace between free/generic form builders and heavy client-management suites; agent-first MCP/CLI access could strengthen that only if it is tied to client-intake handoff.</p></article>
+        <article class="card changed"><h3 class="threat">Threats</h3><p>Incumbents already offer AI, logic, integrations, APIs, workflow suites, generous free tiers, and Typeform already has a beta MCP server.</p></article>
       </div>
       <div class="feedback-panel" hidden>
         <textarea placeholder="Optional section feedback notes"></textarea>
@@ -325,10 +342,12 @@
             <tr><td class="opportunity">Opportunity</td><td>Small-business AI adoption creates trial permission.</td><td>U.S. Bank reports 36% of small business owners use generative AI and 21% plan to implement it within 12 months; Axios notes most current spend is low.</td><td>Medium</td><td>AI can be a trial hook, but WTP likely depends on workflow value.</td></tr>
             <tr><td class="opportunity">Opportunity</td><td>Specialized intake can support paid pricing.</td><td>IntakeQ, HoneyBook, and Dubsado show paid willingness around intake plus workflow, reminders, signatures, secure sharing, portals, or payments.</td><td>Medium</td><td>Paid value likely comes from operational outcomes, not form creation alone.</td></tr>
             <tr><td class="opportunity">Opportunity</td><td>Free-tier pressure clarifies the value bar.</td><td>Tally, Fillout, and Google Forms set low-cost/free benchmarks for basic forms.</td><td>Medium</td><td>FormForge must prove saved setup and follow-up time.</td></tr>
+            <tr class="changed"><td class="opportunity">Opportunity</td><td>Agent-first MCP and CLI access could be a compelling wedge if it is tied to client-intake workflow handoff rather than generic form CRUD.</td><td>MCP is positioned as a standard way for AI applications and agents to access external systems and take actions; Typeform already exposes a beta MCP server, but it advertises limited tools for read-only Forms and read-write Contacts; Jotform exposes broad REST APIs and SDKs, while Tally documents webhooks.</td><td>Medium</td><td>Treat agent-first access as a promising hypothesis for AI-forward consultants, agencies, and technical operators, especially if it creates, updates, publishes, and routes intake data into client docs, CRM, Notion, or project systems.</td></tr>
             <tr><td class="threat">Threat</td><td>Broad builders already cover visible features.</td><td>Typeform, Jotform, Fillout, Tally, and Google Forms cover AI, logic, uploads, payments, responses, analytics, integrations, or free usage.</td><td>High</td><td>Generic feature comparison is risky.</td></tr>
             <tr><td class="threat">Threat</td><td>Free and low-cost alternatives cap pricing.</td><td>Tally, Fillout, and Google Forms create strong good-enough substitutes; Axios notes many small businesses spend less than $50/month on AI.</td><td>High</td><td>Price sensitivity is structural unless user interviews show strong urgency.</td></tr>
             <tr><td class="threat">Threat</td><td>Suite incumbents can absorb intake.</td><td>HoneyBook and Dubsado bundle lead capture, portals, contracts/proposals, scheduling, payments, workflows, and integrations.</td><td>High</td><td>End-to-end operations buyers may prefer suites.</td></tr>
             <tr><td class="threat">Threat</td><td>Incumbent AI compresses novelty.</td><td>Typeform markets AI form creation/editing/translation/follow-up; HoneyBook markets AI chat and automations builder.</td><td>High</td><td>Test workflow specificity and distribution, not AI presence alone.</td></tr>
+            <tr class="changed"><td class="threat">Threat</td><td>Agent-first access is already becoming table stakes for mature developer-platform form builders.</td><td>Typeform's developer docs include an official beta MCP server at <code>https://api.typeform.com/mcp</code>, with OAuth planned; Typeform also has Create, Responses, Webhooks, and Embed APIs, and Jotform says its REST API can access accounts, forms, submissions, and create/edit forms with SDKs in 11 languages.</td><td>Medium-high</td><td>Do not frame MCP/CLI as durable defensibility unless FormForge owns a sharper client-intake agent workflow or distribution channel before incumbents expand their agent surfaces.</td></tr>
           </tbody>
         </table>
       </div>
@@ -363,6 +382,7 @@
         <li><strong>Fast setup vs. downstream work.</strong> AI reduces blank-page work, but the strongest ICP pain includes missing assets and moving answers into project systems.</li>
         <li><strong>Focused intake vs. suite gravity.</strong> Lightweight focus can appeal to suite-resistant buyers, but can lose buyers who want contracts, invoices, scheduling, portals, and automations in one system.</li>
         <li><strong>AI adoption vs. AI willingness to pay.</strong> AI can lower trial friction, but public small-business survey evidence points to low current AI spend.</li>
+        <li class="changed"><strong>Agent-first access vs. incumbent developer platforms.</strong> MCP and CLI access could turn FormForge into a tool agents can use during client onboarding, but Typeform already has a beta MCP server and mature APIs. The wedge is more compelling if it focuses on opinionated client-intake jobs and downstream handoff than if it simply exposes generic form CRUD.</li>
         <li><strong>Prototype depth vs. mature competitors.</strong> FormForge has useful depth, while competitors have deeper integrations, compliance, workflows, collaboration, and brand ecosystems.</li>
       </ol>
       <div class="feedback-panel" hidden>
@@ -394,6 +414,7 @@
             <tr><td>Anti-suite whitespace is plausible.</td><td><code>research/icp.md</code>; HoneyBook and Dubsado feature breadth</td><td>Research + competitor</td><td>Some buyers may want better intake without full suite migration.</td><td>Medium-high</td></tr>
             <tr><td>Specialized intake can support paid pricing.</td><td><a href="https://intakeq.com/pricing">IntakeQ</a>; HoneyBook; Dubsado</td><td>Vertical/suite pricing</td><td>Buyers pay more when intake connects to operational workflows.</td><td>Medium</td></tr>
             <tr><td>Small-business AI adoption supports trial interest but not high AI spend by itself.</td><td><a href="https://www.usbank.com/business-banking/business-resource-center/small-business-survey.html">U.S. Bank 2025 survey</a>; <a href="https://www.axios.com/2025/06/20/small-business-ai-use">Axios</a></td><td>Market</td><td>AI can be an adoption hook, but pricing must connect to operational value.</td><td>Medium</td></tr>
+            <tr class="changed"><td>Agent-first MCP/CLI access may be a wedge only if FormForge owns a client-intake-specific agent workflow.</td><td><a href="https://modelcontextprotocol.io/docs/getting-started/intro">Model Context Protocol docs</a>; <a href="https://www.typeform.com/developers/get-started/mcp/">Typeform MCP server</a>; <a href="https://www.typeform.com/developers/">Typeform Developer Platform</a>; <a href="https://www.jotform.com/developers/">Jotform developers</a>; <a href="https://tally.so/help/webhooks">Tally webhooks</a></td><td>Protocol + competitor developer-platform evidence</td><td>MCP support is directionally aligned with AI-agent adoption, but Typeform's beta MCP server and mature APIs weaken any claim that agent access alone is unique.</td><td>Medium</td></tr>
           </tbody>
         </table>
       </div>
@@ -426,8 +447,11 @@
       <div class="grid">
         <article class="card"><h3>Public Sources</h3><ul>
           <li><a href="https://www.typeform.com/pricing">Typeform pricing</a> and <a href="https://www.typeform.com/ai/">Typeform AI</a></li>
+          <li class="changed"><a href="https://www.typeform.com/developers/">Typeform Developer Platform</a>, <a href="https://www.typeform.com/developers/create/">Typeform Create API</a>, and <a href="https://www.typeform.com/developers/get-started/mcp/">Typeform MCP server</a></li>
           <li><a href="https://www.jotform.com/pricing/">Jotform pricing</a></li>
+          <li class="changed"><a href="https://www.jotform.com/developers/">Jotform developers</a></li>
           <li><a href="https://tally.so/pricing">Tally pricing</a></li>
+          <li class="changed"><a href="https://tally.so/help/webhooks">Tally webhooks</a></li>
           <li><a href="https://www.fillout.com/pricing">Fillout pricing</a></li>
           <li><a href="https://workspace.google.com/products/forms/">Google Forms</a></li>
           <li><a href="https://www.honeybook.com/pricing">HoneyBook pricing</a></li>
@@ -435,6 +459,7 @@
           <li><a href="https://intakeq.com/pricing">IntakeQ pricing</a></li>
           <li><a href="https://www.usbank.com/business-banking/business-resource-center/small-business-survey.html">U.S. Bank 2025 Small Business Survey</a></li>
           <li><a href="https://www.axios.com/2025/06/20/small-business-ai-use">Axios small-business AI coverage</a></li>
+          <li class="changed"><a href="https://modelcontextprotocol.io/docs/getting-started/intro">Model Context Protocol introduction</a></li>
         </ul></article>
         <article class="card"><h3>Repo Sources</h3><ul>
           <li><code>README.md</code></li>
@@ -471,6 +496,7 @@
             <tr><td>Suite-resistant buyers are a meaningful segment.</td><td>Inferred from ICP and suite breadth</td><td>Medium</td><td>Interviews showing target buyers prefer either suites or generic free forms.</td></tr>
             <tr><td>AI adoption creates trial permission but not automatic WTP.</td><td>Evidence-backed</td><td>Medium</td><td>Customer interviews showing high paid urgency specifically for AI-generated intake setup.</td></tr>
             <tr><td>CSV export helps some early users but does not fully solve strongest handoff pain.</td><td>Inferred from ICP and repo evidence</td><td>Medium-high</td><td>Discovery showing CSV/email notifications satisfy target workflow needs.</td></tr>
+            <tr class="changed"><td>Agent-first access is a differentiated wedge only when attached to a specific client-intake job.</td><td>Inferred from MCP docs, Typeform MCP beta, Typeform/Jotform APIs, and ICP handoff pains</td><td>Medium</td><td>Competitor trials showing mature agent support for client-intake handoff, or buyer interviews showing nontechnical ICP users do not value MCP/CLI access.</td></tr>
           </tbody>
         </table>
       </div>
@@ -480,6 +506,8 @@
         <li>No hands-on competitor trials; competitor facts are from public pricing/product pages.</li>
         <li>No quantified traffic, market share, retention, or conversion data.</li>
         <li>No pricing sensitivity interviews for the approved ICP.</li>
+        <li class="changed">No direct interviews with AI-forward consultants, agencies, or technical operators about whether MCP/CLI access changes adoption or willingness to pay.</li>
+        <li class="changed">No hands-on trial of Typeform's beta MCP server or competitor APIs to compare agent execution quality.</li>
         <li>Public competitor pages are time-sensitive and should be rechecked before final synthesis if substantial time passes.</li>
       </ul>
       <div class="question-block" data-gate="assumptions_confidence" data-gate-type="assumptions/confidence">
@@ -762,8 +790,8 @@
     drawBarChart("swotCountChart", [
       { label: "Strength", value: 4 },
       { label: "Weakness", value: 4 },
-      { label: "Opportunity", value: 4 },
-      { label: "Threat", value: 4 }
+      { label: "Opportunity", value: 5 },
+      { label: "Threat", value: 5 }
     ]);
   </script>
   <script src="../scripts/alignment-tts-kokoro.js"></script>

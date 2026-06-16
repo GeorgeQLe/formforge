@@ -1,5 +1,26 @@
 # History
 
+## 2026-06-16 — SWOT competitive analysis finalization and session wrap
+
+- Finalized the approved SWOT competitive-analysis intermediate as canonical research.
+- Confirmed the SWOT alignment page, preserved the approval record, updated the central alignment index, and archived the active SWOT working packet.
+- Preserved the desk-flip report as a project report artifact.
+- Recorded the project pack designation change from `business-discovery` to `business-research` in `.agents/project.json`.
+- Left the competitive-analysis run manifest active because Feature/Pricing Matrix and Strategic Group Map remain pending.
+
+### Ship Manifest
+
+- **User goal:** Consume the final compiled approval YAML for `alignment/swot-formforge.html`, write the approved canonical SWOT artifact, archive the working packet, and wrap the session cleanly.
+- **Changed files:** `research/competitive-analysis-swot.md`, `alignment/swot-formforge.html`, `alignment/index.html`, `docs/history/archive/2026-06-16/114814/research/_working/preliminary-swot-research.md`, `tasks/roadmap.md`, `tasks/todo.md`, `.agents/project.json`, `desk-flip-report.md`, `tasks/history.md`.
+- **Per-file purpose:** The canonical research file stores the approved SWOT matrix, evidence matrix, tensions, assumptions, source notes, and gaps; the SWOT alignment page is the confirmed approval record; the alignment index points to the confirmed SWOT page; the archive path preserves the approved working packet; task docs mark the workflow shipped; `.agents/project.json` records the active project pack designation; `desk-flip-report.md` preserves the project reset/autopsy report; this history entry records the shipping boundary and rationale.
+- **User-goal mapping:** The approved SWOT artifact is now durable, review-stage artifacts are no longer active, and the repository has a session-level audit record of what was shipped and what remains.
+- **Tests run:** Confirmed `research/competitive-analysis-swot.md` exists; confirmed `research/_working/preliminary-swot-research.md` is removed; confirmed the archive copy exists; confirmed `alignment/swot-formforge.html` reports `data-alignment-status="confirmed"` and includes the approval record; parsed the page inline script with `new Function`; ran `git diff --check`; parsed `.agents/project.json` with Node; scanned remaining wrap-up files for common secret patterns.
+- **Skipped tests:** `pnpm test`, `pnpm lint`, and `pnpm build` were not rerun because the shipped boundary contains research markdown, alignment HTML, task/history docs, a report, and project metadata, not application source, runtime configuration, schemas, validation rules, command surfaces, or deploy behavior. The relevant executable checks are artifact existence/removal, HTML script parse, JSON parse, and diff hygiene.
+- **Adversarial review:** Verified the canonical artifact removed review-only metadata, the confirmed page preserved approval decisions, the working packet was archived rather than discarded, and unrelated generated skill roots were not staged. Accepted that the confirmed page still contains hidden legacy gate markup guarded by CSS/script checks; the visible/read-only confirmed record and inline script validation pass.
+- **Residual risk:** Competitor/source facts are time-sensitive and should be rechecked before final competitive synthesis if substantial time passes. The desk-flip report is a project analysis artifact, not a migration plan or implementation spec.
+- **Rollback note:** Revert the SWOT finalization commits and this wrap-up commit to restore the active review-stage packet/page state and remove the canonical SWOT artifact; revert `.agents/project.json` if the project should return to the previous pack designation.
+- **Next command:** `$competitive-analysis`
+
 ## 2026-06-13 — Generated skill-root hygiene cleanup
 
 - Ignored project-local generated skill roots so `/pack`, `$pack`, and `scripts/pack.sh refresh` outputs do not block normal shipping.

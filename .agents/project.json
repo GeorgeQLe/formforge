@@ -1,7 +1,7 @@
 {
   "project_type": "business-app",
   "enabled_packs": [
-    "business-discovery"
+    "business-research"
   ],
   "skill_pack_version": 1,
   "enabled_skills": {

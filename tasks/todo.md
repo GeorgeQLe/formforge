@@ -7,7 +7,7 @@
 - [x] Archive and remove active working packet: `research/_working/preliminary-swot-research.md`.
 - [x] Mark `alignment/swot-formforge.html` confirmed with the approval record preserved.
 - [x] Verify artifact structure, archive state, confirmed page controls, and git diff.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ### Review
 
@@ -16,6 +16,7 @@
 - Review-stage working packet archived under `docs/history/archive/2026-06-16/114814/research/_working/preliminary-swot-research.md` and removed from the active working area.
 - The SWOT alignment page is now confirmed and preserves the approved matrix, evidence completeness answer, assumptions/gaps answer, artifact path, and mutation scope.
 - Verification: canonical artifact exists; active SWOT working packet is removed; archive copy exists; confirmed page reports `data-alignment-status="confirmed"` and includes the approval record; inline page script parses; `git diff --check` passed.
+- Shipped on `main` in commit `38babe4`.
 
 ---
 

@@ -15,7 +15,7 @@ The user returned complete final compiled YAML on 2026-06-16 approving the revis
 - [x] Archive and remove `research/_working/preliminary-swot-research.md`.
 - [x] Convert `alignment/swot-formforge.html` to confirmed and preserve the approval record.
 - [x] Verify canonical artifact, archive state, confirmed page, and git diff.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ---
 

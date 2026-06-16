@@ -1,5 +1,24 @@
 # FormForge Competitive Analysis SWOT Framework Roadmap
 
+## Stage 3 Finalization
+
+The user returned complete final compiled YAML on 2026-06-16 approving the revised SWOT artifact:
+
+- SWOT Matrix: `approve_matrix`
+- Evidence Matrix: `sufficient_with_gaps`
+- Assumptions And Gaps: `preserve`
+- Artifact destination: `research/competitive-analysis-swot.md`
+- Proposed file changes: `approve_scope`
+
+- [x] Reconcile approval YAML with the active SWOT working packet and review page.
+- [x] Write canonical `research/competitive-analysis-swot.md` from the approved packet.
+- [x] Archive and remove `research/_working/preliminary-swot-research.md`.
+- [x] Convert `alignment/swot-formforge.html` to confirmed and preserve the approval record.
+- [x] Verify canonical artifact, archive state, confirmed page, and git diff.
+- [ ] Commit and push intended tracked changes.
+
+---
+
 ## Objective
 
 Run the next pending competitive-analysis framework, SWOT, for the flat FormForge client-service intake ICP and produce review-stage artifacts only.

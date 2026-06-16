@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="review">
+<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="confirmed">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FormForge SWOT Competitive Analysis - Review</title>
+  <title>FormForge SWOT Competitive Analysis - Confirmed</title>
   <style>
     :root {
       color-scheme: dark;
@@ -197,20 +197,26 @@
       section, .toc, .notice { padding: 14px; }
       h1 { font-size: 1.75rem; }
     }
+    .feedback,
+    .feedback-panel,
+    .question-block,
+    .compile {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <main>
-    <p class="status">review · 2026-06-16 · visual research artifact</p>
+    <p class="status">confirmed · 2026-06-16 · visual research artifact</p>
     <h1>FormForge SWOT Competitive Analysis</h1>
-    <p class="lede">Review-stage SWOT intermediate for the approved flat FormForge competitive-analysis scope. This page renders the full proposed working packet and approval gates before the canonical artifact <code>research/competitive-analysis-swot.md</code> is written.</p>
+    <p class="lede">Confirmed SWOT intermediate for the approved flat FormForge competitive-analysis scope. This page renders the approved strengths, weaknesses, opportunities, threats, strategic tensions, evidence matrix, assumptions, source gaps, and approval record for <code>research/competitive-analysis-swot.md</code>.</p>
 
     <section class="notice" id="review-status">
       <h2>Review Status</h2>
-      <p><strong>alignment_status:</strong> review</p>
-      <p><strong>Working packet:</strong> <code>research/_working/preliminary-swot-research.md</code></p>
-      <p><strong>Proposed canonical artifact:</strong> <code>research/competitive-analysis-swot.md</code></p>
-      <p><strong>Loop position:</strong> 1 of 4 selected frameworks is complete. SWOT is the second selected framework and remains pending final artifact approval.</p>
+      <p><strong>alignment_status:</strong> confirmed</p>
+      <p><strong>Canonical artifact:</strong> <code>research/competitive-analysis-swot.md</code></p>
+      <p><strong>Archived working packet:</strong> <code>docs/history/archive/2026-06-16/114814/research/_working/preliminary-swot-research.md</code></p>
+      <p><strong>Loop position:</strong> 2 of 4 selected frameworks are complete. Feature/Pricing Matrix and Strategic Group Map remain pending in the active competitive-analysis run manifest.</p>
       <p class="changed"><span class="badge">Updated</span> Revision note: the 2026-06-16 gate response asked whether agent-first MCP and CLI access could be a compelling competitive wedge. This review now treats it as a medium-confidence opportunity and a medium-high threat: promising when tied to client-intake handoff, but not unique as generic agent access because Typeform already has a beta MCP server and mature form APIs exist.</p>
     </section>
 
@@ -225,8 +231,8 @@
         <li><a href="#evidence">Evidence Matrix</a></li>
         <li><a href="#sources">Source Notes</a></li>
         <li><a href="#assumptions">Assumptions And Gaps</a></li>
-        <li><a href="#file-changes">Proposed File Changes</a></li>
-        <li><a href="#approval">Compile Responses</a></li>
+        <li><a href="#file-changes">Confirmed File Changes</a></li>
+        <li><a href="#approval-record">Approval Record</a></li>
       </ol>
     </nav>
 
@@ -535,12 +541,12 @@
         <button type="button" data-feedback="down">thumbs down</button>
         <button type="button" data-feedback="needs-clarification">clarification needed</button>
       </div>
-      <h2>Proposed File Changes</h2>
-      <p>After final compiled YAML approval with no unresolved negative feedback, the next invocation should write the approved canonical SWOT artifact and keep the competitive-analysis run manifest active for the remaining selected frameworks.</p>
+      <h2>Confirmed File Changes</h2>
+      <p>The final compiled YAML approved this artifact destination and mutation scope. The canonical SWOT artifact is written and the active competitive-analysis run manifest remains active for the remaining selected frameworks.</p>
       <ul>
-        <li>Write <code>research/competitive-analysis-swot.md</code> from the approved packet.</li>
-        <li>Archive <code>research/_working/preliminary-swot-research.md</code>.</li>
-        <li>Convert <code>alignment/swot-formforge.html</code> to confirmed and preserve the approval record.</li>
+        <li>Wrote <code>research/competitive-analysis-swot.md</code> from the approved packet.</li>
+        <li>Archived <code>research/_working/preliminary-swot-research.md</code> to <code>docs/history/archive/2026-06-16/114814/research/_working/preliminary-swot-research.md</code>.</li>
+        <li>Converted <code>alignment/swot-formforge.html</code> to confirmed and preserved the approval record.</li>
         <li>Leave <code>research/_working/competitive-analysis-run.yaml</code> active because Feature/Pricing Matrix and Strategic Group Map remain pending.</li>
       </ul>
       <div class="question-block" data-gate="artifact_destination" data-gate-type="artifact destination">
@@ -573,13 +579,21 @@
       </div>
     </section>
 
-    <section class="compile" id="approval">
-      <h2>Compile Responses</h2>
-      <p class="meta">Answer one or more gates or select section feedback, then compile YAML. Send partial YAML for revision requests or complete YAML for final artifact approval.</p>
-      <button type="button" class="primary" id="compileResponses">Compile Responses</button>
-      <button type="button" id="copyCompiled">Copy YAML</button>
-      <p id="compileStatus" class="meta" aria-live="polite"></p>
-      <textarea id="compiledYaml" readonly></textarea>
+    <section id="approval-record">
+      <h2>Approval Record</h2>
+      <p>The final compiled YAML on 2026-06-16 had no unanswered required questions and approved the revised SWOT artifact for canonical writing.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Section</th><th>Gate Type</th><th>Status</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td>SWOT Matrix</td><td>evidence coverage</td><td>answered</td><td>approve_matrix</td></tr>
+            <tr><td>Evidence Matrix</td><td>research completeness</td><td>answered</td><td>sufficient_with_gaps</td></tr>
+            <tr><td>Assumptions And Gaps</td><td>assumptions/confidence</td><td>answered</td><td>preserve</td></tr>
+            <tr><td>Proposed File Changes</td><td>artifact destination</td><td>answered</td><td>approve_path: <code>research/competitive-analysis-swot.md</code></td></tr>
+            <tr><td>Proposed File Changes</td><td>proposed file changes</td><td>answered</td><td>approve_scope</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
@@ -741,22 +755,28 @@
 
     const compiledYaml = document.getElementById("compiledYaml");
     const compileStatus = document.getElementById("compileStatus");
-    document.getElementById("compileResponses").addEventListener("click", () => {
-      const data = compileResponses();
-      if (!data.gate_answers.length && !data.section_feedback.length) {
-        compileStatus.textContent = "Answer a gate question or select section feedback before compiling.";
-        return;
-      }
-      const yaml = toYaml(data);
-      compiledYaml.value = yaml;
-      compileStatus.textContent = data.approval_status === "ready-for-agent-review"
-        ? "Complete approval YAML compiled and copied when browser permissions allow."
-        : "Partial or revision YAML compiled and copied when browser permissions allow.";
-      navigator.clipboard?.writeText(yaml).catch(() => {});
-    });
-    document.getElementById("copyCompiled").addEventListener("click", () => {
-      navigator.clipboard?.writeText(compiledYaml.value).catch(() => compiledYaml.select());
-    });
+    const compileButton = document.getElementById("compileResponses");
+    const copyButton = document.getElementById("copyCompiled");
+    if (compileButton && compiledYaml && compileStatus) {
+      compileButton.addEventListener("click", () => {
+        const data = compileResponses();
+        if (!data.gate_answers.length && !data.section_feedback.length) {
+          compileStatus.textContent = "Answer a gate question or select section feedback before compiling.";
+          return;
+        }
+        const yaml = toYaml(data);
+        compiledYaml.value = yaml;
+        compileStatus.textContent = data.approval_status === "ready-for-agent-review"
+          ? "Complete approval YAML compiled and copied when browser permissions allow."
+          : "Partial or revision YAML compiled and copied when browser permissions allow.";
+        navigator.clipboard?.writeText(yaml).catch(() => {});
+      });
+    }
+    if (copyButton && compiledYaml) {
+      copyButton.addEventListener("click", () => {
+        navigator.clipboard?.writeText(compiledYaml.value).catch(() => compiledYaml.select());
+      });
+    }
 
     function drawBarChart(canvasId, rows) {
       const canvas = document.getElementById(canvasId);

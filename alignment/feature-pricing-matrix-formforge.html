@@ -33,7 +33,12 @@
     th, td { border-bottom: 1px solid var(--border); padding: 10px 11px; text-align: left; vertical-align: top; font-size: 0.9rem; }
     th { background: #1c2333; color: #fff; }
     tr:last-child td { border-bottom: 0; }
-    canvas { width: 100%; height: 320px; display: block; }
+    .price-chart { display: grid; gap: 12px; min-width: 680px; margin-bottom: 14px; }
+    .price-row { display: grid; grid-template-columns: minmax(150px, 0.9fr) minmax(280px, 2.6fr) minmax(86px, 0.6fr); gap: 12px; align-items: center; }
+    .price-label { color: #fff; font-weight: 700; }
+    .price-track { height: 26px; border: 1px solid var(--border); border-radius: 999px; background: #0d1117; overflow: hidden; }
+    .price-bar { width: var(--bar-width); min-width: 3px; height: 26px; border-radius: inherit; background: var(--bar-color); }
+    .price-value { color: var(--text); font-weight: 700; white-space: nowrap; }
     button { min-height: 44px; border: 1px solid var(--border); border-radius: 8px; background: #21262d; color: var(--text); padding: 10px 16px; font: inherit; font-weight: 700; cursor: pointer; }
     button.primary { border-color: var(--accent); background: var(--accent); color: #06101d; }
     .question-block { border: 1px solid #33425b; border-left: 4px solid var(--purple); border-radius: 8px; background: #1c2333; padding: 14px; margin-top: 14px; }
@@ -140,7 +145,16 @@
       <h2>Pricing Anchor Chart</h2>
       <p class="meta">Chart uses lowest visible paid monthly-equivalent entry where a public price was captured. Jotform and Google Forms are excluded because a comparable standalone public price was not captured.</p>
       <div class="chart-container" data-tts-narrative="The pricing anchor chart shows that low-cost general builders cluster from free to roughly twenty-four dollars per month, while client-service suites and specialized intake tools start around twenty-nine to fifty-five dollars monthly.">
-        <canvas id="priceChart" width="980" height="320" aria-label="Horizontal bar chart of lowest visible paid monthly price anchors for selected competitors."></canvas>
+        <div class="price-chart" role="img" aria-label="Horizontal bar chart of lowest visible paid monthly price anchors for selected competitors. Fillout is $15 per month, forms.app is 16 EUR per month, Tally and Paperform are $24 per month, Dubsado is $335 per year or about $27.92 per month, HoneyBook is $29 per month, IntakeQ low-volume is $29.90 per month, and Typeform is $39 per month.">
+          <div class="price-row"><span class="price-label">Fillout</span><div class="price-track"><div class="price-bar" style="--bar-width: 33.3%; --bar-color: var(--chart-1);"></div></div><span class="price-value">$15/mo</span></div>
+          <div class="price-row"><span class="price-label">forms.app</span><div class="price-track"><div class="price-bar" style="--bar-width: 35.6%; --bar-color: var(--chart-2);"></div></div><span class="price-value">16 EUR/mo</span></div>
+          <div class="price-row"><span class="price-label">Tally</span><div class="price-track"><div class="price-bar" style="--bar-width: 53.3%; --bar-color: var(--chart-3);"></div></div><span class="price-value">$24/mo</span></div>
+          <div class="price-row"><span class="price-label">Paperform</span><div class="price-track"><div class="price-bar" style="--bar-width: 53.3%; --bar-color: var(--chart-4);"></div></div><span class="price-value">$24/mo</span></div>
+          <div class="price-row"><span class="price-label">Dubsado</span><div class="price-track"><div class="price-bar" style="--bar-width: 62%; --bar-color: var(--chart-5);"></div></div><span class="price-value">$335/yr</span></div>
+          <div class="price-row"><span class="price-label">HoneyBook</span><div class="price-track"><div class="price-bar" style="--bar-width: 64.4%; --bar-color: var(--chart-6);"></div></div><span class="price-value">$29/mo</span></div>
+          <div class="price-row"><span class="price-label">IntakeQ low-volume</span><div class="price-track"><div class="price-bar" style="--bar-width: 66.4%; --bar-color: var(--chart-7);"></div></div><span class="price-value">$29.90/mo</span></div>
+          <div class="price-row"><span class="price-label">Typeform</span><div class="price-track"><div class="price-bar" style="--bar-width: 86.7%; --bar-color: var(--chart-8);"></div></div><span class="price-value">$39/mo</span></div>
+        </div>
         <button type="button" class="toggle-table" data-target="price-table">View as table</button>
       </div>
       <div class="table-wrap" id="price-table" hidden data-tts-narrative="The fallback table lists the same lowest visible paid price anchors shown in the chart.">
@@ -294,9 +308,12 @@
     const pagePath = "alignment/feature-pricing-matrix-formforge.html";
     const requiredGates = ["research-completeness", "artifact-approval", "file-changes"];
     function yamlEscape(value) { return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"'); }
+    function feedbackPanelFor(control) {
+      return control.closest("section, .notice")?.querySelector(".feedback-panel") || null;
+    }
     function selectedFeedback() {
       return Array.from(document.querySelectorAll(".feedback[data-active-feedback]")).map((control) => {
-        const panel = control.nextElementSibling;
+        const panel = feedbackPanelFor(control);
         const notes = panel ? panel.querySelector("textarea").value.trim() : "";
         const feedback = control.dataset.activeFeedback;
         const action = feedback === "emphasize" ? "add-weight-to-section" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval";
@@ -351,7 +368,7 @@
         button.addEventListener("click", () => {
           const active = button.classList.contains("active");
           control.querySelectorAll("button[data-feedback]").forEach((candidate) => candidate.classList.remove("active"));
-          const panel = control.nextElementSibling;
+          const panel = feedbackPanelFor(control);
           if (active) { delete control.dataset.activeFeedback; if (panel) panel.hidden = true; }
           else { button.classList.add("active"); control.dataset.activeFeedback = button.dataset.feedback; if (panel) panel.hidden = false; }
         });
@@ -360,7 +377,8 @@
     document.querySelectorAll(".compile-local").forEach((button) => {
       button.addEventListener("click", () => {
         const panel = button.closest(".feedback-panel");
-        const control = panel.previousElementSibling;
+        const control = panel?.closest("section, .notice")?.querySelector(".feedback");
+        if (!control || !control.dataset.activeFeedback) return;
         const feedback = control.dataset.activeFeedback;
         const notes = panel.querySelector("textarea").value.trim();
         const action = feedback === "emphasize" ? "add-weight-to-section" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval";
@@ -383,19 +401,6 @@
       table.hidden = !table.hidden;
       button.textContent = table.hidden ? "View as table" : "Hide table";
     }));
-    const priceData = [["Fillout", 15], ["forms.app", 16], ["Tally", 24], ["Paperform", 24], ["Dubsado", 27.92], ["HoneyBook", 29], ["IntakeQ low-volume", 29.9], ["Typeform", 39]];
-    const canvas = document.getElementById("priceChart");
-    const ctx = canvas.getContext("2d");
-    const colors = ["--chart-1", "--chart-2", "--chart-3", "--chart-4", "--chart-5", "--chart-6", "--chart-7", "--chart-8"].map((name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim());
-    ctx.font = "14px system-ui, sans-serif";
-    const max = 45, left = 170, top = 24, barH = 22, gap = 14;
-    priceData.forEach(([label, value], index) => {
-      const y = top + index * (barH + gap);
-      const width = (value / max) * (canvas.width - left - 110);
-      ctx.fillStyle = "#c9d1d9"; ctx.fillText(label, 10, y + 16);
-      ctx.fillStyle = colors[index % colors.length]; ctx.fillRect(left, y, width, barH);
-      ctx.fillStyle = "#c9d1d9"; ctx.fillText(value >= 27.9 && value < 28 ? "$335/yr" : `$${value}/mo`, left + width + 10, y + 16);
-    });
   </script>
   <script src="../scripts/alignment-tts-kokoro.js"></script>
 </body>

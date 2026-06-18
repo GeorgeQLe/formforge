@@ -1,3 +1,34 @@
+# FormForge Feature/Pricing Alignment Interaction Fix Roadmap
+
+## Objective
+
+Fix `alignment/feature-pricing-matrix-formforge.html` so pricing anchors are visible without canvas rendering and section feedback controls reliably open, switch, close, and compile their matching feedback panels.
+
+## Scope
+
+- Replace the canvas-only pricing anchor chart with static HTML/CSS bar markup.
+- Preserve the existing "View as table" price-table fallback.
+- Refactor section feedback handling to find panels from the containing section.
+- Harden local feedback YAML compilation so it no-ops when no feedback option is selected.
+- Verify page script syntax, core page interactions, and whitespace-safe diff.
+
+## Non-Goals
+
+- Do not change the underlying feature/pricing research findings.
+- Do not modify shared alignment TTS loading unless it blocks the requested interactions.
+- Do not touch unrelated product code, dependencies, lockfiles, or GitHub Actions.
+
+## Plan
+
+- [x] Update task tracking docs with this execution plan.
+- [x] Replace the pricing canvas with readable HTML/CSS bars.
+- [x] Update feedback panel lookup and local YAML handling.
+- [x] Verify inline JavaScript syntax and interaction-critical markup/script paths.
+- [x] Record verification results in `tasks/todo.md`.
+- [ ] Commit and push intended tracked changes.
+
+---
+
 # FormForge Competitive Analysis SWOT Framework Roadmap
 
 ## Stage 3 Finalization

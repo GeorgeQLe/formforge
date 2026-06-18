@@ -1,5 +1,25 @@
 # FormForge Strategic Group Map Framework Roadmap
 
+## Stage 3 Finalization
+
+The user returned complete final compiled YAML on 2026-06-18 approving the Strategic Group Map artifact:
+
+- Axis selection: `approve_axes`
+- Whitespace and crowded zones: `approve_whitespace`
+- Evidence matrix: `sufficient_with_gaps`
+- Proposed file changes: `approve_scope`
+- Artifact destination: `research/competitive-analysis-strategic-group-map.md`
+
+- [x] Reconcile approval YAML with the active Strategic Group Map working packet and page.
+- [x] Write approved canonical artifact: `research/competitive-analysis-strategic-group-map.md`.
+- [x] Archive and remove active working packet: `research/_working/preliminary-strategic-group-map-research.md`.
+- [x] Mark `alignment/strategic-group-map-formforge.html` confirmed with the approval record preserved.
+- [x] Update central alignment index.
+- [x] Verify artifact structure, archive state, confirmed page controls, and git diff.
+- [x] Commit and push intended tracked changes.
+
+---
+
 ## Objective
 
 Run the next pending competitive-analysis framework, Strategic Group Map, for the flat FormForge client-service intake ICP and produce review-stage artifacts only.
@@ -24,8 +44,8 @@ Run the next pending competitive-analysis framework, Strategic Group Map, for th
 - [x] Write the non-canonical Strategic Group Map working packet.
 - [x] Build the Strategic Group Map review alignment page.
 - [x] Update the central alignment index.
-- [ ] Verify review artifacts, task docs, page script, and git diff.
-- [ ] Commit and push intended tracked changes.
+- [x] Verify review artifacts, task docs, page script, and git diff.
+- [x] Commit and push intended tracked changes.
 
 ---
 

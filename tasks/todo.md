@@ -1,5 +1,27 @@
 # Active Strategic Group Map Framework Review
 
+## Stage 3 Finalization
+
+- [x] Reconcile final approval YAML with the active Strategic Group Map working packet and page.
+- [x] Write approved canonical artifact: `research/competitive-analysis-strategic-group-map.md`.
+- [x] Archive and remove active working packet: `research/_working/preliminary-strategic-group-map-research.md`.
+- [x] Mark `alignment/strategic-group-map-formforge.html` confirmed with the approval record preserved.
+- [x] Update central alignment index.
+- [x] Verify artifact structure, archive state, confirmed page controls, and git diff.
+- [x] Commit and push intended tracked changes.
+
+### Review
+
+- Stage 3 Strategic Group Map finalization applied on 2026-06-18 from compiled approval YAML with no unanswered required questions.
+- Canonical artifact written: `research/competitive-analysis-strategic-group-map.md`.
+- Review-stage artifacts archived under `docs/history/archive/2026-06-18/140802/`.
+- Active working packet removed: `research/_working/preliminary-strategic-group-map-research.md`.
+- The Strategic Group Map alignment page is now confirmed and preserves the approved axis selection, whitespace interpretation, evidence coverage, and mutation scope.
+- All four selected competitive-analysis framework intermediates now exist; the next parent-loop phase is synthesis.
+- Verification: canonical artifact exists; active working packet is removed; archive copies exist; confirmed page reports `data-alignment-status="confirmed"` and includes read-only approval records; active gate inputs, feedback controls, local compile controls, required-gate registry, and response compiler are absent; inline page script parses; `alignment/index.html` lists the page as confirmed; all manifest-selected intermediates exist and `research/competitive-analysis.md` is still absent; `git diff --check` passed.
+
+---
+
 - [x] Resolve competitive-analysis state from `research/_working/competitive-analysis-run.yaml`.
 - [x] Confirm completed framework intermediates and missing Strategic Group Map intermediate.
 - [x] Gather approved ICP, existing framework outputs, repo context, and current public source evidence.

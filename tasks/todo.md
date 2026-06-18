@@ -1,3 +1,24 @@
+# Active Strategic Group Map Framework Review
+
+- [x] Resolve competitive-analysis state from `research/_working/competitive-analysis-run.yaml`.
+- [x] Confirm completed framework intermediates and missing Strategic Group Map intermediate.
+- [x] Gather approved ICP, existing framework outputs, repo context, and current public source evidence.
+- [x] Write non-canonical working packet: `research/_working/preliminary-strategic-group-map-research.md`.
+- [x] Build review page: `alignment/strategic-group-map-formforge.html`.
+- [x] Update central alignment index for the new review page.
+- [x] Verify framework-review outputs and git diff.
+- [x] Commit and push intended tracked changes.
+
+### Review
+
+- Stage 2 Strategic Group Map framework review drafted on 2026-06-18. The working packet clusters competitors around client-workflow depth and implementation footprint, with integration/automation maturity as an overlay.
+- Non-canonical review artifacts are `research/_working/preliminary-strategic-group-map-research.md` and `alignment/strategic-group-map-formforge.html`; the canonical Strategic Group Map intermediate remains unwritten pending final compiled YAML approval.
+- Verification: confirmed the working packet and review page exist; confirmed `research/competitive-analysis-strategic-group-map.md` does not exist; confirmed the page reports `data-alignment-status="review"` and includes required axis, whitespace, evidence, and proposed-file-change gates; confirmed parent-owned `agent_routing` routes back to `$competitive-analysis`; inline page script parses; `alignment/index.html` includes the new page and count; `git diff --check` passed.
+- Browser open status: packaged `npx skillpacks alignment pages open alignment/strategic-group-map-formforge.html --browser auto` succeeded and opened the local file URL.
+- Shipped on `main`; final commit hash is reported in the handoff.
+
+---
+
 # Active Feature/Pricing Matrix Stage 3 Finalization
 
 - [x] Reconcile final approval YAML with the active Feature/Pricing Matrix working packet and page.

@@ -1,3 +1,34 @@
+# FormForge Strategic Group Map Framework Roadmap
+
+## Objective
+
+Run the next pending competitive-analysis framework, Strategic Group Map, for the flat FormForge client-service intake ICP and produce review-stage artifacts only.
+
+## Scope Basis
+
+- Active product path: `research/`
+- Approved framework manifest: `research/_working/competitive-analysis-run.yaml`
+- Completed frameworks: Porter Five Forces, SWOT, and Feature/Pricing Matrix
+- Next pending framework: `strategic-group-map`
+
+## Non-Goals
+
+- Do not write canonical `research/competitive-analysis-strategic-group-map.md` before artifact approval.
+- Do not synthesize final `research/competitive-analysis.md` in this session.
+- Do not change product code, dependencies, lockfiles, or GitHub Actions.
+
+## Plan
+
+- [x] Resolve run state and confirm Strategic Group Map is the only pending framework.
+- [x] Gather approved ICP, existing framework outputs, and current public source evidence.
+- [x] Write the non-canonical Strategic Group Map working packet.
+- [x] Build the Strategic Group Map review alignment page.
+- [x] Update the central alignment index.
+- [ ] Verify review artifacts, task docs, page script, and git diff.
+- [ ] Commit and push intended tracked changes.
+
+---
+
 # FormForge Feature/Pricing Matrix Stage 3 Finalization Roadmap
 
 ## Objective

@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="review">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FormForge Strategic Group Map - Review</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+      --chart-1: #58a6ff;
+      --chart-2: #3fb950;
+      --chart-3: #d29922;
+      --chart-4: #bc8cff;
+      --chart-5: #f85149;
+      --chart-6: #79c0ff;
+      --chart-7: #f0883e;
+      --chart-8: #a5d6ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 44px 24px 72px;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { line-height: 1.2; letter-spacing: 0; color: #fff; }
+    h1 { margin: 0 0 12px; font-size: 2.1rem; }
+    h2 { margin: 34px 0 14px; font-size: 1.55rem; color: var(--accent); }
+    h3 { margin: 22px 0 10px; font-size: 1.15rem; }
+    p { margin: 0 0 12px; }
+    a { color: var(--accent); }
+    code {
+      background: #21262d;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 1px 5px;
+      font-size: 0.92em;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      margin-bottom: 18px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      padding: 4px 10px;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+    .lede { max-width: 900px; color: var(--text-muted); font-size: 1.05rem; }
+    .toc, .card, .callout, .gate, .chart-container, .table-wrap, .compile {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 16px 18px;
+    }
+    .toc { margin: 24px 0; }
+    .toc ol { margin: 8px 0 0; padding-left: 22px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(min(210px, 100%), 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .three { grid-template-columns: repeat(3, minmax(min(210px, 100%), 1fr)); }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      margin: 3px 4px 3px 0;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #1c2333;
+      padding: 3px 9px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .feedback {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 14px;
+    }
+    .feedback button { min-height: 36px; padding: 6px 10px; }
+    .feedback button[data-choice="emphasize"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-choice="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-choice="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+    .feedback-panel { display: none; margin: 8px 0 16px; }
+    .feedback-panel.is-visible { display: block; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+    }
+    .table-wrap {
+      overflow-x: auto;
+      margin: 14px 0;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.9rem;
+    }
+    th { color: #fff; background: #1c2333; }
+    tr:last-child td { border-bottom: 0; }
+    .chart-container { margin: 14px 0; }
+    .map {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background:
+        linear-gradient(to right, transparent 49.8%, var(--border) 49.8%, var(--border) 50.2%, transparent 50.2%),
+        linear-gradient(to bottom, transparent 49.8%, var(--border) 49.8%, var(--border) 50.2%, transparent 50.2%),
+        #0f1623;
+      overflow: hidden;
+    }
+    .axis-label {
+      position: absolute;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .axis-x-left { left: 12px; bottom: 10px; }
+    .axis-x-right { right: 12px; bottom: 10px; }
+    .axis-y-top { left: 12px; top: 10px; }
+    .axis-y-bottom { left: 12px; bottom: 42px; }
+    .point {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      min-width: 92px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #21262d;
+      padding: 6px 8px;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+    }
+    .g1 { border-color: var(--chart-1); }
+    .g2 { border-color: var(--chart-2); }
+    .g3 { border-color: var(--chart-3); }
+    .g4 { border-color: var(--chart-4); }
+    .whitespace {
+      position: absolute;
+      left: 52%;
+      top: 31%;
+      width: 27%;
+      min-height: 108px;
+      border: 1px dashed var(--green);
+      border-radius: 8px;
+      background: rgba(63,185,80,0.08);
+      padding: 10px;
+      color: #d8f8df;
+      font-size: 0.82rem;
+    }
+    .hidden { display: none; }
+    .question {
+      border: 1px solid var(--purple);
+      border-radius: 8px;
+      background: #1c2333;
+      padding: 14px;
+      margin-top: 12px;
+    }
+    .options { display: grid; gap: 8px; margin-top: 10px; }
+    label.option {
+      display: flex;
+      gap: 10px;
+      min-height: 44px;
+      align-items: flex-start;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f1623;
+      padding: 10px 12px;
+    }
+    label.option input { margin-top: 4px; }
+    textarea {
+      width: 100%;
+      min-height: 92px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f1623;
+      color: var(--text);
+      padding: 10px 12px;
+      font: inherit;
+      resize: vertical;
+      margin-top: 8px;
+    }
+    button {
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #21262d;
+      color: var(--text);
+      padding: 10px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.primary { border-color: var(--accent); background: var(--accent); color: #07111f; }
+    .compile { margin-top: 22px; border-color: var(--accent); }
+    #compiledYaml { min-height: 260px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .meta { color: var(--text-muted); font-size: 0.84rem; }
+    @media (max-width: 860px) {
+      main { padding: 32px 16px 56px; }
+      .grid, .three { grid-template-columns: 1fr; }
+      .map { min-height: 680px; }
+      .point { min-width: 84px; }
+      .whitespace { left: 43%; width: 45%; }
+    }
+    @media (max-width: 560px) {
+      h1 { font-size: 1.75rem; }
+      .point { font-size: 0.72rem; min-width: 72px; padding: 5px; }
+      .whitespace { position: static; margin: 12px; width: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="status">alignment_status: review - visual tier - 2026-06-18</div>
+    <h1>FormForge Strategic Group Map - Review</h1>
+    <p class="lede">This page reviews the final pending competitive-analysis framework. It renders the full non-canonical Strategic Group Map working packet and asks for approval before the parent orchestrator writes <code>research/competitive-analysis-strategic-group-map.md</code>.</p>
+
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#scope">Scope And Method</a></li>
+        <li><a href="#axis-selection">Axis Selection</a></li>
+        <li><a href="#map">Strategic Group Map</a></li>
+        <li><a href="#placements">Competitor Placement</a></li>
+        <li><a href="#groups">Strategic Groups</a></li>
+        <li><a href="#whitespace">Whitespace And Crowded Zones</a></li>
+        <li><a href="#evidence">Evidence Matrix</a></li>
+        <li><a href="#assumptions">Assumptions And Gaps</a></li>
+        <li><a href="#file-changes">Proposed File Changes</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
+      </ol>
+    </nav>
+
+    <section id="scope">
+      <h2>Scope And Method</h2>
+      <div class="feedback" data-section="scope"><button data-choice="emphasize">Emphasize</button><button data-choice="down">Thumbs down</button><button data-choice="needs-clarification">Clarification needed</button></div>
+      <div class="feedback-panel"><textarea data-feedback-notes placeholder="Optional section feedback"></textarea><button data-local-compile>Compile Feedback YAML</button><textarea readonly data-local-yaml></textarea></div>
+      <div class="grid">
+        <div class="card">
+          <h3>Scope</h3>
+          <p>Flat <code>research/</code> FormForge scope for client-service solo consultants, coaches, and small agencies doing client intake/onboarding.</p>
+          <p>FormForge's current product boundary remains the fresh-start AI-assisted form builder loop: describe, generate, edit visually, publish, receive submissions, and review/export responses.</p>
+        </div>
+        <div class="card">
+          <h3>Method</h3>
+          <p>The map clusters competitors by buyer-visible packaging and adoption tradeoffs. It does not rank vendors, recommend positioning, or write canonical synthesis.</p>
+          <p>Source checks used public pages from Typeform, Jotform, Tally, Fillout, Google Forms, HoneyBook, Dubsado, IntakeQ, Paperform, forms.app, Typeform MCP, and Jotform developer docs.</p>
+        </div>
+      </div>
+      <p><span class="pill">Review artifact</span><span class="pill">Canonical write pending approval</span><span class="pill">Parent route: $competitive-analysis</span></p>
+    </section>
+
+    <section id="axis-selection">
+      <h2>Axis Selection</h2>
+      <div class="feedback" data-section="axis-selection"><button data-choice="emphasize">Emphasize</button><button data-choice="down">Thumbs down</button><button data-choice="needs-clarification">Clarification needed</button></div>
+      <div class="feedback-panel"><textarea data-feedback-notes placeholder="Optional section feedback"></textarea><button data-local-compile>Compile Feedback YAML</button><textarea readonly data-local-yaml></textarea></div>
+      <div class="table-wrap" data-tts-narrative="The map uses client workflow depth and implementation footprint as primary axes, with integration and automation maturity as an overlay.">
+        <table>
+          <thead><tr><th>Axis</th><th>Why It Matters</th><th>Evidence</th><th>Confidence</th></tr></thead>
+          <tbody>
+            <tr><td>Client-workflow depth</td><td>Separates generic collection from lead capture, portals, reminders, contracts, invoices, signatures, secure sharing, or vertical intake.</td><td>HoneyBook/Dubsado suite breadth; IntakeQ vertical intake workflow; general builders emphasize forms, submissions, logic, templates, and integrations.</td><td>High</td></tr>
+            <tr><td>Implementation footprint</td><td>Separates tools adopted for one form from suites or vertical systems that imply workflow migration or operational change.</td><td>General builders expose self-serve/free plans; HoneyBook/Dubsado sell business-management suites; IntakeQ sells vertical intake/practice modules.</td><td>High</td></tr>
+            <tr><td>Integration/automation maturity overlay</td><td>Handoff depth matters to the ICP, but it cuts across both general builders and suites.</td><td>Tally, Paperform, Jotform, Typeform, and suite products all expose different integration/API/workflow surfaces.</td><td>Medium-high</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="question" data-gate="axis-selection">
+        <strong>Required gate: Axis selection</strong>
+        <p>Should the canonical intermediate use these axes?</p>
+        <div class="options">
+          <label class="option"><input type="radio" name="gate-axis-selection" value="approve_axes"> Approve client-workflow depth and implementation footprint as the primary axes.</label>
+          <label class="option"><input type="radio" name="gate-axis-selection" value="approve_with_edits"> Approve with edits noted below.</label>
+          <label class="option"><input type="radio" name="gate-axis-selection" value="other"> Other / None of the above.</label>
+          <label class="option"><input type="radio" name="gate-axis-selection" value="needs-clarification"> Need clarification.</label>
+        </div>
+        <textarea data-notes-for="gate-axis-selection" placeholder="Optional notes or required edits"></textarea>
+      </div>
+    </section>
+
+    <section id="map">
+      <h2>Strategic Group Map</h2>
+      <div class="feedback" data-section="strategic-group-map"><button data-choice="emphasize">Emphasize</button><button data-choice="down">Thumbs down</button><button data-choice="needs-clarification">Clarification needed</button></div>
+      <div class="feedback-panel"><textarea data-feedback-notes placeholder="Optional section feedback"></textarea><button data-local-compile>Compile Feedback YAML</button><textarea readonly data-local-yaml></textarea></div>
+      <div class="chart-container" data-tts-narrative="The map shows free and low-cost collectors in the low workflow low footprint corner, polished general builders in the crowded middle, client-service suites in the high workflow high footprint corner, and a plausible gap for focused client intake without suite migration.">
+        <button type="button" data-toggle-table="mapTable">View as table</button>
+        <div class="map" aria-label="Strategic group map: x axis implementation footprint, y axis client workflow depth">
+          <div class="axis-label axis-y-top">Higher client workflow depth</div>
+          <div class="axis-label axis-y-bottom">Lower workflow depth</div>
+          <div class="axis-label axis-x-left">Lower footprint</div>
+          <div class="axis-label axis-x-right">Higher footprint</div>
+          <div class="point g1" style="left:16%; top:78%;">Google Forms</div>
+          <div class="point g1" style="left:23%; top:68%;">Tally</div>
+          <div class="point g1" style="left:30%; top:65%;">forms.app</div>
+          <div class="point g2" style="left:38%; top:53%;">Fillout</div>
+          <div class="point g2" style="left:45%; top:48%;">Typeform</div>
+          <div class="point g2" style="left:47%; top:39%;">Paperform</div>
+          <div class="point g2" style="left:57%; top:34%;">Jotform</div>
+          <div class="point g3" style="left:78%; top:20%;">HoneyBook</div>
+          <div class="point g3" style="left:84%; top:25%;">Dubsado</div>
+          <div class="point g4" style="left:70%; top:16%;">IntakeQ</div>
+          <div class="whitespace"><strong>Plausible gap:</strong><br>Client-intake-specific workflow depth with lower suite-migration burden. Medium confidence until customer interviews validate it.</div>
+        </div>
+        <div class="table-wrap hidden" id="mapTable" data-tts-narrative="The fallback table lists each competitor group, representative products, workflow depth, implementation footprint, and confidence.">
+          <table>
+            <thead><tr><th>Group</th><th>Competitors</th><th>Workflow Depth</th><th>Footprint</th><th>Confidence</th></tr></thead>
+            <tbody>
+              <tr><td>Free/low-friction collectors</td><td>Google Forms, Tally, forms.app, Fillout</td><td>Low to medium</td><td>Very low to low-medium</td><td>High</td></tr>
+              <tr><td>Polished general platforms</td><td>Typeform, Paperform, Jotform, Fillout</td><td>Medium to medium-high</td><td>Low-medium</td><td>High</td></tr>
+              <tr><td>Client-service suites</td><td>HoneyBook, Dubsado</td><td>High</td><td>High</td><td>High</td></tr>
+              <tr><td>Vertical intake workflow</td><td>IntakeQ</td><td>High</td><td>Medium-high</td><td>Medium-high</td></tr>
+              <tr><td>Potential whitespace</td><td>No direct incumbent proven from current evidence</td><td>Medium-high</td><td>Low-medium</td><td>Medium</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="placements">
+      <h2>Competitor Placement</h2>
+      <div class="feedback" data-section="competitor-placement"><button data-choice="emphasize">Emphasize</button><button data-choice="down">Thumbs down</button><button data-choice="needs-clarification">Clarification needed</button></div>
+      <div class="feedback-panel"><textarea data-feedback-notes placeholder="Optional section feedback"></textarea><button data-local-compile>Compile Feedback YAML</button><textarea readonly data-local-yaml></textarea></div>
+      <div class="table-wrap" data-tts-narrative="The placement table cites public source evidence for every competitor placed on the strategic group map.">
+        <table>
+          <thead><tr><th>Competitor</th><th>Client-Workflow Depth</th><th>Implementation Footprint</th><th>Group</th><th>Evidence</th><th>Confidence</th></tr></thead>
+          <tbody>
+            <tr><td>Google Forms</td><td>Low</td><td>Very low</td><td>Free/workspace-bundled collector</td><td>Online forms and surveys with question types, customization, sharing/embed, response charts, and Sheets export. <a href="https://workspace.google.com/products/forms/">Source</a></td><td>High</td></tr>
+            <tr><td>Tally</td><td>Low-medium</td><td>Low</td><td>Generous free lightweight builder</td><td>Unlimited forms/submissions free within fair-use limits, logic, uploads, payments, redirects, and integrations. <a href="https://tally.so/pricing">Source</a></td><td>High</td></tr>
+            <tr><td>forms.app</td><td>Low-medium</td><td>Low</td><td>Low-cost AI-enabled general builder</td><td>Free plan with unlimited responses, 30+ field types, conditional logic, AI generator, and 500+ integrations. <a href="https://forms.app/en/pricing">Source</a></td><td>High</td></tr>
+            <tr><td>Fillout</td><td>Medium</td><td>Low-medium</td><td>Power general builder</td><td>Free unlimited forms/seats plus paid logic, payments, PDF generation, uploads, analytics, and business controls. <a href="https://www.fillout.com/pricing">Source</a></td><td>High</td></tr>
+            <tr><td>Typeform</td><td>Medium</td><td>Low-medium</td><td>Polished engagement/form platform</td><td>AI form creation, conditional logic, webhooks/integrations, response tiers, branding, analytics, Growth Flow, and enterprise. <a href="https://www.typeform.com/pricing">Source</a></td><td>High</td></tr>
+            <tr><td>Paperform</td><td>Medium</td><td>Low-medium</td><td>Polished operational form builder</td><td>AI creation, guided mode, logic, payments, uploads, 2,000+ integrations, webhooks, and API access. <a href="https://paperform.co/pricing/">Source</a></td><td>High</td></tr>
+            <tr><td>Jotform</td><td>Medium-high</td><td>Low-medium</td><td>Broad form operations platform</td><td>Forms, apps, tables, inbox, PDF tools, Sign, Workflows, AI, HIPAA forms, payments, widgets, and integrations. <a href="https://www.jotform.com/pricing/">Source</a></td><td>Medium-high</td></tr>
+            <tr><td>HoneyBook</td><td>High</td><td>High</td><td>Client-service suite</td><td>Lead forms, client portals, proposals/contracts, invoices, scheduling, automations, reporting, and AI. <a href="https://www.honeybook.com/pricing">Source</a></td><td>High</td></tr>
+            <tr><td>Dubsado</td><td>High</td><td>High</td><td>Client-service suite</td><td>Lead capture forms, portals, contracts/proposals, invoices, scheduling, workflows, email/calendar, and Zapier. <a href="https://www.dubsado.com/pricing">Source</a></td><td>High</td></tr>
+            <tr><td>IntakeQ</td><td>High</td><td>Medium-high</td><td>Vertical intake/practice management</td><td>Branded forms, attachments, e-signatures, reminders, secure sharing, export, HIPAA BAA, and practice-management tiers. <a href="https://intakeq.com/pricing">Source</a></td><td>High</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="groups">
+      <h2>Strategic Groups</h2>
+      <div class="feedback" data-section="strategic-groups"><button data-choice="emphasize">Emphasize</button><button data-choice="down">Thumbs down</button><button data-choice="needs-clarification">Clarification needed</button></div>
+      <div class="feedback-panel"><textarea data-feedback-notes placeholder="Optional section feedback"></textarea><button data-local-compile>Compile Feedback YAML</button><textarea readonly data-local-yaml></textarea></div>
+      <div class="grid">
+        <div class="card"><h3>Free Or Low-Friction Collectors</h3><p>Google Forms, Tally, forms.app, and parts of Fillout compete on availability, generous free tiers, low setup burden, and good-enough form capability.</p><p>Synthesis input: this is the strongest substitute cluster and creates a low price ceiling for generic intake.</p></div>
+        <div class="card"><h3>Polished General Form Platforms</h3><p>Typeform, Paperform, Jotform, and Fillout compete on richer builder capability, brand polish, logic, analytics, payments, integrations, API/webhook surfaces, templates, and AI creation.</p><p>Synthesis input: this crowded middle weakens any "AI forms plus logic" differentiation claim.</p></div>
+        <div class="card"><h3>Client-Service Operating Suites</h3><p>HoneyBook and Dubsado own the surrounding client workflow: lead capture, portal, contracts, invoices, scheduling, workflows, automation, and reports.</p><p>Synthesis input: suites are threats for buyers who want one system and a possible gap signal for suite-resistant buyers.</p></div>
+        <div class="card"><h3>Vertical Intake And Practice Workflow</h3><p>IntakeQ competes on intake as a secure vertical workflow with reminders, signatures, attachments, document sharing, export, and compliance support.</p><p>Synthesis input: specialized intake can support higher WTP when operational depth is central.</p></div>
+      </div>
+    </section>
+
+    <section id="whitespace">
+      <h2>Whitespace And Crowded Zones</h2>
+      <div class="feedback" data-section="whitespace"><button data-choice="emphasize">Emphasize</button><button data-choice="down">Thumbs down</button><button data-choice="needs-clarification">Clarification needed</button></div>
+      <div class="feedback-panel"><textarea data-feedback-notes placeholder="Optional section feedback"></textarea><button data-local-compile>Compile Feedback YAML</button><textarea readonly data-local-yaml></textarea></div>
+      <div class="grid">
+        <div class="card"><h3>Crowded Zones</h3><ul><li>Generic form creation and AI-assisted first drafts.</li><li>Low-cost basic collection.</li><li>Broad operational form platforms.</li><li>Full client-service workflow suites.</li></ul></div>
+        <div class="card"><h3>Whitespace Hypotheses</h3><ul><li>Client-intake-specific workflow without suite migration.</li><li>Post-submission handoff for service work.</li><li>Agent-operable intake handoff, but only if workflow-specific because Typeform MCP and Jotform APIs already exist.</li></ul></div>
+      </div>
+      <div class="question" data-gate="whitespace">
+        <strong>Required gate: Whitespace interpretation</strong>
+        <p>Should the canonical intermediate preserve this whitespace framing?</p>
+        <div class="options">
+          <label class="option"><input type="radio" name="gate-whitespace" value="approve_whitespace"> Approve the whitespace and crowded-zone interpretation with the stated confidence limits.</label>
+          <label class="option"><input type="radio" name="gate-whitespace" value="approve_with_edits"> Approve with edits noted below.</label>
+          <label class="option"><input type="radio" name="gate-whitespace" value="other"> Other / None of the above.</label>
+          <label class="option"><input type="radio" name="gate-whitespace" value="needs-clarification"> Need clarification.</label>
+        </div>
+        <textarea data-notes-for="gate-whitespace" placeholder="Optional notes or required edits"></textarea>
+      </div>
+    </section>
+
+    <section id="evidence">
+      <h2>Evidence Matrix</h2>
+      <div class="feedback" data-section="evidence"><button data-choice="emphasize">Emphasize</button><button data-choice="down">Thumbs down</button><button data-choice="needs-clarification">Clarification needed</button></div>
+      <div class="feedback-panel"><textarea data-feedback-notes placeholder="Optional section feedback"></textarea><button data-local-compile>Compile Feedback YAML</button><textarea readonly data-local-yaml></textarea></div>
+      <div class="table-wrap" data-tts-narrative="The evidence matrix distinguishes direct public-page evidence from the inferences used to place competitors and identify the main whitespace hypothesis.">
+        <table>
+          <thead><tr><th>Claim</th><th>Source</th><th>Evidence Type</th><th>Inference</th><th>Confidence</th></tr></thead>
+          <tbody>
+            <tr><td>Low-cost/free generic collection is crowded.</td><td>Google Forms, Tally, forms.app, Fillout</td><td>Public product/pricing evidence</td><td>Basic intake can be solved by free or low-cost alternatives.</td><td>High</td></tr>
+            <tr><td>The polished general-builder middle is crowded.</td><td>Typeform, Paperform, Jotform, Fillout</td><td>Competitor feature/pricing evidence</td><td>AI creation, logic, uploads, payments, integrations, analytics, and APIs/webhooks are common.</td><td>High</td></tr>
+            <tr><td>Client-service suites compete from above.</td><td>HoneyBook and Dubsado</td><td>Competitor packaging evidence</td><td>Buyers seeking broader client operations may choose a suite.</td><td>High</td></tr>
+            <tr><td>Specialized intake supports higher WTP with workflow/security depth.</td><td>IntakeQ</td><td>Vertical pricing/workflow evidence</td><td>Intake becomes more valuable when bundled with reminders, signatures, secure sharing, compliance, and workflows.</td><td>Medium-high</td></tr>
+            <tr><td>Main plausible gap is client-intake workflow without suite migration.</td><td>ICP pain map, HoneyBook/Dubsado suite breadth, generic-builder crowding</td><td>Approved ICP plus competitor inference</td><td>A suite-resistant segment may want more intake specificity than generic forms.</td><td>Medium</td></tr>
+            <tr><td>Agent-operable intake is not empty space by itself.</td><td>Typeform MCP and Jotform developer docs</td><td>Developer-platform evidence</td><td>Agent/API access needs a client-intake-specific workflow to matter.</td><td>Medium</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="question" data-gate="evidence-coverage">
+        <strong>Required gate: Evidence coverage</strong>
+        <p>Is the evidence sufficient for this framework intermediate?</p>
+        <div class="options">
+          <label class="option"><input type="radio" name="gate-evidence-coverage" value="sufficient_with_gaps"> Sufficient for Strategic Group Map with the listed source gaps preserved.</label>
+          <label class="option"><input type="radio" name="gate-evidence-coverage" value="needs_more_research"> Needs more research before canonical writing.</label>
+          <label class="option"><input type="radio" name="gate-evidence-coverage" value="other"> Other / None of the above.</label>
+          <label class="option"><input type="radio" name="gate-evidence-coverage" value="needs-clarification"> Need clarification.</label>
+        </div>
+        <textarea data-notes-for="gate-evidence-coverage" placeholder="Optional notes or missing evidence requests"></textarea>
+      </div>
+    </section>
+
+    <section id="assumptions">
+      <h2>Assumptions And Gaps</h2>
+      <div class="feedback" data-section="assumptions"><button data-choice="emphasize">Emphasize</button><button data-choice="down">Thumbs down</button><button data-choice="needs-clarification">Clarification needed</button></div>
+      <div class="feedback-panel"><textarea data-feedback-notes placeholder="Optional section feedback"></textarea><button data-local-compile>Compile Feedback YAML</button><textarea readonly data-local-yaml></textarea></div>
+      <div class="table-wrap" data-tts-narrative="The assumptions table flags which map judgments are evidence-backed and which would change after customer interviews or hands-on product trials.">
+        <table>
+          <thead><tr><th>Assumption</th><th>Status</th><th>Confidence</th><th>What Would Change It</th></tr></thead>
+          <tbody>
+            <tr><td>Client-workflow depth and implementation footprint are the right axes.</td><td>Evidence-backed by ICP and packaging.</td><td>High</td><td>Interviews showing price, design polish, compliance, or integrations dominate instead.</td></tr>
+            <tr><td>HoneyBook/Dubsado adoption feels like migration for some buyers.</td><td>Inferred from suite breadth and ICP alternatives.</td><td>Medium</td><td>Interviews showing target buyers prefer suite consolidation.</td></tr>
+            <tr><td>Jotform is closer to an operational platform than a lightweight builder.</td><td>Evidence-backed by product breadth.</td><td>Medium-high</td><td>Hands-on trials showing ICPs use only simple forms.</td></tr>
+            <tr><td>IntakeQ is a vertical proof point, not a primary direct competitor.</td><td>Evidence-backed by practice-management framing.</td><td>Medium-high</td><td>Discovery in regulated coaching, wellness, or therapy-adjacent segments showing direct overlap.</td></tr>
+            <tr><td>FormForge's potential gap is not yet validated.</td><td>Research gap.</td><td>High</td><td>Customer interviews or trials validating WTP for focused intake without suite migration.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">Source gaps: no target-buyer interviews, no hands-on trials, no market-share/traffic/review-volume analysis, time-sensitive public pricing, and no direct tests of Typeform MCP, Jotform APIs, Tally webhooks, or Paperform APIs.</p>
+    </section>
+
+    <section id="file-changes">
+      <h2>Proposed File Changes</h2>
+      <div class="feedback" data-section="file-changes"><button data-choice="emphasize">Emphasize</button><button data-choice="down">Thumbs down</button><button data-choice="needs-clarification">Clarification needed</button></div>
+      <div class="feedback-panel"><textarea data-feedback-notes placeholder="Optional section feedback"></textarea><button data-local-compile>Compile Feedback YAML</button><textarea readonly data-local-yaml></textarea></div>
+      <div class="table-wrap" data-tts-narrative="The proposed file changes write only the approved canonical Strategic Group Map intermediate after approval, archive the review-stage artifacts, and leave final synthesis for a later parent run.">
+        <table>
+          <thead><tr><th>Path</th><th>Action After Approval</th><th>Status Now</th></tr></thead>
+          <tbody>
+            <tr><td><code>research/competitive-analysis-strategic-group-map.md</code></td><td>Write canonical intermediate from the approved packet.</td><td>Not written.</td></tr>
+            <tr><td><code>research/_working/preliminary-strategic-group-map-research.md</code></td><td>Archive then remove active working packet.</td><td>Review packet exists.</td></tr>
+            <tr><td><code>alignment/strategic-group-map-formforge.html</code></td><td>Archive review page and replace with confirmed page after approval.</td><td>This review page.</td></tr>
+            <tr><td><code>research/competitive-analysis.md</code></td><td>No change in this phase.</td><td>Future synthesis only.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="question" data-gate="proposed-file-changes">
+        <strong>Required gate: Proposed file changes</strong>
+        <p>Approve the post-review mutation scope?</p>
+        <div class="options">
+          <label class="option"><input type="radio" name="gate-proposed-file-changes" value="approve_scope"> Approve writing the canonical Strategic Group Map intermediate and archiving/removing review-stage artifacts after approval.</label>
+          <label class="option"><input type="radio" name="gate-proposed-file-changes" value="other"> Other / None of the above.</label>
+          <label class="option"><input type="radio" name="gate-proposed-file-changes" value="needs-clarification"> Need clarification.</label>
+        </div>
+        <textarea data-notes-for="gate-proposed-file-changes" placeholder="Optional notes or file-change constraints"></textarea>
+      </div>
+    </section>
+
+    <section id="compile" class="compile">
+      <h2>Compile Responses</h2>
+      <p>Answer the required gates above, or select section feedback, then compile YAML. Complete approval lets the parent orchestrator write the canonical intermediate and recalculate the next phase.</p>
+      <button class="primary" id="compileResponses" type="button">Compile Responses</button>
+      <p id="compileStatus" class="meta" aria-live="polite"></p>
+      <textarea id="compiledYaml" readonly></textarea>
+    </section>
+  </main>
+
+  <script>
+    const pagePath = "alignment/strategic-group-map-formforge.html";
+    const requiredGates = [
+      ["axis-selection", "Axis Selection", "axis-selection", "gate-axis-selection"],
+      ["whitespace", "Whitespace And Crowded Zones", "candidate/verdict decisions", "gate-whitespace"],
+      ["evidence", "Evidence Matrix", "evidence coverage", "gate-evidence-coverage"],
+      ["file-changes", "Proposed File Changes", "proposed file changes", "gate-proposed-file-changes"]
+    ];
+
+    function yamlEscape(value) {
+      return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
+    }
+
+    function selectedRadio(name) {
+      return document.querySelector(`input[name="${name}"]:checked`);
+    }
+
+    function feedbackEntries() {
+      return Array.from(document.querySelectorAll(".feedback")).filter((control) => control.dataset.feedback).map((control) => {
+        const section = control.dataset.section;
+        const panel = control.nextElementSibling;
+        const notes = panel ? panel.querySelector("[data-feedback-notes]").value.trim() : "";
+        const feedback = control.dataset.feedback;
+        const action = feedback === "emphasize" ? "add-weight-to-section" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval";
+        return { section, feedback, notes, action };
+      });
+    }
+
+    function buildYaml(singleFeedback) {
+      const answers = [];
+      const unanswered = [];
+      requiredGates.forEach(([sectionId, section, gateType, radioName]) => {
+        const picked = selectedRadio(radioName);
+        if (!picked) {
+          unanswered.push(radioName);
+          return;
+        }
+        const notes = document.querySelector(`[data-notes-for="${radioName}"]`).value.trim();
+        const status = picked.value === "other" ? "other" : picked.value === "needs-clarification" ? "needs-clarification" : "answered";
+        answers.push({ section, gateType, status, answer: picked.value, notes, targetPath: sectionId === "file-changes" ? "research/competitive-analysis-strategic-group-map.md" : "" });
+      });
+      const feedback = singleFeedback ? [singleFeedback] : feedbackEntries();
+      const hasNegative = answers.some((a) => a.status !== "answered") || feedback.some((f) => f.feedback === "down" || f.feedback === "needs-clarification");
+      const complete = unanswered.length === 0 && !hasNegative;
+      const lines = [
+        `alignment_page: ${pagePath}`,
+        `response_status: ${unanswered.length === 0 ? "complete" : "partial"}`,
+        `approval_status: ${complete ? "ready-for-agent-review" : "not-approved"}`,
+        `required_gate_status: ${unanswered.length === 0 ? "complete" : "incomplete"}`,
+        "unanswered_required_questions:"
+      ];
+      if (unanswered.length) unanswered.forEach((item) => lines.push(`  - ${item}`)); else lines.push("  []");
+      if (answers.length) {
+        lines.push("gate_answers:");
+        answers.forEach((answer) => {
+          lines.push(`  - section: "${yamlEscape(answer.section)}"`);
+          lines.push(`    gate_type: "${yamlEscape(answer.gateType)}"`);
+          lines.push(`    status: "${answer.status}"`);
+          lines.push(`    answer: "${yamlEscape(answer.answer)}"`);
+          if (answer.notes) lines.push(`    notes: "${yamlEscape(answer.notes)}"`);
+          if (answer.targetPath) lines.push(`    target_path: "${answer.targetPath}"`);
+        });
+      }
+      if (feedback.length) {
+        lines.push("section_feedback:");
+        feedback.forEach((entry) => {
+          lines.push(`  - section: "${yamlEscape(entry.section)}"`);
+          lines.push(`    feedback: "${entry.feedback}"`);
+          if (entry.notes) lines.push(`    notes: "${yamlEscape(entry.notes)}"`);
+          lines.push(`    requested_agent_action: "${entry.action}"`);
+        });
+      }
+      lines.push("agent_routing:");
+      lines.push("  workflow: pattern-a-research-loop");
+      lines.push("  parent_skill: competitive-analysis");
+      lines.push("  command: \"$competitive-analysis\"");
+      lines.push("  gate_owner: parent-orchestrator");
+      lines.push("  gate_type: framework-findings");
+      lines.push("  framework_slug: strategic-group-map");
+      lines.push("  framework_mode: inline-subskill");
+      lines.push("  run_manifest: research/_working/competitive-analysis-run.yaml");
+      lines.push("  next_resolution: parent-resolves-from-yaml-and-filesystem");
+      return lines.join("\n");
+    }
+
+    document.querySelectorAll("[data-toggle-table]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const table = document.getElementById(button.dataset.toggleTable);
+        table.classList.toggle("hidden");
+        button.textContent = table.classList.contains("hidden") ? "View as table" : "Hide table";
+      });
+    });
+
+    document.querySelectorAll(".feedback").forEach((control) => {
+      control.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const same = control.dataset.feedback === button.dataset.choice;
+          control.querySelectorAll("button").forEach((b) => b.classList.remove("active"));
+          const panel = control.nextElementSibling;
+          if (same) {
+            delete control.dataset.feedback;
+            panel.classList.remove("is-visible");
+          } else {
+            control.dataset.feedback = button.dataset.choice;
+            button.classList.add("active");
+            panel.classList.add("is-visible");
+          }
+        });
+      });
+    });
+
+    document.querySelectorAll("[data-local-compile]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const panel = button.closest(".feedback-panel");
+        const control = panel.previousElementSibling;
+        if (!control.dataset.feedback) return;
+        const notes = panel.querySelector("[data-feedback-notes]").value.trim();
+        const feedback = control.dataset.feedback;
+        const action = feedback === "emphasize" ? "add-weight-to-section" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval";
+        const yaml = buildYaml({ section: control.dataset.section, feedback, notes, action });
+        panel.querySelector("[data-local-yaml]").value = yaml;
+        navigator.clipboard?.writeText(yaml).catch(() => {});
+      });
+    });
+
+    document.getElementById("compileResponses").addEventListener("click", () => {
+      const yaml = buildYaml();
+      document.getElementById("compiledYaml").value = yaml;
+      document.getElementById("compileStatus").textContent = "Compiled YAML is ready. It has also been copied when browser permissions allow.";
+      navigator.clipboard?.writeText(yaml).catch(() => {});
+    });
+  </script>
+  <script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

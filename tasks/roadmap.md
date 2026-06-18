@@ -26,7 +26,7 @@ The user provided final compiled YAML on 2026-06-18 approving:
 - [x] Mark `alignment/feature-pricing-matrix-formforge.html` confirmed and preserve approval decisions.
 - [x] Update central alignment index if needed.
 - [x] Verify canonical artifact, archive state, confirmed page controls, and git diff.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ---
 

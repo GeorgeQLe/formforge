@@ -5,7 +5,7 @@
 - [x] Archive and remove active working packet: `research/_working/preliminary-feature-pricing-matrix-research.md`.
 - [x] Mark `alignment/feature-pricing-matrix-formforge.html` confirmed with the approval record preserved.
 - [x] Verify artifact structure, archive state, confirmed page controls, and git diff.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ### Review
 
@@ -16,6 +16,7 @@
 - The Feature/Pricing alignment page is now confirmed and preserves the approved evidence coverage, artifact destination, and file-change decisions as read-only records.
 - Verification: canonical artifact exists and includes the approval reference plus required matrix sections; active working packet is removed; archive copies exist; confirmed page reports `data-alignment-status="confirmed"` and has no active gate inputs, textareas, section feedback controls, local compile controls, response counters, or required gate registry; inline page script parses; `alignment/index.html` lists the page as confirmed with `[visual]` and `2026-06-18`; `git diff --check` passed.
 - Browser open status: fallback `open alignment/feature-pricing-matrix-formforge.html` succeeded because no local `skillpacks` binary or source-checkout opener script was present.
+- Shipped on `main` in commit `412b266`.
 
 ---
 

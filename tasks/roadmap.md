@@ -25,7 +25,7 @@ Fix `alignment/feature-pricing-matrix-formforge.html` so pricing anchors are vis
 - [x] Update feedback panel lookup and local YAML handling.
 - [x] Verify inline JavaScript syntax and interaction-critical markup/script paths.
 - [x] Record verification results in `tasks/todo.md`.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ---
 

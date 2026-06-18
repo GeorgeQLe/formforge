@@ -5,7 +5,7 @@
 - [x] Update feedback panel lookup and local YAML handling.
 - [x] Verify inline JavaScript syntax and interaction-critical markup/script paths.
 - [x] Record verification results.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ### Review
 
@@ -15,6 +15,7 @@
 - Hardened local YAML compilation to return without output if no feedback option is selected.
 - Verification: inline script parse passed; static assertions confirmed eight styled pricing bars, no stale canvas drawing path, no sibling-based feedback lookup, and local feedback hardening; `git diff --check` passed.
 - Browser verification note: the in-app Browser Node REPL tool was unavailable and Safari state inspection timed out, so interaction verification was covered by syntax/static assertions rather than live browser automation.
+- Shipped on `main` in commit `59f78cd`.
 
 ---
 

@@ -1,3 +1,35 @@
+# FormForge Feature/Pricing Matrix Stage 3 Finalization Roadmap
+
+## Objective
+
+Consume the approved Feature/Pricing Matrix artifact YAML, write the canonical matrix, archive the approved working packet, and mark the alignment page confirmed.
+
+## Approval Input
+
+The user provided final compiled YAML on 2026-06-18 approving:
+
+- Evidence coverage with listed source gaps.
+- Canonical artifact destination: `research/competitive-analysis-feature-pricing-matrix.md`.
+- Proposed file changes: write canonical intermediate, archive working packet, and confirm `alignment/feature-pricing-matrix-formforge.html`.
+
+## Non-Goals
+
+- Do not run new competitor research unless verification finds a substantive blocker.
+- Do not run Strategic Group Map or competitive-analysis synthesis in this step.
+- Do not change product code, dependencies, lockfiles, or GitHub Actions.
+
+## Plan
+
+- [x] Reconcile approval YAML with the Feature/Pricing Matrix working packet and review page.
+- [x] Archive review-stage Feature/Pricing Matrix artifacts.
+- [x] Write canonical Feature/Pricing Matrix report: `research/competitive-analysis-feature-pricing-matrix.md`.
+- [x] Mark `alignment/feature-pricing-matrix-formforge.html` confirmed and preserve approval decisions.
+- [x] Update central alignment index if needed.
+- [x] Verify canonical artifact, archive state, confirmed page controls, and git diff.
+- [ ] Commit and push intended tracked changes.
+
+---
+
 # FormForge Feature/Pricing Alignment Interaction Fix Roadmap
 
 ## Objective

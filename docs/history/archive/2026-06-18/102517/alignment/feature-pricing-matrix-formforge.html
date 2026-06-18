@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="confirmed">
+<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="review">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FormForge Feature/Pricing Matrix - Confirmed</title>
+  <title>FormForge Feature/Pricing Matrix - Review</title>
   <style>
     :root {
       color-scheme: dark;
@@ -19,9 +19,9 @@
     h3 { margin: 20px 0 10px; font-size: 1.1rem; }
     a { color: var(--accent); }
     code { background: #222a35; border: 1px solid var(--border); border-radius: 5px; padding: 1px 5px; }
-    section, .toc, .notice, .card, .chart-container, .table-wrap { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+    section, .toc, .notice, .card, .chart-container, .table-wrap, .compile { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
     section { margin: 22px 0; padding: 20px; }
-    .toc, .notice { padding: 18px 20px; margin: 20px 0; }
+    .toc, .notice, .compile { padding: 18px 20px; margin: 20px 0; }
     .lede, .meta { color: var(--text-muted); }
     .status { display: inline-flex; align-items: center; min-height: 32px; border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px; color: var(--text-muted); font-weight: 700; font-size: 0.84rem; }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(min(210px, 100%), 1fr)); gap: 14px; margin: 14px 0; }
@@ -40,27 +40,38 @@
     .price-bar { width: var(--bar-width); min-width: 3px; height: 26px; border-radius: inherit; background: var(--bar-color); }
     .price-value { color: var(--text); font-weight: 700; white-space: nowrap; }
     button { min-height: 44px; border: 1px solid var(--border); border-radius: 8px; background: #21262d; color: var(--text); padding: 10px 16px; font: inherit; font-weight: 700; cursor: pointer; }
-    .table-wrap[hidden] { display: none; }
-    .approval-record { border-left: 4px solid var(--green); background: #10251b; }
-    .approval-record strong { color: #fff; }
+    button.primary { border-color: var(--accent); background: var(--accent); color: #06101d; }
+    .question-block { border: 1px solid #33425b; border-left: 4px solid var(--purple); border-radius: 8px; background: #1c2333; padding: 14px; margin-top: 14px; }
+    .gate-options { display: grid; gap: 8px; margin-top: 10px; }
+    label.option { display: flex; gap: 9px; align-items: flex-start; min-height: 44px; border: 1px solid var(--border); border-radius: 8px; background: #0d1117; padding: 10px 12px; }
+    label.option input { margin-top: 4px; }
+    textarea { width: 100%; min-height: 96px; resize: vertical; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font: inherit; background: #0d1117; color: var(--text); margin-top: 10px; }
+    .feedback { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 12px; }
+    .feedback button { min-height: 36px; padding: 7px 10px; font-size: 0.84rem; }
+    .feedback button[data-feedback="emphasize"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-feedback="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-feedback="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+    .feedback-panel[hidden], .table-wrap[hidden] { display: none; }
+    #compiledYaml, .local-yaml { min-height: 220px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.84rem; }
     @media (max-width: 860px) { .grid, .cards { grid-template-columns: 1fr; } main { width: min(100% - 24px, 1180px); padding-top: 28px; } }
     @media (max-width: 560px) { section, .toc, .notice { padding: 14px; } h1 { font-size: 1.75rem; } }
   </style>
 </head>
 <body>
   <main>
-    <p class="status">confirmed - 2026-06-18 - visual research artifact</p>
+    <p class="status">review - 2026-06-17 - visual research artifact</p>
     <h1>FormForge Feature/Pricing Matrix</h1>
-    <p class="lede">Confirmed Stage 3 Feature/Pricing Matrix record for the approved flat FormForge competitive-analysis scope. The approved canonical artifact is <code>research/competitive-analysis-feature-pricing-matrix.md</code>.</p>
+    <p class="lede">Stage 2 framework review for the approved flat FormForge competitive-analysis scope. This page renders the preliminary working packet for <code>research/_working/preliminary-feature-pricing-matrix-research.md</code> and asks whether it should become <code>research/competitive-analysis-feature-pricing-matrix.md</code>.</p>
 
     <section class="notice" id="review-status">
-      <h2>Confirmation Status</h2>
-      <p><strong>alignment_status:</strong> confirmed</p>
-      <p><strong>Confirmation date:</strong> 2026-06-18</p>
-      <p><strong>Confirmed artifact:</strong> <code>research/competitive-analysis-feature-pricing-matrix.md</code></p>
-      <p><strong>Archived review artifacts:</strong> <code>docs/history/archive/2026-06-18/102517/alignment/feature-pricing-matrix-formforge.html</code> and <code>docs/history/archive/2026-06-18/102517/research/_working/preliminary-feature-pricing-matrix-research.md</code></p>
-      <p><strong>Approval source summary:</strong> final compiled YAML reported <code>response_status: complete</code>, <code>approval_status: ready-for-agent-review</code>, <code>required_gate_status: complete</code>, and no unanswered required questions.</p>
-      <p>This page is current for the completed alignment cycle. Later research can amend it only by archiving this confirmed page and highlighting the amendment.</p>
+      <div class="feedback" data-section="review-status"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
+      <h2>Review Status</h2>
+      <p><strong>alignment_status:</strong> review</p>
+      <p><strong>Working packet:</strong> <code>research/_working/preliminary-feature-pricing-matrix-research.md</code></p>
+      <p><strong>Proposed canonical artifact after approval:</strong> <code>research/competitive-analysis-feature-pricing-matrix.md</code></p>
+      <p><strong>Loop position:</strong> 2 of 4 selected frameworks are complete. This review covers framework 3 of 4. Strategic Group Map remains pending after this framework is approved.</p>
+      <p><strong>Recommended next command after compiling YAML:</strong> <code>$competitive-analysis</code></p>
     </section>
 
     <nav class="toc" aria-label="Table of contents">
@@ -76,11 +87,14 @@
         <li><a href="#evidence-matrix">Evidence Matrix</a></li>
         <li><a href="#assumptions">Assumptions And Confidence</a></li>
         <li><a href="#synthesis-inputs">Preliminary Synthesis Inputs</a></li>
-        <li><a href="#approval-gates">Approval Record</a></li>
+        <li><a href="#approval-gates">Approval Gates</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
       </ul>
     </nav>
 
     <section id="basis">
+      <div class="feedback" data-section="basis"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
       <h2>Basis And Method</h2>
       <div class="grid">
         <div class="card"><h3>Inputs</h3><ul><li><code>research/_working/competitive-analysis-run.yaml</code></li><li><code>research/icp.md</code></li><li><code>research/competitive-analysis-porter-five-forces.md</code></li><li><code>research/competitive-analysis-swot.md</code></li><li><code>README.md</code> and previously cited repo evidence</li></ul></div>
@@ -90,6 +104,8 @@
     </section>
 
     <section id="market-boundary">
+      <div class="feedback" data-section="market-boundary"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
       <h2>Market Boundary</h2>
       <p>FormForge is evaluated as an AI-assisted client-intake form builder for small client-service businesses.</p>
       <div class="cards">
@@ -101,6 +117,8 @@
     </section>
 
     <section id="competitor-matrix">
+      <div class="feedback" data-section="competitor-matrix"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
       <h2>Competitor Matrix</h2>
       <div class="table-wrap" data-tts-narrative="The competitor matrix compares ten alternatives across segment, features, integrations, pricing model, public price, proof points, and source evidence.">
         <table>
@@ -122,6 +140,8 @@
     </section>
 
     <section id="pricing-chart">
+      <div class="feedback" data-section="pricing-chart"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
       <h2>Pricing Anchor Chart</h2>
       <p class="meta">Chart uses lowest visible paid monthly-equivalent entry where a public price was captured. Jotform and Google Forms are excluded because a comparable standalone public price was not captured.</p>
       <div class="chart-container" data-tts-narrative="The pricing anchor chart shows that low-cost general builders cluster from free to roughly twenty-four dollars per month, while client-service suites and specialized intake tools start around twenty-nine to fifty-five dollars monthly.">
@@ -143,6 +163,8 @@
     </section>
 
     <section id="feature-snapshot">
+      <div class="feedback" data-section="feature-snapshot"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
       <h2>Feature Coverage Snapshot</h2>
       <div class="table-wrap" data-tts-narrative="The feature coverage snapshot shows that AI creation and conditional logic are common, while client portals, contracts, invoices, and deep workflow handoff are concentrated in suite or vertical products.">
         <table><thead><tr><th>Capability</th><th>Market Coverage</th><th>FormForge Current Evidence</th><th>Interpretation</th></tr></thead><tbody>
@@ -158,6 +180,8 @@
     </section>
 
     <section id="gaps-patterns">
+      <div class="feedback" data-section="gaps-patterns"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
       <h2>Gaps And Patterns</h2>
       <div class="table-wrap" data-tts-narrative="The gaps and patterns table highlights free generic-form pressure, AI commoditization, suite bundling, specialized intake willingness to pay, integration depth, pricing anchors, and common upgrade levers.">
         <table><thead><tr><th>Pattern</th><th>Evidence</th><th>Opportunity/Risk</th><th>Confidence</th></tr></thead><tbody>
@@ -172,6 +196,8 @@
     </section>
 
     <section id="source-gaps">
+      <div class="feedback" data-section="source-gaps"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
       <h2>Source Gaps</h2>
       <div class="table-wrap" data-tts-narrative="The source gaps table calls out missing Jotform price details, incomplete integration depth for Fillout, complex Typeform add-on economics, promotional HoneyBook pricing uncertainty, missing review evidence, and lack of hands-on trials.">
         <table><thead><tr><th>Competitor</th><th>Missing Evidence</th><th>Why It Matters</th><th>Follow-up Query</th></tr></thead><tbody>
@@ -186,6 +212,8 @@
     </section>
 
     <section id="evidence-matrix">
+      <div class="feedback" data-section="evidence-matrix"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
       <h2>Evidence Matrix</h2>
       <div class="table-wrap" data-tts-narrative="The evidence matrix maps major claims to source evidence, inference, confidence, assumptions, and decision impact.">
         <table><thead><tr><th>Claim</th><th>Source</th><th>Evidence Type</th><th>Inference</th><th>Confidence</th><th>Assumption Status</th><th>Decision Impact</th></tr></thead><tbody>
@@ -196,15 +224,22 @@
           <tr><td>Integration depth is a visible gap for FormForge's current fresh-start scope.</td><td>Tally, Jotform, Paperform, Dubsado, HoneyBook, ICP, README.</td><td>Competitor plus repo/research evidence.</td><td>CSV export/notifications likely do not satisfy strongest handoff pains.</td><td class="high">High</td><td>Evidence-backed plus workflow inference.</td><td>Approve inclusion as a source gap/risk for synthesis.</td></tr>
         </tbody></table>
       </div>
-      <div class="approval-record card">
-        <h3>Research Completeness Approval</h3>
-        <p><strong>Section:</strong> Evidence Matrix</p>
-        <p><strong>Gate type:</strong> research completeness</p>
-        <p><strong>Decision:</strong> Approve evidence coverage with listed source gaps.</p>
+      <div class="question-block">
+        <h3>Research Completeness Gate</h3>
+        <p>Is this evidence sufficient for the Feature/Pricing Matrix intermediate?</p>
+        <div class="gate-options" data-gate="research-completeness" data-section="Evidence Matrix" data-gate-type="research completeness">
+          <label class="option"><input type="radio" name="research-completeness" value="Approve evidence coverage with listed source gaps">Approve evidence coverage with listed source gaps</label>
+          <label class="option"><input type="radio" name="research-completeness" value="Require more source checks before canonicalizing">Require more source checks before canonicalizing</label>
+          <label class="option"><input type="radio" name="research-completeness" value="Other / None of the above">Other / None of the above</label>
+          <label class="option"><input type="radio" name="research-completeness" value="Need clarification">Need clarification</label>
+        </div>
+        <textarea class="gate-notes" data-for="research-completeness" placeholder="Optional notes, clarification, or alternate decision"></textarea>
       </div>
     </section>
 
     <section id="assumptions">
+      <div class="feedback" data-section="assumptions"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
       <h2>Assumptions And Confidence</h2>
       <div class="table-wrap" data-tts-narrative="The assumptions register separates evidence-backed assumptions from unresolved buyer-preference and pricing-page uncertainty.">
         <table><thead><tr><th>Assumption</th><th>Status</th><th>Confidence</th><th>What Would Change It</th></tr></thead><tbody>
@@ -218,6 +253,8 @@
     </section>
 
     <section id="synthesis-inputs">
+      <div class="feedback" data-section="synthesis-inputs"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
       <h2>Preliminary Synthesis Inputs</h2>
       <ol>
         <li>The strongest pricing pressure comes from Tally, Fillout, forms.app, and Google Forms, not Typeform alone.</li>
@@ -230,35 +267,135 @@
     </section>
 
     <section id="approval-gates">
-      <h2>Approval Record</h2>
-      <div class="grid">
-        <div class="approval-record card">
-          <h3>Artifact Approval</h3>
-          <p><strong>Section:</strong> Approval Gates</p>
-          <p><strong>Gate type:</strong> artifact approval</p>
-          <p><strong>Decision:</strong> Approve canonical feature/pricing intermediate at <code>research/competitive-analysis-feature-pricing-matrix.md</code>.</p>
-          <p><strong>Target path:</strong> <code>research/competitive-analysis-feature-pricing-matrix.md</code></p>
+      <div class="feedback" data-section="approval-gates"><strong>Section feedback</strong><button type="button" data-feedback="emphasize">emphasize</button><button type="button" data-feedback="down">thumbs down</button><button type="button" data-feedback="needs-clarification">clarification needed</button></div>
+      <div class="feedback-panel" hidden><textarea placeholder="Optional section feedback"></textarea><button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><textarea class="local-yaml" readonly></textarea></div>
+      <h2>Approval Gates</h2>
+      <div class="question-block">
+        <h3>Framework Artifact Gate</h3>
+        <p>Should this reviewed packet be promoted to the canonical feature/pricing intermediate?</p>
+        <div class="gate-options" data-gate="artifact-approval" data-section="Approval Gates" data-gate-type="artifact approval" data-target-path="research/competitive-analysis-feature-pricing-matrix.md">
+          <label class="option"><input type="radio" name="artifact-approval" value="Approve canonical feature/pricing intermediate at research/competitive-analysis-feature-pricing-matrix.md">Approve canonical feature/pricing intermediate at <code>research/competitive-analysis-feature-pricing-matrix.md</code></label>
+          <label class="option"><input type="radio" name="artifact-approval" value="Approve with edits listed in notes">Approve with edits listed in notes</label>
+          <label class="option"><input type="radio" name="artifact-approval" value="Other / None of the above">Other / None of the above</label>
+          <label class="option"><input type="radio" name="artifact-approval" value="Need clarification">Need clarification</label>
         </div>
-        <div class="approval-record card">
-          <h3>Proposed File Changes</h3>
-          <p><strong>Section:</strong> Approval Gates</p>
-          <p><strong>Gate type:</strong> proposed file changes</p>
-          <p><strong>Decision:</strong> Approve writing canonical intermediate, archiving working packet, and confirming this page.</p>
-          <p><strong>Target path:</strong> <code>research/competitive-analysis-feature-pricing-matrix.md</code></p>
-        </div>
+        <textarea class="gate-notes" data-for="artifact-approval" placeholder="Optional notes, edits, clarification, or alternate destination"></textarea>
       </div>
-      <h3>Compiled Approval YAML Summary</h3>
-      <ul>
-        <li><code>alignment_page:</code> <code>alignment/feature-pricing-matrix-formforge.html</code></li>
-        <li><code>response_status:</code> complete</li>
-        <li><code>approval_status:</code> ready-for-agent-review</li>
-        <li><code>required_gate_status:</code> complete</li>
-        <li><code>unanswered_required_questions:</code> none</li>
-      </ul>
+      <div class="question-block">
+        <h3>Proposed File Changes Gate</h3>
+        <p>Which file changes are approved after this review?</p>
+        <div class="gate-options" data-gate="file-changes" data-section="Approval Gates" data-gate-type="proposed file changes" data-target-path="research/competitive-analysis-feature-pricing-matrix.md">
+          <label class="option"><input type="radio" name="file-changes" value="Approve writing canonical intermediate, archiving working packet, and confirming this page">Approve writing canonical intermediate, archiving working packet, and confirming this page</label>
+          <label class="option"><input type="radio" name="file-changes" value="Keep as working packet and revise page only">Keep as working packet and revise page only</label>
+          <label class="option"><input type="radio" name="file-changes" value="Other / None of the above">Other / None of the above</label>
+          <label class="option"><input type="radio" name="file-changes" value="Need clarification">Need clarification</label>
+        </div>
+        <textarea class="gate-notes" data-for="file-changes" placeholder="Optional notes or file-scope constraints"></textarea>
+      </div>
+    </section>
+
+    <section class="compile" id="compile">
+      <h2>Compile Responses</h2>
+      <p>Answer any gate questions or select section feedback, then compile YAML for the agent. Complete approval requires all required gates answered and no unresolved down or clarification feedback.</p>
+      <button type="button" class="primary" id="compileResponses">Compile Responses</button>
+      <button type="button" id="copyCompiled">Copy YAML</button>
+      <p id="compileStatus" class="meta"></p>
+      <textarea id="compiledYaml" readonly></textarea>
     </section>
   </main>
 
   <script>
+    const pagePath = "alignment/feature-pricing-matrix-formforge.html";
+    const requiredGates = ["research-completeness", "artifact-approval", "file-changes"];
+    function yamlEscape(value) { return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"'); }
+    function feedbackPanelFor(control) {
+      return control.closest("section, .notice")?.querySelector(".feedback-panel") || null;
+    }
+    function selectedFeedback() {
+      return Array.from(document.querySelectorAll(".feedback[data-active-feedback]")).map((control) => {
+        const panel = feedbackPanelFor(control);
+        const notes = panel ? panel.querySelector("textarea").value.trim() : "";
+        const feedback = control.dataset.activeFeedback;
+        const action = feedback === "emphasize" ? "add-weight-to-section" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval";
+        return { section: control.dataset.section, feedback, notes, requested_agent_action: action };
+      });
+    }
+    function gateAnswers() {
+      return Array.from(document.querySelectorAll(".gate-options")).map((gate) => {
+        const checked = gate.querySelector("input:checked");
+        if (!checked) return null;
+        const notes = document.querySelector(`.gate-notes[data-for="${gate.dataset.gate}"]`)?.value.trim() || "";
+        const status = checked.value === "Need clarification" ? "needs-clarification" : checked.value === "Other / None of the above" ? "other" : "answered";
+        return { gate_id: gate.dataset.gate, section: gate.dataset.section, gate_type: gate.dataset.gateType, status, answer: checked.value, notes, target_path: gate.dataset.targetPath || "" };
+      }).filter(Boolean);
+    }
+    function buildYaml(localFeedback) {
+      const answers = gateAnswers();
+      const feedback = localFeedback ? [localFeedback] : selectedFeedback();
+      const unanswered = requiredGates.filter((gate) => !answers.some((answer) => answer.gate_id === gate));
+      const hasNegative = feedback.some((item) => item.feedback === "down" || item.feedback === "needs-clarification") || answers.some((answer) => answer.status === "needs-clarification");
+      const complete = unanswered.length === 0 && !hasNegative;
+      const lines = [`alignment_page: ${pagePath}`, localFeedback ? "feedback_status: revision-request" : `response_status: ${complete ? "complete" : "partial"}`, `approval_status: ${complete ? "ready-for-agent-review" : "not-approved"}`, `required_gate_status: ${unanswered.length === 0 ? "complete" : "incomplete"}`, "unanswered_required_questions:"];
+      if (unanswered.length) unanswered.forEach((gate) => lines.push(`  - ${gate}`)); else lines.push("  []");
+      if (answers.length && !localFeedback) {
+        lines.push("gate_answers:");
+        answers.forEach((answer) => {
+          lines.push(`  - section: "${yamlEscape(answer.section)}"`);
+          lines.push(`    gate_type: "${yamlEscape(answer.gate_type)}"`);
+          lines.push(`    status: "${yamlEscape(answer.status)}"`);
+          lines.push(`    answer: "${yamlEscape(answer.answer)}"`);
+          if (answer.target_path) lines.push(`    target_path: "${yamlEscape(answer.target_path)}"`);
+          if (answer.notes) lines.push(`    notes: "${yamlEscape(answer.notes)}"`);
+        });
+      }
+      if (feedback.length) {
+        lines.push("section_feedback:");
+        feedback.forEach((item) => {
+          lines.push(`  - section: "${yamlEscape(item.section)}"`);
+          lines.push(`    feedback: "${yamlEscape(item.feedback)}"`);
+          lines.push(`    requested_agent_action: "${yamlEscape(item.requested_agent_action)}"`);
+          if (item.notes) lines.push(`    notes: "${yamlEscape(item.notes)}"`);
+        });
+      }
+      return lines.join("\n") + "\n";
+    }
+    async function copyText(text, statusEl) {
+      try { await navigator.clipboard.writeText(text); if (statusEl) statusEl.textContent = "YAML copied to clipboard."; }
+      catch (error) { if (statusEl) statusEl.textContent = "Copy blocked. Select the YAML textarea and copy manually."; }
+    }
+    document.querySelectorAll(".feedback").forEach((control) => {
+      control.querySelectorAll("button[data-feedback]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const active = button.classList.contains("active");
+          control.querySelectorAll("button[data-feedback]").forEach((candidate) => candidate.classList.remove("active"));
+          const panel = feedbackPanelFor(control);
+          if (active) { delete control.dataset.activeFeedback; if (panel) panel.hidden = true; }
+          else { button.classList.add("active"); control.dataset.activeFeedback = button.dataset.feedback; if (panel) panel.hidden = false; }
+        });
+      });
+    });
+    document.querySelectorAll(".compile-local").forEach((button) => {
+      button.addEventListener("click", () => {
+        const panel = button.closest(".feedback-panel");
+        const control = panel?.closest("section, .notice")?.querySelector(".feedback");
+        if (!control || !control.dataset.activeFeedback) return;
+        const feedback = control.dataset.activeFeedback;
+        const notes = panel.querySelector("textarea").value.trim();
+        const action = feedback === "emphasize" ? "add-weight-to-section" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval";
+        const yaml = buildYaml({ section: control.dataset.section, feedback, notes, requested_agent_action: action });
+        const output = panel.querySelector(".local-yaml");
+        output.value = yaml;
+        copyText(yaml);
+      });
+    });
+    document.querySelectorAll(".copy-local").forEach((button) => button.addEventListener("click", () => copyText(button.closest(".feedback-panel").querySelector(".local-yaml").value)));
+    document.getElementById("compileResponses").addEventListener("click", () => {
+      const yaml = buildYaml();
+      document.getElementById("compiledYaml").value = yaml;
+      document.getElementById("compileStatus").textContent = yaml.includes("ready-for-agent-review") ? "Complete YAML compiled." : "Partial or revision-request YAML compiled.";
+      copyText(yaml, document.getElementById("compileStatus"));
+    });
+    document.getElementById("copyCompiled").addEventListener("click", () => copyText(document.getElementById("compiledYaml").value, document.getElementById("compileStatus")));
     document.querySelectorAll(".toggle-table").forEach((button) => button.addEventListener("click", () => {
       const table = document.getElementById(button.dataset.target);
       table.hidden = !table.hidden;

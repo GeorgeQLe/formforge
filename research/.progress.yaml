@@ -15,9 +15,13 @@ product_paths:
       - research/icp.md
       - research/icp-search-log.md
     revisit_trigger: Continue downstream research and validation for the approved primary ICP.
-    next_skill: competitive-analysis
-    last_touched: "2026-06-15"
-    pipeline_stage: icp
+    next_skill: journey-map
+    last_touched: "2026-06-19"
+    pipeline_stage: competitive-analysis
+    competitive_analysis_refs:
+      - alignment/competitive-analysis-synthesis-formforge.html
+      - research/competitive-analysis.md
+      - research/competitive-analysis-search-log.md
   - id: lead-quote-forms
     label: Small service lead and quote forms
     source_skill: icp

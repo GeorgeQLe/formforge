@@ -1,3 +1,37 @@
+# FormForge Competitive Analysis Stage 3 Finalization Roadmap
+
+## Objective
+
+Consume the approved competitive-analysis synthesis YAML, write the canonical competitive landscape report and search log, archive the consumed working state, and mark the synthesis alignment page confirmed.
+
+## Approval Input
+
+The user provided final compiled YAML on 2026-06-19 approving:
+
+- Synthesis conclusion: `approve_synthesis`
+- Evidence coverage: `sufficient_with_gaps`
+- Artifact destination: `research/competitive-analysis.md; research/competitive-analysis-search-log.md`
+- Deferred path implications: `preserve_no_promotion`
+- Post-approval route: `approve_customer_lifecycle_install`
+
+## Non-Goals
+
+- Do not run new competitor research or change the approved synthesis unless verification finds a blocker.
+- Do not promote deferred product paths.
+- Do not change product code, dependencies, lockfiles, or GitHub Actions.
+
+## Plan
+
+- [x] Reconcile final approval YAML with the active synthesis working packet and review page.
+- [x] Write canonical artifacts: `research/competitive-analysis.md` and `research/competitive-analysis-search-log.md`.
+- [x] Archive and remove consumed working state: synthesis packet and run manifest.
+- [x] Mark `alignment/competitive-analysis-synthesis-formforge.html` confirmed with the approval record preserved.
+- [x] Update `research/.progress.yaml` and central alignment index.
+- [x] Verify artifact structure, archive state, confirmed page controls, and git diff.
+- [x] Commit and push intended tracked changes.
+
+---
+
 # FormForge Competitive Analysis Synthesis Roadmap
 
 ## Objective

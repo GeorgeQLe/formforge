@@ -1,3 +1,24 @@
+# Active Competitive Analysis Synthesis Review
+
+- [x] Resolve synthesis state from `research/_working/competitive-analysis-run.yaml`.
+- [x] Read approved framework intermediates and active product context.
+- [x] Refresh current competitor/pricing/source facts where needed.
+- [x] Write non-canonical working packet: `research/_working/preliminary-competitive-analysis-research.md`.
+- [x] Build review page: `alignment/competitive-analysis-synthesis-formforge.html`.
+- [x] Update central alignment index.
+- [x] Verify review artifacts and git diff.
+- [x] Commit and push intended tracked changes.
+
+### Review
+
+- Stage 2 competitive-analysis synthesis review drafted on 2026-06-19 from the four approved framework intermediates.
+- Non-canonical review artifacts are `research/_working/preliminary-competitive-analysis-research.md` and `alignment/competitive-analysis-synthesis-formforge.html`; canonical `research/competitive-analysis.md` and `research/competitive-analysis-search-log.md` remain unwritten pending final compiled YAML approval.
+- The synthesis frames the main competitive gap as client-intake-specific workflow without suite migration, while preserving high-confidence risks around free/low-cost generic builders, AI feature commoditization, integration/handoff depth, and suite gravity.
+- Verification: all manifest-selected intermediates exist; canonical `research/competitive-analysis.md` is absent; review page reports `data-alignment-status="review"` with `data-visual-tier="visual"`; required gates include Other/None and Need clarification options; parent-owned `agent_routing` routes back to `$competitive-analysis --synthesize`; inline page script parses; `alignment/index.html` includes the new page and count; `git diff --check` passed.
+- Browser open status: `npx skillpacks alignment pages open alignment/competitive-analysis-synthesis-formforge.html --browser auto` succeeded and opened the local file URL.
+
+---
+
 # Active Strategic Group Map Framework Review
 
 ## Stage 3 Finalization

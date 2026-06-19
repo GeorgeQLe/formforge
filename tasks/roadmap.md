@@ -1,3 +1,35 @@
+# FormForge Competitive Analysis Synthesis Roadmap
+
+## Objective
+
+Build the Stage 2 synthesis review for the approved FormForge competitive-analysis framework set without writing canonical `research/competitive-analysis.md` before final artifact approval.
+
+## Scope Basis
+
+- Active product path: flat `research/`
+- Approved run manifest: `research/_working/competitive-analysis-run.yaml`
+- Approved intermediates: Porter Five Forces, SWOT, Feature/Pricing Matrix, and Strategic Group Map
+- Requested shortcut: `$competitive-analysis --synthesize`
+
+## Non-Goals
+
+- Do not overwrite or create canonical `research/competitive-analysis.md` until final compiled YAML approval.
+- Do not change product code, dependencies, lockfiles, or GitHub Actions.
+- Do not run downstream positioning, journey-map, GTM, or MVP-gap work in this session.
+
+## Plan
+
+- [x] Resolve synthesis state from the manifest and approved intermediate files.
+- [x] Read the approved intermediate artifacts, ICP, source logs, and pack availability context.
+- [x] Refresh volatile competitor/pricing/source facts with current web checks where needed.
+- [x] Write the non-canonical synthesis working packet.
+- [x] Build the synthesis review alignment page.
+- [x] Update the central alignment index.
+- [x] Verify artifact structure, page controls, script syntax, and git diff.
+- [x] Commit and push intended tracked changes.
+
+---
+
 # FormForge Strategic Group Map Framework Roadmap
 
 ## Stage 3 Finalization

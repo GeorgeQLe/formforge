@@ -1,3 +1,34 @@
+# FormForge Journey Map Stage 1 Scope Gate Roadmap
+
+## Objective
+
+Create the journey-map framework-selection review page for the active flat FormForge research scope, then stop for compiled YAML approval before writing a run manifest or running framework research.
+
+## Scope Basis
+
+- Active product path: flat `research/` from `research/.progress.yaml`.
+- Hard prerequisite: `research/icp.md` exists and is confirmed.
+- Soft context available: `research/competitive-analysis.md`, README, CLAUDE, package metadata, and existing alignment pages.
+- No active journey-map run manifest or canonical journey-map artifact exists.
+
+## Non-Goals
+
+- Do not perform synthesized journey research in Stage 1.
+- Do not write `research/_working/journey-map-run.yaml`.
+- Do not write canonical `research/journey-map.md` or framework intermediates.
+- Do not change product code, dependencies, lockfiles, or GitHub Actions.
+
+## Plan
+
+- [x] Resolve active scope and journey-map state from filesystem and progress manifest.
+- [x] Gather minimal scope evidence from ICP, competitive analysis, README, CLAUDE, and package metadata.
+- [x] Build review alignment page: `alignment/journey-map-formforge.html`.
+- [x] Update central alignment index for the new review page.
+- [x] Verify the page includes scope evidence, framework-selection gates, agent routing, TTS script, and no synthesized journey findings.
+- [x] Stop for compiled YAML approval before creating the run manifest or running a framework.
+
+---
+
 # FormForge Competitive Analysis Stage 3 Finalization Roadmap
 
 ## Objective

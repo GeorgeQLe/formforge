@@ -1,0 +1,924 @@
+<!doctype html>
+<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="review">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FormForge Journey Map Framework Selection</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #1c2333;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+      --chart-1: #58a6ff;
+      --chart-2: #3fb950;
+      --chart-3: #d29922;
+      --chart-4: #bc8cff;
+      --chart-5: #f85149;
+      --chart-6: #79c0ff;
+      --chart-7: #f0883e;
+      --chart-8: #a5d6ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1120px, calc(100% - 32px));
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 40px 0 72px;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { color: #fff; line-height: 1.2; letter-spacing: 0; }
+    h1 { margin: 0 0 12px; font-size: 2.1rem; }
+    h2 { margin: 0 0 14px; font-size: 1.45rem; color: var(--accent); }
+    h3 { margin: 18px 0 10px; font-size: 1.05rem; }
+    p { margin: 0 0 12px; }
+    a { color: var(--accent); }
+    code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #0b1220;
+      color: #e6edf3;
+    }
+    ul { margin-top: 8px; padding-left: 22px; }
+    li { margin: 4px 0; }
+    .hero, section, .toc {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 22px;
+      margin: 18px 0;
+    }
+    .hero {
+      border-left: 4px solid var(--purple);
+      background: linear-gradient(180deg, #161b22 0%, #101722 100%);
+    }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: #0b1220;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+    .pill.good { border-color: rgba(63, 185, 80, 0.5); color: var(--green); }
+    .pill.warn { border-color: rgba(210, 153, 34, 0.55); color: var(--orange); }
+    .pill.review { border-color: rgba(188, 140, 255, 0.55); color: var(--purple); }
+    .toc {
+      background: #111827;
+    }
+    .toc ul {
+      columns: 2;
+      gap: 32px;
+      margin-bottom: 0;
+    }
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .feedback {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .feedback button, .toggle, .compile-button, .copy-button {
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0b1220;
+      color: var(--text);
+      padding: 10px 16px;
+      font: inherit;
+      cursor: pointer;
+    }
+    .feedback button[aria-pressed="true"][data-kind="emphasize"] { border-color: var(--green); color: var(--green); }
+    .feedback button[aria-pressed="true"][data-kind="down"] { border-color: var(--red); color: var(--red); }
+    .feedback button[aria-pressed="true"][data-kind="needs-clarification"] { border-color: var(--orange); color: var(--orange); }
+    .feedback-panel {
+      display: none;
+      margin-top: 12px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f1623;
+    }
+    .feedback-panel.is-visible { display: block; }
+    label { display: block; font-weight: 700; margin-bottom: 6px; }
+    textarea, input[type="text"] {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0b1220;
+      color: var(--text);
+      font: inherit;
+      padding: 10px 12px;
+    }
+    textarea { min-height: 108px; resize: vertical; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(min(260px, 100%), 1fr));
+      gap: 14px;
+    }
+    .cards-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(min(220px, 100%), 1fr));
+      gap: 14px;
+    }
+    .card, .framework-card, .question-block, .notice {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f1623;
+      padding: 16px;
+    }
+    .framework-card.default {
+      border-color: rgba(63, 185, 80, 0.55);
+      box-shadow: inset 4px 0 0 var(--green);
+    }
+    .framework-card.optional {
+      border-color: rgba(88, 166, 255, 0.45);
+      box-shadow: inset 4px 0 0 var(--accent);
+    }
+    .framework-card h3 {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 0;
+    }
+    .question-block {
+      margin-top: 14px;
+      background: var(--surface-2);
+      border-left: 4px solid var(--purple);
+    }
+    .question-block fieldset {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+    .question-block legend {
+      color: #fff;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .option {
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      min-height: 44px;
+      padding: 8px 0;
+    }
+    .option input { margin-top: 4px; }
+    .option-notes { display: none; margin: 4px 0 12px 32px; }
+    .option-notes.is-visible { display: block; }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+    table {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: collapse;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 11px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--surface);
+      color: #fff;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .chart-container {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0b1220;
+      padding: 16px;
+      margin-top: 12px;
+    }
+    svg { max-width: 100%; height: auto; display: block; }
+    .compile-section {
+      border-color: rgba(188, 140, 255, 0.6);
+      background: #111827;
+    }
+    .compile-button {
+      background: var(--purple);
+      color: #0d1117;
+      border-color: var(--purple);
+      font-weight: 800;
+    }
+    .copy-button { margin-left: 8px; }
+    .status {
+      min-height: 28px;
+      margin-top: 10px;
+      color: var(--text-muted);
+    }
+    .yaml-output {
+      margin-top: 12px;
+      min-height: 260px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre;
+    }
+    .muted { color: var(--text-muted); }
+    .no-findings {
+      border-left: 4px solid var(--orange);
+      background: #19150a;
+    }
+    @media (max-width: 860px) {
+      main { width: min(100% - 24px, 1120px); padding-top: 28px; }
+      .toc ul { columns: 1; }
+      .cards-3 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      main { width: min(100% - 16px, 1120px); }
+      .hero, section, .toc { padding: 16px; }
+      h1 { font-size: 1.7rem; }
+      table { min-width: 640px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <p class="muted">Review alignment page · Stage 1 scope and framework-selection gate</p>
+      <h1>FormForge Journey Map Framework Selection</h1>
+      <p>This page proposes the journey-map research scope and framework set for the active FormForge flat research path. It is a scope gate only: it identifies available source categories and approval questions before any synthesized journey research, working packet, run manifest, framework intermediate, or canonical journey-map artifact is created.</p>
+      <div class="meta-row">
+        <span class="pill review">alignment_status: review</span>
+        <span class="pill">Date: 2026-06-19</span>
+        <span class="pill">Scope: research/</span>
+        <span class="pill">Skill: journey-map</span>
+        <span class="pill">Visual tier: visual</span>
+      </div>
+    </header>
+
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Table Of Contents</h2>
+      <ul>
+        <li><a href="#stage-boundary">Stage Boundary</a></li>
+        <li><a href="#scope-resolution">Scope Resolution</a></li>
+        <li><a href="#mode-detection">Mode Detection</a></li>
+        <li><a href="#source-plan">Available Source Categories</a></li>
+        <li><a href="#framework-selection">Framework Selection</a></li>
+        <li><a href="#loop-plan">Loop Plan</a></li>
+        <li><a href="#output-paths">Output Paths</a></li>
+        <li><a href="#assumptions">Assumptions And Confidence</a></li>
+        <li><a href="#stage-two-preview">Stage 2 Preview</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
+      </ul>
+    </nav>
+
+    <section id="stage-boundary" data-section="stage-boundary">
+      <div class="section-head">
+        <h2>Stage Boundary</h2>
+        <div class="feedback" data-feedback-for="stage-boundary">
+          <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+          <button type="button" data-kind="down" aria-pressed="false">Down</button>
+          <button type="button" data-kind="needs-clarification" aria-pressed="false">Clarify</button>
+        </div>
+      </div>
+      <p class="notice no-findings"><strong>No synthesized journey findings are included on this page.</strong> The purpose is to approve scope and framework selection before the parent loop writes a run manifest or enters the first framework research phase.</p>
+      <div class="cards-3">
+        <div class="card">
+          <h3>Allowed In This Stage</h3>
+          <p>Resolve scope, identify source categories, detect mode, propose framework set, define output paths, and ask approval questions.</p>
+        </div>
+        <div class="card">
+          <h3>Blocked Until Approval</h3>
+          <p>Framework research, journey synthesis, working-packet creation, run-manifest creation, canonical artifact writes, and downstream routing.</p>
+        </div>
+        <div class="card">
+          <h3>Approval Mechanism</h3>
+          <p>Use the required gate questions and bottom compile control to produce YAML for a fresh `$journey-map` invocation.</p>
+        </div>
+      </div>
+      <div class="feedback-panel" data-panel-for="stage-boundary">
+        <label for="feedback-stage-boundary">Section feedback notes</label>
+        <textarea id="feedback-stage-boundary" placeholder="What should be emphasized, revised, or clarified in this section?"></textarea>
+        <button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-button copy-local">Copy YAML</button>
+        <div class="status local-status"></div>
+        <textarea class="yaml-output local-output" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="scope-resolution" data-section="scope-resolution">
+      <div class="section-head">
+        <h2>Scope Resolution</h2>
+        <div class="feedback" data-feedback-for="scope-resolution">
+          <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+          <button type="button" data-kind="down" aria-pressed="false">Down</button>
+          <button type="button" data-kind="needs-clarification" aria-pressed="false">Clarify</button>
+        </div>
+      </div>
+      <p>The active scope resolves to flat <code>research/</code> mode for FormForge.</p>
+      <div class="table-wrap" data-tts-narrative="The scope table shows that the active FormForge product path is the flat research directory, while deferred product paths remain parked and out of scope for this journey-map run.">
+        <table>
+          <thead>
+            <tr><th>Scope Item</th><th>Observed Evidence</th><th>Stage 1 Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Active path</td><td><code>research/.progress.yaml</code> lists <code>active_paths: [research/]</code>.</td><td>Use flat single-product output paths.</td></tr>
+            <tr><td>Product path label</td><td><code>formforge</code>, labeled "FormForge current flat scope".</td><td>Use topic slug <code>formforge</code> for the alignment page.</td></tr>
+            <tr><td>Prerequisite status</td><td><code>research/icp.md</code> exists and is confirmed.</td><td>The hard journey-map prerequisite is satisfied.</td></tr>
+            <tr><td>Prior lifecycle state</td><td>No <code>research/_working/journey-map-run.yaml</code> or <code>research/journey-map.md</code> found in the Stage 1 file scan.</td><td>Cold state E: build framework-selection review page.</td></tr>
+            <tr><td>Deferred paths</td><td>Lead quote forms, event registration, nonprofit volunteer forms, and HR ops forms are marked revisit/deferred in <code>research/.progress.yaml</code>.</td><td>Do not promote or map deferred paths in this run.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="question-block" data-gate="scope-non-goals">
+        <fieldset>
+          <legend>Required Gate: Scope And Non-Goals</legend>
+          <label class="option"><input type="radio" name="scope-non-goals" value="approve_flat_scope" data-answer="Approve flat research/ scope and keep deferred paths out of this journey-map run."><span>Approve flat <code>research/</code> scope and keep deferred product paths out of this run.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="scope-non-goals" value="revise_scope" data-answer="Revise scope before framework selection."><span>Revise the scope before framework selection.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="scope-non-goals" value="other" data-answer="Other / None of the above"><span>Other / None of the above</span></label>
+          <div class="option-notes"><label>Free-form decision</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="scope-non-goals" value="needs-clarification" data-answer="Need clarification"><span>Need clarification</span></label>
+          <div class="option-notes"><label>What is unclear?</label><textarea></textarea></div>
+        </fieldset>
+      </div>
+      <div class="feedback-panel" data-panel-for="scope-resolution">
+        <label for="feedback-scope-resolution">Section feedback notes</label>
+        <textarea id="feedback-scope-resolution"></textarea>
+        <button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-button copy-local">Copy YAML</button>
+        <div class="status local-status"></div>
+        <textarea class="yaml-output local-output" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="mode-detection" data-section="mode-detection">
+      <div class="section-head">
+        <h2>Mode Detection</h2>
+        <div class="feedback" data-feedback-for="mode-detection">
+          <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+          <button type="button" data-kind="down" aria-pressed="false">Down</button>
+          <button type="button" data-kind="needs-clarification" aria-pressed="false">Clarify</button>
+        </div>
+      </div>
+      <p><strong>Detected mode:</strong> Product-exists mode, based on local product implementation and README/package evidence. The source base shows a Next.js application and product loop; no post-launch customer-feedback file was found.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Product Evidence</h3>
+          <ul>
+            <li><code>README.md</code> describes FormForge as an AI-assisted form builder prototype focused on describe, generate, edit, publish, submit, review, and export.</li>
+            <li><code>package.json</code> identifies a private Next.js app with build, lint, test, database, Stripe, Clerk, OpenAI, and form-builder dependencies.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Customer Evidence Gap</h3>
+          <ul>
+            <li>No <code>research/customer-feedback.md</code> was found.</li>
+            <li>Journey research should distinguish repo/product evidence from direct buyer or usage evidence in later framework packets.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="chart-container" data-tts-narrative="The mode evidence chart shows stronger evidence for product existence than for customer feedback. This supports product-exists framework defaults while preserving a clear customer-feedback gap.">
+        <button type="button" class="toggle" data-toggle-target="mode-chart-table">View as table</button>
+        <svg aria-label="Horizontal bar chart showing Stage 1 mode detection evidence strength" viewBox="0 0 760 210" role="img">
+          <rect x="0" y="0" width="760" height="210" fill="#0b1220"></rect>
+          <text x="24" y="34" fill="#ffffff" font-size="18" font-weight="700">Mode Evidence Strength</text>
+          <text x="24" y="76" fill="#c9d1d9" font-size="14">Production app / repo evidence</text>
+          <rect x="250" y="58" width="430" height="28" rx="6" fill="#1f2937"></rect>
+          <rect x="250" y="58" width="365" height="28" rx="6" fill="#58a6ff"></rect>
+          <text x="628" y="78" fill="#c9d1d9" font-size="14">High</text>
+          <text x="24" y="124" fill="#c9d1d9" font-size="14">Customer feedback evidence</text>
+          <rect x="250" y="106" width="430" height="28" rx="6" fill="#1f2937"></rect>
+          <rect x="250" y="106" width="86" height="28" rx="6" fill="#d29922"></rect>
+          <text x="350" y="126" fill="#c9d1d9" font-size="14">Low / absent</text>
+          <text x="24" y="172" fill="#c9d1d9" font-size="14">Approved ICP evidence</text>
+          <rect x="250" y="154" width="430" height="28" rx="6" fill="#1f2937"></rect>
+          <rect x="250" y="154" width="330" height="28" rx="6" fill="#3fb950"></rect>
+          <text x="594" y="174" fill="#c9d1d9" font-size="14">High</text>
+        </svg>
+        <div id="mode-chart-table" class="table-wrap" hidden data-tts-narrative="The table version of the mode evidence chart rates product app evidence and ICP evidence high, while customer feedback evidence is low or absent.">
+          <table>
+            <thead><tr><th>Evidence Category</th><th>Observed Stage 1 Signal</th><th>Strength</th></tr></thead>
+            <tbody>
+              <tr><td>Production app / repo evidence</td><td>Next.js app, README product loop, product dependencies.</td><td>High</td></tr>
+              <tr><td>Customer feedback evidence</td><td>No <code>research/customer-feedback.md</code> found.</td><td>Low / absent</td></tr>
+              <tr><td>Approved ICP evidence</td><td>Confirmed ICP and competitive analysis exist.</td><td>High</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="question-block" data-gate="mode-selection">
+        <fieldset>
+          <legend>Required Gate: Mode Selection</legend>
+          <label class="option"><input type="radio" name="mode-selection" value="approve_product_exists" data-answer="Approve product-exists mode for framework defaults."><span>Approve product-exists mode for framework defaults.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="mode-selection" value="switch_pre_product" data-answer="Use pre-product mode despite local product evidence."><span>Use pre-product mode instead.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="mode-selection" value="other" data-answer="Other / None of the above"><span>Other / None of the above</span></label>
+          <div class="option-notes"><label>Free-form decision</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="mode-selection" value="needs-clarification" data-answer="Need clarification"><span>Need clarification</span></label>
+          <div class="option-notes"><label>What is unclear?</label><textarea></textarea></div>
+        </fieldset>
+      </div>
+      <div class="feedback-panel" data-panel-for="mode-detection">
+        <label for="feedback-mode-detection">Section feedback notes</label>
+        <textarea id="feedback-mode-detection"></textarea>
+        <button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-button copy-local">Copy YAML</button>
+        <div class="status local-status"></div>
+        <textarea class="yaml-output local-output" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="source-plan" data-section="source-plan">
+      <div class="section-head">
+        <h2>Available Source Categories</h2>
+        <div class="feedback" data-feedback-for="source-plan">
+          <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+          <button type="button" data-kind="down" aria-pressed="false">Down</button>
+          <button type="button" data-kind="needs-clarification" aria-pressed="false">Clarify</button>
+        </div>
+      </div>
+      <p>This is source availability and research plan context, not journey findings.</p>
+      <div class="table-wrap" data-tts-narrative="The source plan table lists confirmed ICP evidence, approved competitive analysis, local product context, missing customer feedback, and absent journey intermediates.">
+        <table>
+          <thead><tr><th>Source Category</th><th>Available Inputs</th><th>Use In Later Framework Research</th><th>Coverage Gap</th></tr></thead>
+          <tbody>
+            <tr><td>ICP and current-state journey</td><td><code>research/icp.md</code>, <code>alignment/icp-formforge.html</code></td><td>Primary source for personas, trigger events, pain map, current alternatives, and likely aha moment.</td><td>Research-backed, not interview-backed.</td></tr>
+            <tr><td>Competitive landscape</td><td><code>research/competitive-analysis.md</code> plus approved framework intermediates.</td><td>Source for alternatives, suite gravity, generic builder pressure, handoff gaps, and validation questions.</td><td>No hands-on trials or buyer interviews.</td></tr>
+            <tr><td>Product/repo context</td><td><code>README.md</code>, <code>package.json</code>, Next.js app files in the repository.</td><td>Source for product-exists mode and product loop boundaries.</td><td>Local implementation is not proof of usage, adoption, or buyer value.</td></tr>
+            <tr><td>Customer feedback</td><td>No <code>research/customer-feedback.md</code> found.</td><td>Do not use nonexistent customer quotes as evidence.</td><td>Later journey packets must keep direct-customer confidence lower where applicable.</td></tr>
+            <tr><td>Journey intermediates</td><td>No <code>research/journey-map-*.md</code> found.</td><td>State E begins framework selection.</td><td>Framework-specific evidence will be generated only after approval.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="question-block" data-gate="evidence-coverage">
+        <fieldset>
+          <legend>Required Gate: Evidence Coverage</legend>
+          <label class="option"><input type="radio" name="evidence-coverage" value="sufficient_for_stage_one" data-answer="Available sources are sufficient for Stage 1 framework selection, with customer-feedback gaps preserved."><span>Available sources are sufficient for Stage 1 framework selection, with customer-feedback gaps preserved.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="evidence-coverage" value="needs_more_context" data-answer="Add or inspect more context before approving the framework set."><span>Add or inspect more context before approving the framework set.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="evidence-coverage" value="other" data-answer="Other / None of the above"><span>Other / None of the above</span></label>
+          <div class="option-notes"><label>Free-form decision</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="evidence-coverage" value="needs-clarification" data-answer="Need clarification"><span>Need clarification</span></label>
+          <div class="option-notes"><label>What is unclear?</label><textarea></textarea></div>
+        </fieldset>
+      </div>
+      <div class="feedback-panel" data-panel-for="source-plan">
+        <label for="feedback-source-plan">Section feedback notes</label>
+        <textarea id="feedback-source-plan"></textarea>
+        <button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-button copy-local">Copy YAML</button>
+        <div class="status local-status"></div>
+        <textarea class="yaml-output local-output" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="framework-selection" data-section="framework-selection">
+      <div class="section-head">
+        <h2>Framework Selection</h2>
+        <div class="feedback" data-feedback-for="framework-selection">
+          <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+          <button type="button" data-kind="down" aria-pressed="false">Down</button>
+          <button type="button" data-kind="needs-clarification" aria-pressed="false">Clarify</button>
+        </div>
+      </div>
+      <p>Product-exists mode defaults to <code>service-blueprint</code> and <code>user-story-map</code>. Optional frameworks can be included if the reviewer wants a broader journey artifact set.</p>
+      <div class="grid">
+        <div class="framework-card default">
+          <h3><input type="checkbox" data-framework="service-blueprint" checked> Service Blueprint <span class="pill good">Default</span></h3>
+          <p>Maps front-stage, backstage, support processes, evidence, and operational gaps. Fit: strong for an existing product loop where intake, submissions, review, export, and handoff need to be grounded in service delivery operations.</p>
+        </div>
+        <div class="framework-card default">
+          <h3><input type="checkbox" data-framework="user-story-map" checked> User Story Map <span class="pill good">Default</span></h3>
+          <p>Maps activity, task, story hierarchy, and release slicing. Fit: strong for a working product boundary because it can connect buyer/user jobs to the describe, generate, edit, publish, submit, review, and export loop.</p>
+        </div>
+        <div class="framework-card optional">
+          <h3><input type="checkbox" data-framework="customer-journey-canvas"> Customer Journey Canvas <span class="pill">Optional</span></h3>
+          <p>Maps stages, touchpoints, actions, emotions, backstage, pain, and opportunities. Fit: useful if the review should cover the full stage-by-stage customer lifecycle rather than product operations first.</p>
+        </div>
+        <div class="framework-card optional">
+          <h3><input type="checkbox" data-framework="experience-map"> Experience Map <span class="pill">Optional</span></h3>
+          <p>Maps doing, thinking, feeling, channels, pain, and delight moments. Fit: useful for emotional arc and adoption anxieties, but direct customer feedback is currently missing.</p>
+        </div>
+        <div class="framework-card optional">
+          <h3><input type="checkbox" data-framework="jtbd-timeline"> JTBD Timeline <span class="pill">Optional</span></h3>
+          <p>Maps first thought, passive looking, active looking, deciding, consuming, and satisfaction through push, pull, anxiety, and habit. Fit: useful if switching behavior needs more structure before positioning.</p>
+        </div>
+      </div>
+      <div class="question-block" data-gate="framework-selection">
+        <fieldset>
+          <legend>Required Gate: Framework Set</legend>
+          <label class="option"><input type="radio" name="framework-selection" value="approve_defaults" data-answer="Approve default product-exists set: service-blueprint and user-story-map."><span>Approve default product-exists set: <code>service-blueprint</code> and <code>user-story-map</code>.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="framework-selection" value="approve_checked" data-answer="Approve the checked framework boxes as the selected set."><span>Approve the checked framework boxes as the selected set.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="framework-selection" value="revise_frameworks" data-answer="Revise the framework set before running framework research."><span>Revise the framework set before running framework research.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="framework-selection" value="other" data-answer="Other / None of the above"><span>Other / None of the above</span></label>
+          <div class="option-notes"><label>Free-form decision</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="framework-selection" value="needs-clarification" data-answer="Need clarification"><span>Need clarification</span></label>
+          <div class="option-notes"><label>What is unclear?</label><textarea></textarea></div>
+        </fieldset>
+      </div>
+      <div class="feedback-panel" data-panel-for="framework-selection">
+        <label for="feedback-framework-selection">Section feedback notes</label>
+        <textarea id="feedback-framework-selection"></textarea>
+        <button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-button copy-local">Copy YAML</button>
+        <div class="status local-status"></div>
+        <textarea class="yaml-output local-output" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="loop-plan" data-section="loop-plan">
+      <div class="section-head">
+        <h2>Loop Plan</h2>
+        <div class="feedback" data-feedback-for="loop-plan">
+          <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+          <button type="button" data-kind="down" aria-pressed="false">Down</button>
+          <button type="button" data-kind="needs-clarification" aria-pressed="false">Clarify</button>
+        </div>
+      </div>
+      <ol>
+        <li>Reviewer approves this Stage 1 scope and framework-selection page through compiled YAML.</li>
+        <li>A fresh `$journey-map` session consumes the YAML and writes <code>research/_working/journey-map-run.yaml</code>.</li>
+        <li>The parent orchestrator runs exactly one selected framework inline and creates that framework's findings review page.</li>
+        <li>Each framework findings page waits for compiled YAML before its canonical intermediate is written.</li>
+        <li>After all selected intermediates exist, `$journey-map --synthesize` builds the synthesis review page.</li>
+      </ol>
+      <div class="notice">
+        <p><strong>Parent-owned routing:</strong> the user should continue through <code>$journey-map</code>, not through child framework commands. The parent resolves pending framework state from the manifest and filesystem.</p>
+      </div>
+      <div class="feedback-panel" data-panel-for="loop-plan">
+        <label for="feedback-loop-plan">Section feedback notes</label>
+        <textarea id="feedback-loop-plan"></textarea>
+        <button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-button copy-local">Copy YAML</button>
+        <div class="status local-status"></div>
+        <textarea class="yaml-output local-output" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="output-paths" data-section="output-paths">
+      <div class="section-head">
+        <h2>Output Paths</h2>
+        <div class="feedback" data-feedback-for="output-paths">
+          <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+          <button type="button" data-kind="down" aria-pressed="false">Down</button>
+          <button type="button" data-kind="needs-clarification" aria-pressed="false">Clarify</button>
+        </div>
+      </div>
+      <div class="table-wrap" data-tts-narrative="The output paths table distinguishes current review artifacts from future manifest, framework intermediate, and synthesis paths. The future paths are not written until approval gates are satisfied.">
+        <table>
+          <thead><tr><th>Artifact</th><th>Path</th><th>Timing</th></tr></thead>
+          <tbody>
+            <tr><td>Active review page</td><td><code>alignment/journey-map-formforge.html</code></td><td>Written in Stage 1 for this review.</td></tr>
+            <tr><td>Future run manifest</td><td><code>research/_working/journey-map-run.yaml</code></td><td>Only after approved compiled YAML is consumed.</td></tr>
+            <tr><td>Future framework intermediates</td><td><code>research/journey-map-{framework}.md</code></td><td>Only after each framework findings page is approved.</td></tr>
+            <tr><td>Future synthesis working packet</td><td><code>research/_working/preliminary-journey-map-research.md</code></td><td>Only during synthesis review.</td></tr>
+            <tr><td>Future canonical synthesis</td><td><code>research/journey-map.md</code></td><td>Only after synthesis approval.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="question-block" data-gate="artifact-destination">
+        <fieldset>
+          <legend>Required Gate: Artifact Destination</legend>
+          <label class="option"><input type="radio" name="artifact-destination" value="approve_paths" data-answer="Approve the proposed flat-mode output paths."><span>Approve the proposed flat-mode output paths.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="artifact-destination" value="revise_paths" data-answer="Revise output paths before continuing."><span>Revise output paths before continuing.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="artifact-destination" value="other" data-answer="Other / None of the above"><span>Other / None of the above</span></label>
+          <div class="option-notes"><label>Free-form decision</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="artifact-destination" value="needs-clarification" data-answer="Need clarification"><span>Need clarification</span></label>
+          <div class="option-notes"><label>What is unclear?</label><textarea></textarea></div>
+        </fieldset>
+      </div>
+      <div class="question-block" data-gate="proposed-file-changes">
+        <fieldset>
+          <legend>Required Gate: Proposed File Changes</legend>
+          <label class="option"><input type="radio" name="proposed-file-changes" value="approve_stage_two_scope" data-answer="Approve later creation of the run manifest and one framework review artifact per selected framework after YAML approval."><span>Approve later creation of the run manifest and one framework review artifact per selected framework after YAML approval.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="proposed-file-changes" value="do_not_mutate" data-answer="Do not create future journey-map files yet."><span>Do not create future journey-map files yet.</span></label>
+          <div class="option-notes"><label>Additional notes</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="proposed-file-changes" value="other" data-answer="Other / None of the above"><span>Other / None of the above</span></label>
+          <div class="option-notes"><label>Free-form decision</label><textarea></textarea></div>
+          <label class="option"><input type="radio" name="proposed-file-changes" value="needs-clarification" data-answer="Need clarification"><span>Need clarification</span></label>
+          <div class="option-notes"><label>What is unclear?</label><textarea></textarea></div>
+        </fieldset>
+      </div>
+      <div class="feedback-panel" data-panel-for="output-paths">
+        <label for="feedback-output-paths">Section feedback notes</label>
+        <textarea id="feedback-output-paths"></textarea>
+        <button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-button copy-local">Copy YAML</button>
+        <div class="status local-status"></div>
+        <textarea class="yaml-output local-output" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="assumptions" data-section="assumptions">
+      <div class="section-head">
+        <h2>Assumptions And Confidence</h2>
+        <div class="feedback" data-feedback-for="assumptions">
+          <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+          <button type="button" data-kind="down" aria-pressed="false">Down</button>
+          <button type="button" data-kind="needs-clarification" aria-pressed="false">Clarify</button>
+        </div>
+      </div>
+      <div class="table-wrap" data-tts-narrative="The assumptions table shows high confidence for active scope and prerequisite availability, medium confidence for product-exists mode, and lower confidence where direct customer usage data is absent.">
+        <table>
+          <thead><tr><th>Assumption</th><th>Status</th><th>Confidence</th><th>What Would Change It</th></tr></thead>
+          <tbody>
+            <tr><td>Flat <code>research/</code> is the active FormForge scope.</td><td>Evidence-backed from progress manifest.</td><td>High</td><td>New approved product-path YAML or manifest change.</td></tr>
+            <tr><td>Journey-map prerequisite is satisfied.</td><td><code>research/icp.md</code> exists and is confirmed.</td><td>High</td><td>Archived or superseded ICP approval.</td></tr>
+            <tr><td>Product-exists mode is appropriate.</td><td>Inferred from README and Next.js app/package evidence.</td><td>Medium-high</td><td>User directs pre-product mode, or repo implementation is declared non-representative.</td></tr>
+            <tr><td>Customer-feedback evidence is absent.</td><td>No <code>research/customer-feedback.md</code> in the file scan.</td><td>High</td><td>User provides feedback artifacts, interview notes, analytics, or support logs.</td></tr>
+            <tr><td>Default framework set should prioritize operations and stories.</td><td>Policy-backed by product-exists mode.</td><td>Medium</td><td>Reviewer chooses broader emotional/lifecycle or switching frameworks.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="feedback-panel" data-panel-for="assumptions">
+        <label for="feedback-assumptions">Section feedback notes</label>
+        <textarea id="feedback-assumptions"></textarea>
+        <button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-button copy-local">Copy YAML</button>
+        <div class="status local-status"></div>
+        <textarea class="yaml-output local-output" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="stage-two-preview" data-section="stage-two-preview">
+      <div class="section-head">
+        <h2>Stage 2 Preview</h2>
+        <div class="feedback" data-feedback-for="stage-two-preview">
+          <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+          <button type="button" data-kind="down" aria-pressed="false">Down</button>
+          <button type="button" data-kind="needs-clarification" aria-pressed="false">Clarify</button>
+        </div>
+      </div>
+      <p>After approval, the next fresh `$journey-map` session will create the run manifest from the approved selected framework set and run the first pending framework inline. The framework findings page should include:</p>
+      <ul>
+        <li>Framework-specific working packet content rendered as structured review UI.</li>
+        <li>Evidence matrix distinguishing claims, source evidence, inference, confidence, assumptions, and decision impact.</li>
+        <li>Source coverage gaps, especially direct-customer feedback gaps.</li>
+        <li>Framework artifact destination and proposed file-change gates.</li>
+        <li>Parent-owned <code>agent_routing</code> back to <code>$journey-map</code>.</li>
+      </ul>
+      <div class="feedback-panel" data-panel-for="stage-two-preview">
+        <label for="feedback-stage-two-preview">Section feedback notes</label>
+        <textarea id="feedback-stage-two-preview"></textarea>
+        <button type="button" class="compile-local">Compile Feedback YAML</button><button type="button" class="copy-button copy-local">Copy YAML</button>
+        <div class="status local-status"></div>
+        <textarea class="yaml-output local-output" readonly></textarea>
+      </div>
+    </section>
+
+    <section id="compile" class="compile-section" data-section="compile">
+      <h2>Compile Responses</h2>
+      <p>Answer required gate questions and optionally select section feedback. The compiled YAML is the approval or revision payload for the next fresh `$journey-map` session.</p>
+      <button type="button" class="compile-button" id="compileResponses">Compile Responses</button><button type="button" class="copy-button" id="copyResponses">Copy YAML</button>
+      <div class="status" id="compileStatus"></div>
+      <textarea class="yaml-output" id="compiledYaml" readonly></textarea>
+    </section>
+  </main>
+
+  <script>
+    const pagePath = 'alignment/journey-map-formforge.html';
+    const requiredGates = [
+      'scope-non-goals',
+      'mode-selection',
+      'evidence-coverage',
+      'framework-selection',
+      'artifact-destination',
+      'proposed-file-changes'
+    ];
+
+    function selectedFrameworks() {
+      return Array.from(document.querySelectorAll('[data-framework]:checked')).map((input) => input.dataset.framework);
+    }
+
+    function yamlString(value) {
+      const text = String(value || '');
+      if (!text) return '""';
+      if (/[:#\n\r]|^\s|\s$|["']/.test(text)) {
+        return JSON.stringify(text);
+      }
+      return text;
+    }
+
+    function gateType(name) {
+      const map = {
+        'scope-non-goals': 'scope/non-goals',
+        'mode-selection': 'mode selection',
+        'evidence-coverage': 'evidence coverage',
+        'framework-selection': 'framework selection',
+        'artifact-destination': 'artifact destination',
+        'proposed-file-changes': 'proposed file changes'
+      };
+      return map[name] || name;
+    }
+
+    function getGateAnswers() {
+      return requiredGates.map((name) => {
+        const checked = document.querySelector(`input[name="${name}"]:checked`);
+        if (!checked) return null;
+        const notesWrap = checked.closest('label').nextElementSibling;
+        const notes = notesWrap ? notesWrap.querySelector('textarea').value.trim() : '';
+        return {
+          section: checked.closest('section').id,
+          gate_type: gateType(name),
+          name,
+          status: checked.value === 'other' ? 'other' : checked.value === 'needs-clarification' ? 'needs-clarification' : 'answered',
+          answer: notes && checked.value === 'other' ? notes : checked.dataset.answer,
+          notes
+        };
+      }).filter(Boolean);
+    }
+
+    function getSectionFeedback() {
+      return Array.from(document.querySelectorAll('.feedback')).map((group) => {
+        const active = group.querySelector('button[aria-pressed="true"]');
+        if (!active) return null;
+        const section = group.dataset.feedbackFor;
+        const panel = document.querySelector(`.feedback-panel[data-panel-for="${section}"]`);
+        const notes = panel ? panel.querySelector('textarea').value.trim() : '';
+        const action = {
+          'emphasize': 'add-weight-to-section',
+          'down': 'investigate-and-revise',
+          'needs-clarification': 'clarify-before-approval'
+        }[active.dataset.kind];
+        return { section, feedback: active.dataset.kind, notes, requested_agent_action: action };
+      }).filter(Boolean);
+    }
+
+    function buildYaml(singleFeedback) {
+      const answers = singleFeedback ? [] : getGateAnswers();
+      const feedback = singleFeedback ? [singleFeedback] : getSectionFeedback();
+      const answeredNames = answers.map((answer) => answer.name);
+      const unanswered = requiredGates.filter((name) => !answeredNames.includes(name));
+      const hasNegative = feedback.some((item) => item.feedback === 'down' || item.feedback === 'needs-clarification') ||
+        answers.some((answer) => answer.status === 'needs-clarification' || answer.status === 'other' || /revise|switch|do_not/.test(answer.answer));
+      const complete = unanswered.length === 0;
+      const ready = complete && !hasNegative && !singleFeedback;
+      const lines = [];
+      lines.push(`alignment_page: ${pagePath}`);
+      if (singleFeedback) {
+        lines.push('feedback_status: revision-request');
+      } else {
+        lines.push(`response_status: ${complete ? 'complete' : 'partial'}`);
+      }
+      lines.push(`approval_status: ${ready ? 'ready-for-agent-review' : 'not-approved'}`);
+      if (!singleFeedback) lines.push(`required_gate_status: ${complete ? 'complete' : 'incomplete'}`);
+      lines.push('unanswered_required_questions:');
+      if (unanswered.length) unanswered.forEach((name) => lines.push(`  - ${name}`));
+      else lines.push('  []');
+      if (answers.length) {
+        lines.push('gate_answers:');
+        answers.forEach((answer) => {
+          lines.push(`  - section: ${answer.section}`);
+          lines.push(`    gate_type: ${yamlString(answer.gate_type)}`);
+          lines.push(`    status: ${answer.status}`);
+          lines.push(`    answer: ${yamlString(answer.answer)}`);
+          if (answer.notes) lines.push(`    notes: ${yamlString(answer.notes)}`);
+          if (answer.name === 'artifact-destination') lines.push('    target_path: research/journey-map.md');
+          if (answer.name === 'proposed-file-changes') lines.push('    target_artifact: journey-map-run-and-framework-review-artifacts');
+        });
+      }
+      lines.push('selected_frameworks:');
+      selectedFrameworks().forEach((framework) => lines.push(`  - ${framework}`));
+      if (feedback.length) {
+        lines.push('section_feedback:');
+        feedback.forEach((item) => {
+          lines.push(`  - section: ${item.section}`);
+          lines.push(`    feedback: ${item.feedback}`);
+          if (item.notes) lines.push(`    notes: ${yamlString(item.notes)}`);
+          lines.push(`    requested_agent_action: ${item.requested_agent_action}`);
+        });
+      }
+      lines.push('agent_routing:');
+      lines.push('  workflow: pattern-a-research-loop');
+      lines.push('  parent_skill: journey-map');
+      lines.push('  command: "$journey-map"');
+      lines.push('  gate_owner: parent-orchestrator');
+      lines.push('  gate_type: framework-selection');
+      lines.push('  run_manifest: research/_working/journey-map-run.yaml');
+      lines.push('  next_resolution: parent-resolves-from-yaml-and-filesystem');
+      return lines.join('\n') + '\n';
+    }
+
+    async function copyText(text, statusEl) {
+      try {
+        await navigator.clipboard.writeText(text);
+        statusEl.textContent = 'YAML copied to clipboard.';
+      } catch (error) {
+        statusEl.textContent = 'Clipboard unavailable. Select and copy the YAML manually.';
+      }
+    }
+
+    document.querySelectorAll('.feedback button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const group = button.closest('.feedback');
+        const section = group.dataset.feedbackFor;
+        const panel = document.querySelector(`.feedback-panel[data-panel-for="${section}"]`);
+        const wasActive = button.getAttribute('aria-pressed') === 'true';
+        group.querySelectorAll('button').forEach((item) => item.setAttribute('aria-pressed', 'false'));
+        if (wasActive) {
+          panel.classList.remove('is-visible');
+        } else {
+          button.setAttribute('aria-pressed', 'true');
+          panel.classList.add('is-visible');
+        }
+      });
+    });
+
+    document.querySelectorAll('.compile-local').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const panel = button.closest('.feedback-panel');
+        const section = panel.dataset.panelFor;
+        const active = document.querySelector(`.feedback[data-feedback-for="${section}"] button[aria-pressed="true"]`);
+        if (!active) return;
+        const item = {
+          section,
+          feedback: active.dataset.kind,
+          notes: panel.querySelector('textarea').value.trim(),
+          requested_agent_action: {
+            'emphasize': 'add-weight-to-section',
+            'down': 'investigate-and-revise',
+            'needs-clarification': 'clarify-before-approval'
+          }[active.dataset.kind]
+        };
+        const yaml = buildYaml(item);
+        panel.querySelector('.local-output').value = yaml;
+        await copyText(yaml, panel.querySelector('.local-status'));
+      });
+    });
+
+    document.querySelectorAll('.copy-local').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const panel = button.closest('.feedback-panel');
+        await copyText(panel.querySelector('.local-output').value, panel.querySelector('.local-status'));
+      });
+    });
+
+    document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+      radio.addEventListener('change', () => {
+        const fieldset = radio.closest('fieldset');
+        fieldset.querySelectorAll('.option-notes').forEach((notes) => notes.classList.remove('is-visible'));
+        const notes = radio.closest('label').nextElementSibling;
+        if (notes) notes.classList.add('is-visible');
+      });
+    });
+
+    document.querySelectorAll('.toggle').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.toggleTarget);
+        target.hidden = !target.hidden;
+        button.textContent = target.hidden ? 'View as table' : 'Hide table';
+      });
+    });
+
+    document.getElementById('compileResponses').addEventListener('click', async () => {
+      const yaml = buildYaml();
+      const hasAny = getGateAnswers().length || getSectionFeedback().length;
+      const output = document.getElementById('compiledYaml');
+      const status = document.getElementById('compileStatus');
+      if (!hasAny) {
+        status.textContent = 'Answer a gate question or select section feedback before compiling.';
+        return;
+      }
+      output.value = yaml;
+      await copyText(yaml, status);
+    });
+
+    document.getElementById('copyResponses').addEventListener('click', async () => {
+      await copyText(document.getElementById('compiledYaml').value, document.getElementById('compileStatus'));
+    });
+  </script>
+  <script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

@@ -1,3 +1,22 @@
+# Active Journey Map Stage 1 Scope Gate
+
+- [x] Resolve active FormForge research scope and existing journey-map state.
+- [x] Gather minimal Stage 1 scope evidence from approved research and repo context.
+- [x] Create review alignment page: `alignment/journey-map-formforge.html`.
+- [x] Update central alignment index.
+- [x] Verify the review page and confirm no run manifest or canonical journey-map artifacts were written.
+- [x] Commit and push intended tracked changes after verification.
+
+### Review
+
+- Stage 1 journey-map framework-selection page drafted on 2026-06-19 at `alignment/journey-map-formforge.html`.
+- The page resolves the active flat `research/` scope, detects product-exists mode from README/package evidence, proposes default `service-blueprint` and `user-story-map` frameworks with optional broader journey frameworks, and renders source categories, assumptions, output paths, approval gates, and parent-owned `agent_routing`.
+- No synthesized journey findings, run manifest, framework intermediates, synthesis working packet, or canonical `research/journey-map.md` were created.
+- Verification: inline page script parses; page reports `data-alignment-status="review"` and `data-visual-tier="visual"`; review/routing/TTS markers are present; `alignment/index.html` lists `journey-map-formforge.html` and shows 9 pages; journey-map artifact file scan returned no active research artifacts; `git diff --check` passed.
+- Browser open status: `npx skillpacks alignment pages open alignment/journey-map-formforge.html --browser auto` succeeded and opened the local file URL.
+
+---
+
 # Active Competitive Analysis Stage 3 Finalization
 
 - [x] Reconcile final approval YAML with the active synthesis working packet and page.

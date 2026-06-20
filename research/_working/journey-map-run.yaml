@@ -1,0 +1,6 @@
+orchestrator: journey-map
+selected_frameworks:
+  - slug: service-blueprint
+    intermediate: research/journey-map-service-blueprint.md
+  - slug: user-story-map
+    intermediate: research/journey-map-user-story-map.md

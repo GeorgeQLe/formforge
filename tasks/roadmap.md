@@ -1,3 +1,35 @@
+# FormForge Journey Map User Story Map Finalization Roadmap
+
+## Objective
+
+Consume the approved user-story-map framework findings YAML, write the canonical user-story-map intermediate, archive the consumed review-stage artifacts, and hand the parent journey-map loop to synthesis.
+
+## Approval Input
+
+The user provided final compiled YAML approving:
+
+- Evidence coverage for the user-story-map intermediate with known gaps.
+- Preserving assumptions and confidence levels.
+- Proposed file change: write `research/journey-map-user-story-map.md`.
+
+## Non-Goals
+
+- Do not run new journey research or alter the approved user-story-map findings.
+- Do not synthesize `research/journey-map.md` in this approval-consumption step.
+- Do not change product code, dependencies, lockfiles, `.agents/project.json`, or GitHub Actions.
+
+## Plan
+
+- [x] Reconcile approval YAML with the active user-story-map working packet and journey-map run manifest.
+- [x] Write approved canonical artifact: `research/journey-map-user-story-map.md`.
+- [x] Archive and remove active working packet: `research/_working/preliminary-user-story-map-research.md`.
+- [x] Archive the user-story-map review page snapshot and preserve the approval record.
+- [x] Recalculate manifest-selected framework progress and identify synthesis readiness.
+- [x] Verify artifact structure, archive state, synthesis-ready state, and git diff.
+- [x] Commit and push intended tracked changes.
+
+---
+
 # FormForge Journey Map User Story Map Framework Roadmap
 
 ## Objective

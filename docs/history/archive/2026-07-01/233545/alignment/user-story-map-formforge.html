@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-alignment-status="confirmed" data-alignment-category="research" data-visual-tier="visual">
+<html lang="en" data-alignment-status="review" data-alignment-stage="stage-2" data-alignment-category="research" data-visual-tier="visual">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FormForge User Story Map - Confirmed</title>
+  <title>FormForge User Story Map - Review</title>
   <style>
     :root {
       color-scheme: dark;
@@ -139,17 +139,17 @@
 </head>
 <body>
   <main>
-    <h1>FormForge User Story Map - Confirmed</h1>
-    <p class="lede">Confirmed Stage 3 record for the approved <code>user-story-map</code> framework intermediate in the parent <code>$journey-map</code> loop. The canonical artifact has been written to <code>research/journey-map-user-story-map.md</code>.</p>
+    <h1>FormForge User Story Map - Review</h1>
+    <p class="lede">Stage 2 framework findings page for the pending <code>user-story-map</code> framework in the parent <code>$journey-map</code> loop. This page previews the non-canonical working packet and asks for approval before writing <code>research/journey-map-user-story-map.md</code>.</p>
 
     <section class="notice" id="status">
-      <h2>Artifact Approved</h2>
-      <p><strong>Status:</strong> <span class="status">confirmed</span></p>
+      <h2>Research Scope Approved</h2>
+      <p><strong>Status:</strong> <span class="status">review pending</span></p>
       <p><strong>Date:</strong> 2026-07-02</p>
       <p><strong>Parent manifest:</strong> <code>research/_working/journey-map-run.yaml</code></p>
-      <p><strong>Selected frameworks:</strong> <span class="pill">service-blueprint complete</span><span class="pill">user-story-map complete</span></p>
+      <p><strong>Selected frameworks:</strong> <span class="pill">service-blueprint complete</span><span class="pill">user-story-map in review</span></p>
       <p><strong>Scope:</strong> flat <code>research/</code> FormForge client-service intake/onboarding scope.</p>
-      <p><strong>Approval record:</strong> compiled YAML approved evidence coverage as sufficient with gaps, preserved assumptions and confidence, and approved writing <code>research/journey-map-user-story-map.md</code>.</p>
+      <p><strong>Output boundary:</strong> this run writes only <code>research/_working/preliminary-user-story-map-research.md</code> and this review page. The canonical intermediate is not written until compiled YAML approves it.</p>
     </section>
 
     <nav class="toc" aria-label="Table of contents">
@@ -163,7 +163,8 @@
         <li><a href="#evidence">Evidence Matrix</a></li>
         <li><a href="#assumptions">Assumptions Register</a></li>
         <li><a href="#alternatives">Alternatives And Gaps</a></li>
-        <li><a href="#file-changes">Canonical Artifact Record</a></li>
+        <li><a href="#file-changes">Canonical Artifact Gate</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
       </ul>
     </nav>
 
@@ -292,7 +293,15 @@
         </table>
       </div>
 
-      <div class="notice"><h3>Approved Evidence Coverage</h3><p><strong>Gate answer:</strong> sufficient_with_gaps. The artifact is approved with source gaps preserved for synthesis: no direct target-buyer interviews, no destination-priority evidence for handoff, no observed respondent drop-off data, no proof of AI question quality by service niche, and no validation of agent-first access demand.</p></div>
+      <div class="question" data-required-gate="evidence_coverage">
+        <h3>Evidence Coverage Gate</h3>
+        <p>Is the evidence sufficient to approve this User Story Map intermediate?</p>
+        <label class="option"><input type="radio" name="evidence_coverage" value="sufficient_with_gaps">Approve evidence coverage with the visible customer-feedback and handoff-destination gaps preserved.</label>
+        <label class="option"><input type="radio" name="evidence_coverage" value="needs_more_support">Do not approve yet; gather or add more support for one or more claims.</label>
+        <label class="option"><input type="radio" name="evidence_coverage" value="other">Other / None of the above</label>
+        <textarea data-notes-for="evidence_coverage" placeholder="Optional notes or required evidence changes"></textarea>
+        <label class="option"><input type="radio" name="evidence_coverage" value="needs-clarification">Need clarification</label>
+      </div>
     </section>
 
     <section id="assumptions">
@@ -307,7 +316,15 @@
           <tr><td>Agent-operable handoff is a later candidate, not a near-term default.</td><td>Competitor MCP/API evidence and buyer-demand gap.</td><td>Medium</td><td>AI-forward agencies validate MCP/CLI immediately.</td></tr>
         </table>
       </div>
-      <div class="notice"><h3>Approved Assumptions And Confidence</h3><p><strong>Gate answer:</strong> preserve. The confidence register remains unchanged for synthesis and downstream journey-map consolidation.</p></div>
+      <div class="question" data-required-gate="assumptions_confidence">
+        <h3>Assumptions And Confidence Gate</h3>
+        <p>Should these assumptions and confidence levels be preserved in the canonical intermediate?</p>
+        <label class="option"><input type="radio" name="assumptions_confidence" value="preserve">Preserve the assumptions and confidence levels as written.</label>
+        <label class="option"><input type="radio" name="assumptions_confidence" value="approve_with_edits">Approve with edits named in notes.</label>
+        <label class="option"><input type="radio" name="assumptions_confidence" value="other">Other / None of the above</label>
+        <textarea data-notes-for="assumptions_confidence" placeholder="Optional edits or confidence changes"></textarea>
+        <label class="option"><input type="radio" name="assumptions_confidence" value="needs-clarification">Need clarification</label>
+      </div>
     </section>
 
     <section id="alternatives">
@@ -328,17 +345,25 @@
     </section>
 
     <section id="file-changes">
-      <h2>Confirmed Canonical Artifacts & File Changes</h2>
-      <div class="table-wrap" data-tts-narrative="The approved canonical user story map intermediate has been written and the review artifacts have been archived.">
+      <h2>Proposed Canonical Artifacts & File Changes</h2>
+      <div class="table-wrap" data-tts-narrative="The proposed file changes are limited to writing the approved canonical user story map intermediate after approval.">
         <table>
-          <tr><th>Path</th><th>Review-State Action</th><th>Finalized Action</th></tr>
-          <tr><td><code>research/_working/preliminary-user-story-map-research.md</code></td><td>Written as non-canonical working packet.</td><td>Archived and removed after approved canonical write.</td></tr>
-          <tr><td><code>alignment/user-story-map-formforge.html</code></td><td>Review page for approval.</td><td>Confirmed with approval record after canonical write.</td></tr>
-          <tr><td><code>research/journey-map-user-story-map.md</code></td><td>Not written during review.</td><td>Approved canonical intermediate written.</td></tr>
+          <tr><th>Path</th><th>Action Now</th><th>Action After Approval</th></tr>
+          <tr><td><code>research/_working/preliminary-user-story-map-research.md</code></td><td>Written as non-canonical working packet.</td><td>Archive and remove after approved canonical write.</td></tr>
+          <tr><td><code>alignment/user-story-map-formforge.html</code></td><td>Review page for approval.</td><td>Confirm page with approval record after canonical write.</td></tr>
+          <tr><td><code>research/journey-map-user-story-map.md</code></td><td>Not written.</td><td>Write approved canonical intermediate.</td></tr>
           <tr><td><code>research/_working/journey-map-run.yaml</code></td><td>Read only.</td><td>Preserve; completion inferred from canonical intermediate existence.</td></tr>
         </table>
       </div>
-      <div class="notice"><h3>Approved File Change</h3><p><strong>Gate answer:</strong> approve_scope. Approved canonical target: <code>research/journey-map-user-story-map.md</code>.</p></div>
+      <div class="question" data-required-gate="proposed_file_changes">
+        <h3>Artifact Destination & Proposed File Changes Gate</h3>
+        <p>Approve writing the canonical User Story Map intermediate after this review?</p>
+        <label class="option"><input type="radio" name="proposed_file_changes" value="approve_scope">Approve writing <code>research/journey-map-user-story-map.md</code> from this packet after any requested edits.</label>
+        <label class="option"><input type="radio" name="proposed_file_changes" value="do_not_write">Do not write the canonical intermediate yet.</label>
+        <label class="option"><input type="radio" name="proposed_file_changes" value="other">Other / None of the above</label>
+        <textarea data-notes-for="proposed_file_changes" placeholder="Optional destination or scope notes"></textarea>
+        <label class="option"><input type="radio" name="proposed_file_changes" value="needs-clarification">Need clarification</label>
+      </div>
     </section>
 
     <section class="source-view" id="routing">
@@ -357,7 +382,7 @@
 
     <section class="source-view" id="packet-source">
       <h2>Supplemental Working Packet Source</h2>
-      <p class="muted">The rendered sections above are the primary record. This source view is retained as a supplemental checksum for the packet archived under <code>docs/history/archive/2026-07-01/233545/research/_working/preliminary-user-story-map-research.md</code>.</p>
+      <p class="muted">The rendered sections above are the primary review surface. This source view is included only as a supplemental checksum against <code>research/_working/preliminary-user-story-map-research.md</code>.</p>
       <pre><code># User Story Map
 
 Based on: research/icp.md, research/competitive-analysis.md, research/journey-map-service-blueprint.md, README/product boundary, and observed implementation files.
@@ -367,9 +392,110 @@ Mode: Product-Exists, grounded by code and customer-feedback-limited.
 
 Summary: FormForge's story map backbone is the client-service intake loop: decide what information is needed, create a useful intake form, tailor it, publish a polished link, collect client responses, review readiness, and hand answers into service delivery. The walking skeleton is visible in product: create with AI or from scratch, edit fields, publish, collect a public response, review it, mark status, and export CSV. The major gap is the transition from response received to ready for kickoff or delivery work.
 
-Canonical artifact written: research/journey-map-user-story-map.md.</code></pre>
+Canonical destination after approval: research/journey-map-user-story-map.md.</code></pre>
+    </section>
+
+    <section class="compile" id="compile">
+      <h2>Compile Responses</h2>
+      <p>Answer the required gates above, then compile YAML and paste it into a session invoking the parent skill.</p>
+      <button type="button" id="compileBtn">Compile Responses</button>
+      <p id="compileStatus" class="muted" role="status"></p>
+      <textarea id="yamlOutput" readonly placeholder="Compiled YAML will appear here."></textarea>
+      <button type="button" id="copyBtn">Copy YAML</button>
     </section>
   </main>
+
+  <script>
+    const requiredGateNames = ["evidence_coverage", "assumptions_confidence", "proposed_file_changes"];
+    const gateMeta = {
+      evidence_coverage: { section: "Evidence Matrix", gate_type: "evidence coverage" },
+      assumptions_confidence: { section: "Assumptions / Confidence Register", gate_type: "assumptions/confidence" },
+      proposed_file_changes: { section: "Proposed Canonical Artifacts & File Changes", gate_type: "proposed file changes", target_path: "research/journey-map-user-story-map.md" }
+    };
+    function yamlString(value) {
+      return JSON.stringify(String(value ?? ""));
+    }
+    function selectedGate(name) {
+      const chosen = document.querySelector(`input[name="${name}"]:checked`);
+      if (!chosen) return null;
+      const notes = document.querySelector(`[data-notes-for="${name}"]`)?.value.trim() || "";
+      const status = chosen.value === "needs-clarification" ? "needs-clarification" : chosen.value === "other" ? "other" : "answered";
+      return { name, answer: chosen.value, notes, status };
+    }
+    function buildYaml() {
+      const answered = requiredGateNames.map(selectedGate).filter(Boolean);
+      const unanswered = requiredGateNames.filter((name) => !selectedGate(name));
+      const hasBlocking = answered.some((gate) => gate.status === "needs-clarification" || gate.answer === "do_not_write" || gate.answer === "needs_more_support");
+      const complete = unanswered.length === 0 && !hasBlocking;
+      const lines = [
+        "# Invoke with: $journey-map",
+        'command: "$journey-map"',
+        "alignment_page: alignment/user-story-map-formforge.html",
+        `response_status: ${unanswered.length === 0 ? "complete" : "partial"}`,
+        `approval_status: ${complete ? "ready-for-agent-review" : "not-approved"}`,
+        `required_gate_status: ${unanswered.length === 0 ? "complete" : "incomplete"}`,
+        "unanswered_required_questions:"
+      ];
+      if (unanswered.length) unanswered.forEach((name) => lines.push(`  - ${name}`));
+      else lines.push("  []");
+      if (answered.length) {
+        lines.push("gate_answers:");
+        answered.forEach((gate) => {
+          const meta = gateMeta[gate.name];
+          lines.push(`  - section: ${yamlString(meta.section)}`);
+          lines.push(`    gate_type: ${yamlString(meta.gate_type)}`);
+          lines.push(`    status: ${yamlString(gate.status)}`);
+          lines.push(`    answer: ${yamlString(gate.answer)}`);
+          if (gate.notes) lines.push(`    notes: ${yamlString(gate.notes)}`);
+          if (meta.target_path) lines.push(`    target_path: ${yamlString(meta.target_path)}`);
+        });
+      }
+      lines.push("agent_routing:");
+      lines.push("  workflow: pattern-a-research-loop");
+      lines.push("  parent_skill: journey-map");
+      lines.push('  command: "$journey-map"');
+      lines.push("  gate_owner: parent-orchestrator");
+      lines.push("  gate_type: framework-findings");
+      lines.push("  framework_slug: user-story-map");
+      lines.push("  framework_mode: inline-subskill");
+      lines.push("  run_manifest: research/_working/journey-map-run.yaml");
+      lines.push("  next_resolution: parent-resolves-from-yaml-and-filesystem");
+      return { yaml: lines.join("\n"), complete, unanswered };
+    }
+    async function copyYaml(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        const output = document.getElementById("yamlOutput");
+        output.focus();
+        output.select();
+        return false;
+      }
+    }
+    document.getElementById("compileBtn").addEventListener("click", async () => {
+      const { yaml, complete, unanswered } = buildYaml();
+      document.getElementById("yamlOutput").value = yaml;
+      const copied = await copyYaml(yaml);
+      document.getElementById("compileStatus").textContent = complete
+        ? `Complete response YAML compiled${copied ? " and copied." : "."}`
+        : `Partial response YAML compiled; unanswered or blocking gates: ${unanswered.join(", ") || "blocking answer selected"}.`;
+    });
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      const output = document.getElementById("yamlOutput");
+      if (!output.value.trim()) output.value = buildYaml().yaml;
+      const copied = await copyYaml(output.value);
+      document.getElementById("compileStatus").textContent = copied ? "YAML copied." : "YAML selected for manual copy.";
+    });
+    document.querySelectorAll("[data-toggle]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const table = document.getElementById(button.dataset.toggle);
+        if (!table) return;
+        table.hidden = !table.hidden;
+        button.textContent = table.hidden ? "View as table" : "Hide table";
+      });
+    });
+  </script>
   <script src="../scripts/alignment-tts-kokoro.js"></script>
   <script src="../scripts/alignment-question-nav.js"></script>
 </body>

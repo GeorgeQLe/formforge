@@ -7,7 +7,7 @@
 - [x] Build review page: `alignment/user-story-map-formforge.html`.
 - [x] Update central alignment index for the new review page.
 - [x] Verify framework-review outputs and git diff.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ### Review
 

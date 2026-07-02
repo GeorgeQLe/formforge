@@ -25,7 +25,7 @@ Run the next pending journey-map framework, User Story Map, for the approved For
 - [x] Build the User Story Map findings review page: `alignment/user-story-map-formforge.html`.
 - [x] Update central alignment index for the new review page.
 - [x] Verify review artifacts, page script/includes, and git diff.
-- [ ] Commit and push intended tracked changes.
+- [x] Commit and push intended tracked changes.
 
 ---
 

@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en" data-alignment-status="review" data-alignment-stage="stage-2" data-alignment-category="research" data-visual-tier="visual">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FormForge User Story Map - Review</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #1c2333;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+      --chart-1: #58a6ff;
+      --chart-2: #3fb950;
+      --chart-3: #d29922;
+      --chart-4: #bc8cff;
+      --chart-5: #f85149;
+      --chart-6: #79c0ff;
+      --chart-7: #f0883e;
+      --chart-8: #a5d6ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 40px 22px 76px;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3, h4 { color: #fff; line-height: 1.2; letter-spacing: 0; }
+    h1 { font-size: 2.1rem; margin: 0 0 10px; }
+    h2 { margin-top: 42px; color: var(--accent); }
+    h3 { margin-top: 28px; }
+    a { color: var(--accent); }
+    code { color: #fff; background: #0b1220; border: 1px solid var(--border); border-radius: 6px; padding: 1px 5px; }
+    .lede { color: var(--text-muted); max-width: 880px; }
+    .meta-grid, .cards, .release-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+      gap: 14px;
+    }
+    .card, .toc, .notice, .question, .compile, .source-view {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .notice { border-left: 4px solid var(--accent); }
+    .question {
+      background: var(--surface-2);
+      border-color: rgba(188, 140, 255, 0.48);
+      margin-top: 18px;
+    }
+    .question h3, .question h4 { color: var(--purple); margin-top: 0; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin: 3px 5px 3px 0;
+      background: #0b1220;
+      color: var(--text);
+      font-weight: 650;
+      font-size: 0.9rem;
+    }
+    .toc ul { columns: 2; margin-bottom: 0; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td { border: 1px solid var(--border); padding: 10px 12px; vertical-align: top; }
+    th { background: var(--surface); color: #fff; text-align: left; }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 14px 0;
+    }
+    .table-wrap table { border: 0; }
+    .table-wrap th:first-child, .table-wrap td:first-child { border-left: 0; }
+    .table-wrap th:last-child, .table-wrap td:last-child { border-right: 0; }
+    .table-wrap tr:first-child th { border-top: 0; }
+    .chart-container { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 16px; margin: 18px 0; }
+    .chart-row { display: grid; grid-template-columns: 170px minmax(0, 1fr) 92px; gap: 10px; align-items: center; margin: 10px 0; }
+    .track { height: 24px; border-radius: 999px; background: #0b1220; overflow: hidden; border: 1px solid var(--border); }
+    .fill { height: 24px; border-radius: 999px; min-width: 4px; }
+    .chart-toggle { min-height: 44px; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border); background: #0b1220; color: var(--text); cursor: pointer; }
+    label.option { display: block; min-height: 44px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; margin: 8px 0; cursor: pointer; background: #0d1117; }
+    label.option:hover { border-color: var(--accent); }
+    input[type="radio"] { margin-right: 9px; }
+    textarea, input[type="text"] {
+      width: 100%;
+      min-height: 44px;
+      margin-top: 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0b1220;
+      color: var(--text);
+      font: inherit;
+      padding: 10px 12px;
+    }
+    textarea { min-height: 98px; }
+    button {
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--accent);
+      color: #06111f;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    .muted { color: var(--text-muted); }
+    .status { color: var(--green); font-weight: 750; }
+    .warn { color: var(--orange); font-weight: 750; }
+    .source-view { margin-top: 24px; }
+    .source-view pre { white-space: pre-wrap; overflow-x: auto; color: var(--text); }
+    .compile textarea { min-height: 320px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+    @media (max-width: 860px) {
+      main { padding: 30px 16px 60px; }
+      .toc ul { columns: 1; }
+      .chart-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>FormForge User Story Map - Review</h1>
+    <p class="lede">Stage 2 framework findings page for the pending <code>user-story-map</code> framework in the parent <code>$journey-map</code> loop. This page previews the non-canonical working packet and asks for approval before writing <code>research/journey-map-user-story-map.md</code>.</p>
+
+    <section class="notice" id="status">
+      <h2>Research Scope Approved</h2>
+      <p><strong>Status:</strong> <span class="status">review pending</span></p>
+      <p><strong>Date:</strong> 2026-07-02</p>
+      <p><strong>Parent manifest:</strong> <code>research/_working/journey-map-run.yaml</code></p>
+      <p><strong>Selected frameworks:</strong> <span class="pill">service-blueprint complete</span><span class="pill">user-story-map in review</span></p>
+      <p><strong>Scope:</strong> flat <code>research/</code> FormForge client-service intake/onboarding scope.</p>
+      <p><strong>Output boundary:</strong> this run writes only <code>research/_working/preliminary-user-story-map-research.md</code> and this review page. The canonical intermediate is not written until compiled YAML approves it.</p>
+    </section>
+
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Table Of Contents</h2>
+      <ul>
+        <li><a href="#summary">Executive Findings</a></li>
+        <li><a href="#activity-backbone">Activity Backbone</a></li>
+        <li><a href="#story-map">Story Map</a></li>
+        <li><a href="#release-slicing">Release Slicing</a></li>
+        <li><a href="#walking-skeleton">Walking Skeleton</a></li>
+        <li><a href="#evidence">Evidence Matrix</a></li>
+        <li><a href="#assumptions">Assumptions Register</a></li>
+        <li><a href="#alternatives">Alternatives And Gaps</a></li>
+        <li><a href="#file-changes">Canonical Artifact Gate</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
+      </ul>
+    </nav>
+
+    <section id="summary">
+      <h2>Executive Findings</h2>
+      <div class="cards">
+        <div class="card"><h3>Backbone</h3><p>The story map centers on client-service intake: recognize need, draft, tailor, publish, collect, review, hand off, and reuse.</p><p class="muted">Confidence: high, grounded in approved ICP and code.</p></div>
+        <div class="card"><h3>Walking Skeleton</h3><p>The existing product surface already supports the thinnest end-to-end path from draft to public response and CSV export.</p><p class="muted">Confidence: high, observed in routes and routers.</p></div>
+        <div class="card"><h3>Main Gap</h3><p>The highest-value story gap is not more generic form creation. It is response readiness and handoff into service delivery.</p><p class="muted">Confidence: medium-high, research-backed but not customer-validated.</p></div>
+      </div>
+    </section>
+
+    <section id="activity-backbone">
+      <h2>Activity Backbone</h2>
+      <div class="chart-container" data-tts-narrative="The activity backbone follows eight stages from recognizing an intake need through reuse and improvement. Current product coverage is strongest from drafting through export, and weakest in downstream handoff depth.">
+        <h3>Backbone Coverage</h3>
+        <button class="chart-toggle" type="button" data-toggle="coverage-table">View as table</button>
+        <div class="chart" aria-label="Bar chart showing evidence coverage across eight user story map activities">
+          <div class="chart-row"><strong>Recognize need</strong><div class="track"><div class="fill" style="width:75%;background:var(--chart-1)"></div></div><span>Research high</span></div>
+          <div class="chart-row"><strong>Draft form</strong><div class="track"><div class="fill" style="width:95%;background:var(--chart-2)"></div></div><span>Code high</span></div>
+          <div class="chart-row"><strong>Tailor form</strong><div class="track"><div class="fill" style="width:90%;background:var(--chart-2)"></div></div><span>Code high</span></div>
+          <div class="chart-row"><strong>Publish/share</strong><div class="track"><div class="fill" style="width:92%;background:var(--chart-2)"></div></div><span>Code high</span></div>
+          <div class="chart-row"><strong>Complete intake</strong><div class="track"><div class="fill" style="width:86%;background:var(--chart-2)"></div></div><span>Code high</span></div>
+          <div class="chart-row"><strong>Review readiness</strong><div class="track"><div class="fill" style="width:68%;background:var(--chart-3)"></div></div><span>Partial</span></div>
+          <div class="chart-row"><strong>Hand off answers</strong><div class="track"><div class="fill" style="width:42%;background:var(--chart-5)"></div></div><span>Gap</span></div>
+          <div class="chart-row"><strong>Reuse/improve</strong><div class="track"><div class="fill" style="width:72%;background:var(--chart-3)"></div></div><span>Partial</span></div>
+        </div>
+        <div class="table-wrap" id="coverage-table" hidden data-tts-narrative="The table mirrors the coverage chart and shows where each activity is supported by research, code, or both.">
+          <table>
+            <tr><th>Activity</th><th>Coverage</th><th>Basis</th></tr>
+            <tr><td>Recognize intake need</td><td>Research high</td><td>ICP trigger events and current-state journey.</td></tr>
+            <tr><td>Draft intake form</td><td>Code high</td><td>AI route and generation service.</td></tr>
+            <tr><td>Tailor form</td><td>Code high</td><td>Editor, field palette, settings, and form router.</td></tr>
+            <tr><td>Publish and share link</td><td>Code high</td><td>Publish mutation, version snapshots, public route.</td></tr>
+            <tr><td>Complete intake</td><td>Code high</td><td>Public renderer, validation, Turnstile, submit API.</td></tr>
+            <tr><td>Review response readiness</td><td>Partial</td><td>Responses, status, stats, analytics exist; readiness scoring does not.</td></tr>
+            <tr><td>Export or hand off answers</td><td>Gap</td><td>CSV export exists; native workflow handoff is absent.</td></tr>
+            <tr><td>Reuse and improve</td><td>Partial</td><td>Duplicate/regenerate/analytics exist; intake libraries and quality metrics do not.</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-wrap" data-tts-narrative="The activity backbone table maps eight goal-level activities to personas, goals, and evidence sources.">
+        <table>
+          <tr><th>Activity</th><th>Persona</th><th>Goal</th><th>Evidence</th></tr>
+          <tr><td>Recognize intake need</td><td>Owner-operator, consultant, coach, small-agency operator</td><td>Realize a new client, offer, cohort, or project needs a structured intake artifact now.</td><td><code>research/icp.md</code> trigger events; current-state journey.</td></tr>
+          <tr><td>Draft intake form</td><td>Buyer/user</td><td>Get from plain-language need to a usable first draft without blank-page setup.</td><td>ICP blank-page pain; README core loop; AI route and generation service.</td></tr>
+          <tr><td>Tailor form for client/service</td><td>Buyer/user, sometimes ops coordinator</td><td>Adjust fields, wording, required flags, logic, theme, settings, and publication readiness.</td><td>ICP value drivers; editor/settings UI; form router.</td></tr>
+          <tr><td>Publish and share link</td><td>Buyer/user</td><td>Send a credible intake link to the client without respondent account friction.</td><td>README core loop; publish mutation; public route; immutable snapshots.</td></tr>
+          <tr><td>Complete intake</td><td>External client/respondent</td><td>Submit required information, files, preferences, and constraints with minimal friction.</td><td>ICP respondent dynamic; submit route validation; Turnstile; renderer fields.</td></tr>
+          <tr><td>Review response readiness</td><td>Buyer/user</td><td>See what came in, triage responses, and decide whether kickoff can proceed.</td><td>Service blueprint gap analysis; response list, stats, analytics, status update.</td></tr>
+          <tr><td>Export or hand off answers</td><td>Buyer/user</td><td>Move intake answers into project docs, CRM, Notion, Sheets, kickoff notes, or service workflow.</td><td>ICP manual copy/paste pain; competitive handoff gap; CSV export.</td></tr>
+          <tr><td>Reuse and improve intake system</td><td>Buyer/user</td><td>Duplicate, regenerate, close, analyze, and adapt forms across clients or offers.</td><td>Dashboard duplicate; AI regenerate; statuses; analytics.</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="story-map">
+      <h2>Story Map</h2>
+      <p>The complete story hierarchy is rendered below. Release labels are user-story-map slices for review, not a committed engineering roadmap.</p>
+
+      <h3>Recognize Intake Need</h3>
+      <div class="table-wrap"><table><tr><th>Task</th><th>P1 Stories</th><th>P2 Stories</th><th>P3+ Stories</th></tr><tr><td>Identify the intake job</td><td>Start a form for a new client or service need.</td><td>Use intake examples aligned to service type.</td><td>Separate applications, onboarding, check-ins, and testimonials.</td></tr><tr><td>Decide what good intake must capture</td><td>Describe goals, background, files, links, access, timeline, budget, and preferences in the prompt.</td><td>Use completeness prompts for commonly missed client details.</td><td>Save intake criteria by offer type.</td></tr></table></div>
+
+      <h3>Draft Intake Form</h3>
+      <div class="table-wrap"><table><tr><th>Task</th><th>P1 Stories</th><th>P2 Stories</th><th>P3+ Stories</th></tr><tr><td>Generate or create the first draft</td><td>Create from plain-language prompt; create manually if AI is wrong or unavailable.</td><td>AI includes sensible labels, field types, required flags, validation, options, and conditional-logic hints; generation errors guide retry.</td><td>Generation learns from saved service-type criteria.</td></tr><tr><td>Review AI quality</td><td>Preview generated fields before publishing.</td><td>Regenerate from a revision request.</td><td>Run quality checks against intake completeness.</td></tr></table></div>
+
+      <h3>Tailor Form For Client/Service</h3>
+      <div class="table-wrap"><table><tr><th>Task</th><th>P1 Stories</th><th>P2 Stories</th><th>P3+ Stories</th></tr><tr><td>Edit fields and logic</td><td>Add, remove, reorder, and edit fields; use common field types.</td><td>Use conditional logic, undo/redo, and preview.</td><td>Offer reusable patterns for specific service types.</td></tr><tr><td>Configure client-facing experience</td><td>Set title, description, required fields, and success message.</td><td>Configure notifications, response limits, close dates, redirect URL, GDPR consent, and themes.</td><td>Reuse themes and templates across repeated client work.</td></tr></table></div>
+
+      <h3>Publish And Share Link</h3>
+      <div class="table-wrap"><table><tr><th>Task</th><th>P1 Stories</th><th>P2 Stories</th><th>P3+ Stories</th></tr><tr><td>Publish a stable form</td><td>Publish only non-empty forms; tie responses to the published version.</td><td>Make draft/published/closed states clear.</td><td>Surface pre-publish completeness checks.</td></tr><tr><td>Share with a respondent</td><td>Provide a public link clients can complete without a FormForge account.</td><td>Make the shared page polished and credible.</td><td>Track whether a client has started or stalled.</td></tr></table></div>
+
+      <h3>Complete Intake</h3>
+      <div class="table-wrap"><table><tr><th>Task</th><th>P1 Stories</th><th>P2 Stories</th><th>P3+ Stories</th></tr><tr><td>Fill and submit the form</td><td>Respondent fills visible fields, fixes validation errors, and submits.</td><td>Only relevant fields appear; success message or redirect confirms receipt.</td><td>File and asset requests make the right materials clear.</td></tr><tr><td>Protect submission reliability</td><td>Use bot/rate-limit protection.</td><td>Use close-date and response-limit controls.</td><td>Expose submission failure or notification delivery problems.</td></tr></table></div>
+
+      <h3>Review Response Readiness</h3>
+      <div class="table-wrap"><table><tr><th>Task</th><th>P1 Stories</th><th>P2 Stories</th><th>P3+ Stories</th></tr><tr><td>See and triage responses</td><td>See submissions; label new/read/starred/archived.</td><td>Use response stats, recent activity, and bulk status updates.</td><td>Coordinate review across team roles.</td></tr><tr><td>Judge completeness</td><td>Open a response and read answers.</td><td>See readiness signal for missing files, unclear answers, or incomplete context.</td><td>Send follow-up requests tied to missing answers.</td></tr></table></div>
+
+      <h3>Export Or Hand Off Answers</h3>
+      <div class="table-wrap"><table><tr><th>Task</th><th>P1 Stories</th><th>P2 Stories</th><th>P3+ Stories</th></tr><tr><td>Export collected data</td><td>Export responses as CSV.</td><td>Preserve metadata and labels; expose truncation.</td><td>Support richer exports by destination.</td></tr><tr><td>Move answers into delivery workflow</td><td>Use at least one manual handoff path.</td><td>Use cleaner handoff to Sheets, Notion, CRM, kickoff docs, or project tools.</td><td>Use workflow-specific handoff or agent-operable access.</td></tr></table></div>
+
+      <h3>Reuse And Improve Intake System</h3>
+      <div class="table-wrap"><table><tr><th>Task</th><th>P1 Stories</th><th>P2 Stories</th><th>P3+ Stories</th></tr><tr><td>Reuse successful forms</td><td>Duplicate a form.</td><td>Regenerate or revise an existing form.</td><td>Use reusable intake libraries by service type.</td></tr><tr><td>Learn from usage</td><td>See basic response counts.</td><td>Use completion time and recent submission analytics.</td><td>Track intake quality and follow-up metrics.</td></tr></table></div>
+    </section>
+
+    <section id="release-slicing">
+      <h2>Release Slicing</h2>
+      <div class="release-grid">
+        <div class="card"><h3>Release 1 - Walking Skeleton</h3><p><strong>Outcome:</strong> A provider can create one intake form, publish it, collect a response, review it, and export it manually.</p><p><strong>Stories:</strong> start form, draft/create, edit fields, publish, public submit, response review, CSV export, duplicate/count.</p></div>
+        <div class="card"><h3>Release 2 - Useful Client Intake Loop</h3><p><strong>Outcome:</strong> The loop becomes credible for repeated paid-client work by improving completeness, polish, monitoring, and first handoff beyond raw collection.</p><p><strong>Stories:</strong> completeness prompts, better AI/logic quality, themes/settings, readiness signal, export metadata, one validated handoff path.</p></div>
+        <div class="card"><h3>Release 3+ - Operational Depth</h3><p><strong>Outcome:</strong> FormForge becomes an intake operating layer for repeated service workflows.</p><p><strong>Stories:</strong> destination routing, follow-up loops, service-type libraries, teams, API/webhooks, agent-operable handoff, billing expansion.</p></div>
+      </div>
+    </section>
+
+    <section id="walking-skeleton">
+      <h2>Walking Skeleton</h2>
+      <p>The thinnest deployable/testable path is: authenticated provider creates a form from a prompt or manual title; edits common fields; publishes; FormForge snapshots the published version; external client submits; provider sees the response, changes status, and exports CSV.</p>
+      <div class="table-wrap" data-tts-narrative="The walking skeleton table maps each activity to its minimal story and the observed implementation evidence.">
+        <table>
+          <tr><th>Activity</th><th>Skeleton Story</th><th>Implementation Notes</th></tr>
+          <tr><td>Recognize intake need</td><td>Start one intake form for one client/service need.</td><td>Dashboard and new-form path support entry.</td></tr>
+          <tr><td>Draft intake form</td><td>Generate or manually create the first draft.</td><td>AI route and form creation route support this.</td></tr>
+          <tr><td>Tailor form</td><td>Edit/reorder common fields.</td><td>Editor palette/canvas/properties support field-level editing.</td></tr>
+          <tr><td>Publish/share</td><td>Publish a non-empty form and expose a public link.</td><td>Publish mutation snapshots fields and changes status.</td></tr>
+          <tr><td>Complete intake</td><td>Submit a public response with validation.</td><td>Public form and submit API cover this.</td></tr>
+          <tr><td>Review readiness</td><td>View response list/detail and mark status.</td><td>Response router and pages support this.</td></tr>
+          <tr><td>Export/handoff</td><td>Export responses as CSV.</td><td>CSV export builder and response page support manual handoff.</td></tr>
+          <tr><td>Reuse/improve</td><td>Duplicate or regenerate forms and see basic counts.</td><td>Duplicate, regenerate, stats, and analytics cover early reuse.</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="evidence">
+      <h2>Evidence Matrix</h2>
+      <div class="table-wrap" data-tts-narrative="The evidence matrix maps seven major claims to research or code evidence, confidence, and decision impact.">
+        <table>
+          <tr><th>Claim</th><th>Evidence Source</th><th>Evidence Type</th><th>Inference</th><th>Confidence</th><th>Decision Impact</th></tr>
+          <tr><td>The story map should center on client-service intake/onboarding.</td><td><code>research/icp.md</code></td><td>Approved research</td><td>The primary ICP and pains are intake-specific.</td><td>High</td><td>Approve the active backbone if the ICP still holds.</td></tr>
+          <tr><td>The current product covers a walking skeleton from draft to export.</td><td>README; AI route; form router; submit route; response router.</td><td>Observed code plus product boundary</td><td>The flow exists end to end.</td><td>High</td><td>Do not treat R1 as a greenfield requirement.</td></tr>
+          <tr><td>AI drafting helps activation but is not durable differentiation.</td><td>ICP blank-page pain; competitive analysis AI table-stakes finding.</td><td>Approved research plus inference</td><td>Useful as a start, weak as the final wedge.</td><td>High</td><td>Keep later slices focused on intake quality and handoff.</td></tr>
+          <tr><td>Editing, preview, publish, snapshots, public completion, and validation are core R1 stories.</td><td>Editor UI; publish mutation; form version schema; public form; submit route.</td><td>Observed code</td><td>These are required to prove the two-sided loop.</td><td>High</td><td>Preserve in canonical intermediate.</td></tr>
+          <tr><td>Post-submission readiness and handoff should be the main R2/R3 concern.</td><td>ICP manual copy/paste pain; competitive handoff gap; service blueprint operational gap.</td><td>Approved research plus service blueprint</td><td>The buyer's value continues after response receipt.</td><td>Medium-high</td><td>Gate for whether the next slice emphasis is right.</td></tr>
+          <tr><td>Broad integrations, API keys, billing, teams, and durable file storage should not dominate the walking skeleton.</td><td>README Fresh Start Bootstrap Note.</td><td>Product boundary</td><td>The repo explicitly defers these until core validation.</td><td>High</td><td>Keep them R3+ unless user overrides.</td></tr>
+          <tr><td>Customer-feedback confidence remains limited.</td><td>No <code>research/customer-feedback.md</code>; service blueprint source gaps.</td><td>Source absence</td><td>Story-map priorities are research/code-backed, not customer-proven.</td><td>High</td><td>Preserve caveats in canonical artifact.</td></tr>
+        </table>
+      </div>
+
+      <div class="question" data-required-gate="evidence_coverage">
+        <h3>Evidence Coverage Gate</h3>
+        <p>Is the evidence sufficient to approve this User Story Map intermediate?</p>
+        <label class="option"><input type="radio" name="evidence_coverage" value="sufficient_with_gaps">Approve evidence coverage with the visible customer-feedback and handoff-destination gaps preserved.</label>
+        <label class="option"><input type="radio" name="evidence_coverage" value="needs_more_support">Do not approve yet; gather or add more support for one or more claims.</label>
+        <label class="option"><input type="radio" name="evidence_coverage" value="other">Other / None of the above</label>
+        <textarea data-notes-for="evidence_coverage" placeholder="Optional notes or required evidence changes"></textarea>
+        <label class="option"><input type="radio" name="evidence_coverage" value="needs-clarification">Need clarification</label>
+      </div>
+    </section>
+
+    <section id="assumptions">
+      <h2>Assumptions / Confidence Register</h2>
+      <div class="table-wrap" data-tts-narrative="The assumptions register identifies which conclusions are high confidence and which could change after customer interviews.">
+        <table>
+          <tr><th>Assumption</th><th>Status</th><th>Confidence</th><th>What Would Change It</th></tr>
+          <tr><td>Product-exists mode remains appropriate.</td><td>Supported by manifest selection and observed code.</td><td>High</td><td>User changes mode or scope.</td></tr>
+          <tr><td>Release labels are story-map slices, not committed engineering roadmap milestones.</td><td>Methodological assumption.</td><td>High</td><td>User requests roadmap/spec conversion.</td></tr>
+          <tr><td>CSV export is enough for the walking skeleton but not durable ICP fit.</td><td>Inferred from ICP and competitive analysis.</td><td>Medium-high</td><td>Customers show CSV/email is sufficient for repeated paid use.</td></tr>
+          <tr><td>Completeness/readiness matters before broad integrations.</td><td>Inferred from missing-details pain and service blueprint gaps.</td><td>Medium</td><td>Discovery shows buyers care primarily about destination sync.</td></tr>
+          <tr><td>Agent-operable handoff is a later candidate, not a near-term default.</td><td>Competitor MCP/API evidence and buyer-demand gap.</td><td>Medium</td><td>AI-forward agencies validate MCP/CLI immediately.</td></tr>
+        </table>
+      </div>
+      <div class="question" data-required-gate="assumptions_confidence">
+        <h3>Assumptions And Confidence Gate</h3>
+        <p>Should these assumptions and confidence levels be preserved in the canonical intermediate?</p>
+        <label class="option"><input type="radio" name="assumptions_confidence" value="preserve">Preserve the assumptions and confidence levels as written.</label>
+        <label class="option"><input type="radio" name="assumptions_confidence" value="approve_with_edits">Approve with edits named in notes.</label>
+        <label class="option"><input type="radio" name="assumptions_confidence" value="other">Other / None of the above</label>
+        <textarea data-notes-for="assumptions_confidence" placeholder="Optional edits or confidence changes"></textarea>
+        <label class="option"><input type="radio" name="assumptions_confidence" value="needs-clarification">Need clarification</label>
+      </div>
+    </section>
+
+    <section id="alternatives">
+      <h2>Alternatives, Lower-Confidence Findings, And Source Gaps</h2>
+      <div class="cards">
+        <div class="card"><h3>Alternative: Feature Roadmap Emphasis</h3><p>Billing, teams, API keys, and durable storage could move earlier because code exists, but the README defers them until core loop validation.</p></div>
+        <div class="card"><h3>Alternative: Generic Builder Map</h3><p>Templates, payments, signatures, and broad integrations could dominate a generic form-builder story map, but the approved ICP is client-service intake.</p></div>
+        <div class="card"><h3>Alternative: Handoff-First R1</h3><p>Adding one integration before readiness may be right later, but the current evidence does not identify the winning destination.</p></div>
+      </div>
+      <h3>Source Coverage Gaps</h3>
+      <ul>
+        <li>No direct target-buyer interviews, usage analytics, support tickets, or win/loss notes.</li>
+        <li>No customer evidence showing which handoff destination should come first.</li>
+        <li>No observed completion-dropoff data for external clients.</li>
+        <li>No proof that AI-generated intake questions are ready-to-send for specific service niches.</li>
+        <li>No evidence yet on whether agent-first access is meaningful to nontechnical owner-operators.</li>
+      </ul>
+    </section>
+
+    <section id="file-changes">
+      <h2>Proposed Canonical Artifacts & File Changes</h2>
+      <div class="table-wrap" data-tts-narrative="The proposed file changes are limited to writing the approved canonical user story map intermediate after approval.">
+        <table>
+          <tr><th>Path</th><th>Action Now</th><th>Action After Approval</th></tr>
+          <tr><td><code>research/_working/preliminary-user-story-map-research.md</code></td><td>Written as non-canonical working packet.</td><td>Archive and remove after approved canonical write.</td></tr>
+          <tr><td><code>alignment/user-story-map-formforge.html</code></td><td>Review page for approval.</td><td>Confirm page with approval record after canonical write.</td></tr>
+          <tr><td><code>research/journey-map-user-story-map.md</code></td><td>Not written.</td><td>Write approved canonical intermediate.</td></tr>
+          <tr><td><code>research/_working/journey-map-run.yaml</code></td><td>Read only.</td><td>Preserve; completion inferred from canonical intermediate existence.</td></tr>
+        </table>
+      </div>
+      <div class="question" data-required-gate="proposed_file_changes">
+        <h3>Artifact Destination & Proposed File Changes Gate</h3>
+        <p>Approve writing the canonical User Story Map intermediate after this review?</p>
+        <label class="option"><input type="radio" name="proposed_file_changes" value="approve_scope">Approve writing <code>research/journey-map-user-story-map.md</code> from this packet after any requested edits.</label>
+        <label class="option"><input type="radio" name="proposed_file_changes" value="do_not_write">Do not write the canonical intermediate yet.</label>
+        <label class="option"><input type="radio" name="proposed_file_changes" value="other">Other / None of the above</label>
+        <textarea data-notes-for="proposed_file_changes" placeholder="Optional destination or scope notes"></textarea>
+        <label class="option"><input type="radio" name="proposed_file_changes" value="needs-clarification">Need clarification</label>
+      </div>
+    </section>
+
+    <section class="source-view" id="routing">
+      <h2>Parent Agent Routing</h2>
+      <pre><code>agent_routing:
+  workflow: pattern-a-research-loop
+  parent_skill: journey-map
+  command: "$journey-map"
+  gate_owner: parent-orchestrator
+  gate_type: framework-findings
+  framework_slug: user-story-map
+  framework_mode: inline-subskill
+  run_manifest: research/_working/journey-map-run.yaml
+  next_resolution: parent-resolves-from-yaml-and-filesystem</code></pre>
+    </section>
+
+    <section class="source-view" id="packet-source">
+      <h2>Supplemental Working Packet Source</h2>
+      <p class="muted">The rendered sections above are the primary review surface. This source view is included only as a supplemental checksum against <code>research/_working/preliminary-user-story-map-research.md</code>.</p>
+      <pre><code># User Story Map
+
+Based on: research/icp.md, research/competitive-analysis.md, research/journey-map-service-blueprint.md, README/product boundary, and observed implementation files.
+Date: 2026-07-02.
+Methodology: Jeff Patton User Story Mapping.
+Mode: Product-Exists, grounded by code and customer-feedback-limited.
+
+Summary: FormForge's story map backbone is the client-service intake loop: decide what information is needed, create a useful intake form, tailor it, publish a polished link, collect client responses, review readiness, and hand answers into service delivery. The walking skeleton is visible in product: create with AI or from scratch, edit fields, publish, collect a public response, review it, mark status, and export CSV. The major gap is the transition from response received to ready for kickoff or delivery work.
+
+Canonical destination after approval: research/journey-map-user-story-map.md.</code></pre>
+    </section>
+
+    <section class="compile" id="compile">
+      <h2>Compile Responses</h2>
+      <p>Answer the required gates above, then compile YAML and paste it into a session invoking the parent skill.</p>
+      <button type="button" id="compileBtn">Compile Responses</button>
+      <p id="compileStatus" class="muted" role="status"></p>
+      <textarea id="yamlOutput" readonly placeholder="Compiled YAML will appear here."></textarea>
+      <button type="button" id="copyBtn">Copy YAML</button>
+    </section>
+  </main>
+
+  <script>
+    const requiredGateNames = ["evidence_coverage", "assumptions_confidence", "proposed_file_changes"];
+    const gateMeta = {
+      evidence_coverage: { section: "Evidence Matrix", gate_type: "evidence coverage" },
+      assumptions_confidence: { section: "Assumptions / Confidence Register", gate_type: "assumptions/confidence" },
+      proposed_file_changes: { section: "Proposed Canonical Artifacts & File Changes", gate_type: "proposed file changes", target_path: "research/journey-map-user-story-map.md" }
+    };
+    function yamlString(value) {
+      return JSON.stringify(String(value ?? ""));
+    }
+    function selectedGate(name) {
+      const chosen = document.querySelector(`input[name="${name}"]:checked`);
+      if (!chosen) return null;
+      const notes = document.querySelector(`[data-notes-for="${name}"]`)?.value.trim() || "";
+      const status = chosen.value === "needs-clarification" ? "needs-clarification" : chosen.value === "other" ? "other" : "answered";
+      return { name, answer: chosen.value, notes, status };
+    }
+    function buildYaml() {
+      const answered = requiredGateNames.map(selectedGate).filter(Boolean);
+      const unanswered = requiredGateNames.filter((name) => !selectedGate(name));
+      const hasBlocking = answered.some((gate) => gate.status === "needs-clarification" || gate.answer === "do_not_write" || gate.answer === "needs_more_support");
+      const complete = unanswered.length === 0 && !hasBlocking;
+      const lines = [
+        "# Invoke with: $journey-map",
+        'command: "$journey-map"',
+        "alignment_page: alignment/user-story-map-formforge.html",
+        `response_status: ${unanswered.length === 0 ? "complete" : "partial"}`,
+        `approval_status: ${complete ? "ready-for-agent-review" : "not-approved"}`,
+        `required_gate_status: ${unanswered.length === 0 ? "complete" : "incomplete"}`,
+        "unanswered_required_questions:"
+      ];
+      if (unanswered.length) unanswered.forEach((name) => lines.push(`  - ${name}`));
+      else lines.push("  []");
+      if (answered.length) {
+        lines.push("gate_answers:");
+        answered.forEach((gate) => {
+          const meta = gateMeta[gate.name];
+          lines.push(`  - section: ${yamlString(meta.section)}`);
+          lines.push(`    gate_type: ${yamlString(meta.gate_type)}`);
+          lines.push(`    status: ${yamlString(gate.status)}`);
+          lines.push(`    answer: ${yamlString(gate.answer)}`);
+          if (gate.notes) lines.push(`    notes: ${yamlString(gate.notes)}`);
+          if (meta.target_path) lines.push(`    target_path: ${yamlString(meta.target_path)}`);
+        });
+      }
+      lines.push("agent_routing:");
+      lines.push("  workflow: pattern-a-research-loop");
+      lines.push("  parent_skill: journey-map");
+      lines.push('  command: "$journey-map"');
+      lines.push("  gate_owner: parent-orchestrator");
+      lines.push("  gate_type: framework-findings");
+      lines.push("  framework_slug: user-story-map");
+      lines.push("  framework_mode: inline-subskill");
+      lines.push("  run_manifest: research/_working/journey-map-run.yaml");
+      lines.push("  next_resolution: parent-resolves-from-yaml-and-filesystem");
+      return { yaml: lines.join("\n"), complete, unanswered };
+    }
+    async function copyYaml(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        const output = document.getElementById("yamlOutput");
+        output.focus();
+        output.select();
+        return false;
+      }
+    }
+    document.getElementById("compileBtn").addEventListener("click", async () => {
+      const { yaml, complete, unanswered } = buildYaml();
+      document.getElementById("yamlOutput").value = yaml;
+      const copied = await copyYaml(yaml);
+      document.getElementById("compileStatus").textContent = complete
+        ? `Complete response YAML compiled${copied ? " and copied." : "."}`
+        : `Partial response YAML compiled; unanswered or blocking gates: ${unanswered.join(", ") || "blocking answer selected"}.`;
+    });
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      const output = document.getElementById("yamlOutput");
+      if (!output.value.trim()) output.value = buildYaml().yaml;
+      const copied = await copyYaml(output.value);
+      document.getElementById("compileStatus").textContent = copied ? "YAML copied." : "YAML selected for manual copy.";
+    });
+    document.querySelectorAll("[data-toggle]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const table = document.getElementById(button.dataset.toggle);
+        if (!table) return;
+        table.hidden = !table.hidden;
+        button.textContent = table.hidden ? "View as table" : "Hide table";
+      });
+    });
+  </script>
+  <script src="../scripts/alignment-tts-kokoro.js"></script>
+  <script src="../scripts/alignment-question-nav.js"></script>
+</body>
+</html>

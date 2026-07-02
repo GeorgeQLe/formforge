@@ -1,3 +1,25 @@
+# Active Journey Map User Story Map Framework Review
+
+- [x] Resolve journey-map state from `research/_working/journey-map-run.yaml`.
+- [x] Confirm completed service-blueprint intermediate and missing user-story-map intermediate.
+- [x] Gather approved ICP, competitive analysis, service blueprint, README, and product-surface evidence.
+- [x] Write non-canonical working packet: `research/_working/preliminary-user-story-map-research.md`.
+- [x] Build review page: `alignment/user-story-map-formforge.html`.
+- [x] Update central alignment index for the new review page.
+- [x] Verify framework-review outputs and git diff.
+- [ ] Commit and push intended tracked changes.
+
+### Review
+
+- Stage 2 User Story Map framework review drafted on 2026-07-02 from the approved journey-map run manifest.
+- Non-canonical review artifacts are `research/_working/preliminary-user-story-map-research.md` and `alignment/user-story-map-formforge.html`; the canonical User Story Map intermediate remains unwritten pending final compiled YAML approval.
+- The story map frames the FormForge backbone as recognize intake need, draft form, tailor form, publish/share link, complete intake, review readiness, export/handoff answers, and reuse/improve the intake system.
+- Release slicing treats the current draft-to-CSV flow as the walking skeleton, with intake completeness/readiness and first validated handoff path as the main useful-loop gap.
+- Verification: `git diff --check` passed; inline review-page script parses; page reports review/stage-2/visual metadata and includes parent-owned `agent_routing` for `$journey-map`; active working packet and alignment page exist; `research/journey-map-user-story-map.md` remains absent; `alignment/index.html` lists the page and count is updated to 10 pages.
+- Browser open status: `npx skillpacks alignment pages open alignment/user-story-map-formforge.html --browser auto` succeeded and opened the local file URL.
+
+---
+
 # Active Journey Map Service Blueprint Finalization
 
 - [x] Reconcile approval YAML with the active service-blueprint working packet and manifest.

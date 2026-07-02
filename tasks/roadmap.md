@@ -1,3 +1,34 @@
+# FormForge Journey Map User Story Map Framework Roadmap
+
+## Objective
+
+Run the next pending journey-map framework, User Story Map, for the approved FormForge journey-map run and produce review-stage artifacts only.
+
+## Scope Basis
+
+- Active product path: flat `research/`
+- Approved journey-map run manifest: `research/_working/journey-map-run.yaml`
+- Completed framework: Service Blueprint
+- Next pending framework: User Story Map
+
+## Non-Goals
+
+- Do not write canonical `research/journey-map-user-story-map.md` before artifact approval.
+- Do not synthesize final `research/journey-map.md` in this session.
+- Do not change product code, dependencies, lockfiles, `.agents/project.json`, or GitHub Actions.
+
+## Plan
+
+- [x] Resolve journey-map state and confirm User Story Map is the only pending framework.
+- [x] Gather approved ICP, competitive analysis, service blueprint, README, and product-surface evidence.
+- [x] Write non-canonical working packet: `research/_working/preliminary-user-story-map-research.md`.
+- [x] Build the User Story Map findings review page: `alignment/user-story-map-formforge.html`.
+- [x] Update central alignment index for the new review page.
+- [x] Verify review artifacts, page script/includes, and git diff.
+- [ ] Commit and push intended tracked changes.
+
+---
+
 # FormForge Journey Map Service Blueprint Finalization Roadmap
 
 ## Objective

@@ -1,3 +1,36 @@
+# FormForge Journey Map Service Blueprint Finalization Roadmap
+
+## Objective
+
+Consume the approved service-blueprint framework findings YAML, write the canonical service-blueprint intermediate, archive the consumed review-stage artifacts, and hand the parent journey-map loop to the next pending framework.
+
+## Approval Input
+
+The user provided final compiled YAML approving:
+
+- Evidence coverage for the service-blueprint intermediate.
+- Confidence levels and visible customer-feedback gaps.
+- Proposed file change: write `research/journey-map-service-blueprint.md`.
+
+## Non-Goals
+
+- Do not run new journey research or alter the approved service-blueprint findings.
+- Do not run the `user-story-map` heavy phase in this approval-consumption step.
+- Do not synthesize `research/journey-map.md` yet.
+- Do not change product code, dependencies, lockfiles, or GitHub Actions.
+
+## Plan
+
+- [x] Reconcile approval YAML with the active service-blueprint working packet and journey-map run manifest.
+- [x] Write approved canonical artifact: `research/journey-map-service-blueprint.md`.
+- [x] Archive and remove active working packet: `research/_working/preliminary-service-blueprint-research.md`.
+- [x] Archive the service-blueprint review page snapshot and preserve the approval record.
+- [x] Recalculate manifest-selected framework progress and identify the next pending framework.
+- [x] Verify artifact structure, archive state, pending-framework state, and git diff.
+- [x] Commit and push intended tracked changes.
+
+---
+
 # FormForge Journey Map Stage 1 Scope Gate Roadmap
 
 ## Objective

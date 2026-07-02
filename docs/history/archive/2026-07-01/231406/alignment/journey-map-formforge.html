@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="confirmed">
+<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="review">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FormForge Service Blueprint - Confirmed</title>
+  <title>FormForge Service Blueprint Findings Review</title>
   <style>
     :root {
       color-scheme: dark;
@@ -254,15 +254,14 @@
 <body>
   <main>
     <header class="hero">
-      <p class="muted">Confirmed alignment record · journey-map parent orchestrator · service-blueprint framework</p>
-      <h1>FormForge Service Blueprint</h1>
-      <p>This page is the confirmed Stage 3 record for the approved service-blueprint intermediate. The canonical artifact is `research/journey-map-service-blueprint.md`; the unified journey map is not finalized yet.</p>
+      <p class="muted">Alignment review · journey-map parent orchestrator · service-blueprint framework</p>
+      <h1>FormForge Service Blueprint Findings Review</h1>
+      <p>This page renders the Stage 2 service-blueprint working packet for review. Approval will let the parent `$journey-map` orchestrator write `research/journey-map-service-blueprint.md`; it will not finalize the unified journey map yet.</p>
       <div class="meta-row">
-        <span class="pill good">alignment_status: confirmed</span>
-        <span class="pill">Findings date: 2026-06-20</span>
-        <span class="pill">Confirmed: 2026-07-01</span>
-        <span class="pill good">Required gate status: complete</span>
-        <span class="pill">Artifact: research/journey-map-service-blueprint.md</span>
+        <span class="pill review">alignment_status: review</span>
+        <span class="pill">Date: 2026-06-20</span>
+        <span class="pill good">Required gate status: pending reviewer YAML</span>
+        <span class="pill">Working packet: research/_working/preliminary-service-blueprint-research.md</span>
       </div>
     </header>
 
@@ -278,25 +277,26 @@
         <li><a href="#evidence-matrix">Evidence Matrix</a></li>
         <li><a href="#confidence">Assumptions And Confidence</a></li>
         <li><a href="#source-gaps">Source Coverage Gaps</a></li>
-        <li><a href="#file-changes">Confirmed File Changes</a></li>
+        <li><a href="#file-changes">Proposed File Changes</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
       </ul>
     </nav>
 
     <section id="approval-context" data-section="approval-context">
       <div class="section-head">
         <h2>Approval Context</h2>
+        <div class="feedback" data-feedback="approval-context"><button type="button" data-kind="emphasize">Emphasize</button><button type="button" data-kind="down">Thumbs down</button><button type="button" data-kind="needs-clarification">Clarification needed</button></div>
       </div>
+      <div class="feedback-panel" id="feedback-approval-context"><label for="feedback-approval-context-text">Section feedback</label><textarea id="feedback-approval-context-text"></textarea><button class="copy-button local-feedback" type="button">Compile Feedback YAML</button><textarea class="yaml-output local-yaml" readonly></textarea></div>
       <div class="notice success">
-        <p><strong>Consumed YAML:</strong> The service-blueprint framework findings gate was approved with `response_status: complete`, `approval_status: ready-for-agent-review`, `required_gate_status: complete`, and no unanswered required questions.</p>
-        <p><strong>Gate answers:</strong> evidence coverage approved; assumptions/confidence approved with customer-feedback gaps visible; proposed file change approved for <code>research/journey-map-service-blueprint.md</code>.</p>
-        <p><strong>Archived review artifacts:</strong> <code>docs/history/archive/2026-07-01/231406/alignment/journey-map-formforge.html</code> and <code>docs/history/archive/2026-07-01/231406/research/_working/preliminary-service-blueprint-research.md</code>.</p>
-        <p><strong>State transition:</strong> The parent wrote the canonical service-blueprint intermediate. Completion is inferred from the artifact existence; the run manifest remains selection-only.</p>
+        <p><strong>Consumed YAML:</strong> The framework-selection gate was approved with no unanswered required questions. Selected frameworks are `service-blueprint` and `user-story-map`.</p>
+        <p><strong>State transition:</strong> The parent wrote the run manifest and entered State C. This page is the findings review for the first pending framework, `service-blueprint`.</p>
       </div>
       <div class="table-wrap" data-tts-narrative="The approved loop selected two frameworks. Service blueprint is being reviewed first, and user story map remains pending after this approval.">
         <table>
           <thead><tr><th>Framework</th><th>Intermediate path</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td>service-blueprint</td><td><code>research/journey-map-service-blueprint.md</code></td><td>Confirmed canonical intermediate</td></tr>
+            <tr><td>service-blueprint</td><td><code>research/journey-map-service-blueprint.md</code></td><td>Pending approval from this page</td></tr>
             <tr><td>user-story-map</td><td><code>research/journey-map-user-story-map.md</code></td><td>Pending future framework run</td></tr>
           </tbody>
         </table>
@@ -306,7 +306,9 @@
     <section id="scope-inputs" data-section="scope-inputs">
       <div class="section-head">
         <h2>Scope And Inputs</h2>
+        <div class="feedback" data-feedback="scope-inputs"><button type="button" data-kind="emphasize">Emphasize</button><button type="button" data-kind="down">Thumbs down</button><button type="button" data-kind="needs-clarification">Clarification needed</button></div>
       </div>
+      <div class="feedback-panel" id="feedback-scope-inputs"><label for="feedback-scope-inputs-text">Section feedback</label><textarea id="feedback-scope-inputs-text"></textarea><button class="copy-button local-feedback" type="button">Compile Feedback YAML</button><textarea class="yaml-output local-yaml" readonly></textarea></div>
       <p>This packet maps the FormForge client-intake service in flat `research/` mode for the approved ICP: client-service solo consultants, coaches, and small agencies doing client intake/onboarding.</p>
       <div class="grid">
         <div class="card">
@@ -338,7 +340,9 @@
     <section id="summary" data-section="summary">
       <div class="section-head">
         <h2>Proposed Canonical Summary</h2>
+        <div class="feedback" data-feedback="summary"><button type="button" data-kind="emphasize">Emphasize</button><button type="button" data-kind="down">Thumbs down</button><button type="button" data-kind="needs-clarification">Clarification needed</button></div>
       </div>
+      <div class="feedback-panel" id="feedback-summary"><label for="feedback-summary-text">Section feedback</label><textarea id="feedback-summary-text"></textarea><button class="copy-button local-feedback" type="button">Compile Feedback YAML</button><textarea class="yaml-output local-yaml" readonly></textarea></div>
       <p>FormForge's current service is strongest from "describe the needed intake form" through "publish a public link" and "receive structured submissions." The visible product loop already supports AI-generated fields, visual editing, conditional logic, immutable published snapshots, public submission, response review, basic response status, analytics, notification email, and CSV export.</p>
       <p>The highest operational risk is after the respondent submits. ICP and competitive evidence both say the value of intake depends on reducing back-and-forth and moving answers into client work systems. The observed implementation currently provides response review, status labels, email notification, and CSV export, but no native Sheets/Notion/CRM/Zapier/Make/webhook/project-doc handoff. That makes post-submission routing the biggest service blueprint gap for the approved ICP.</p>
     </section>
@@ -346,7 +350,9 @@
     <section id="service-stages" data-section="service-stages">
       <div class="section-head">
         <h2>Service Stages</h2>
+        <div class="feedback" data-feedback="service-stages"><button type="button" data-kind="emphasize">Emphasize</button><button type="button" data-kind="down">Thumbs down</button><button type="button" data-kind="needs-clarification">Clarification needed</button></div>
       </div>
+      <div class="feedback-panel" id="feedback-service-stages"><label for="feedback-service-stages-text">Section feedback</label><textarea id="feedback-service-stages-text"></textarea><button class="copy-button local-feedback" type="button">Compile Feedback YAML</button><textarea class="yaml-output local-yaml" readonly></textarea></div>
       <div class="chart-container" data-tts-narrative="The service path starts with client-intake urgency, moves through AI draft, editing, publishing, respondent completion, response review, and ends at the weakest current stage: handoff into service delivery systems.">
         <svg viewBox="0 0 1100 220" role="img" aria-label="Service blueprint stage flow with handoff marked as the highest gap">
           <rect x="10" y="40" width="120" height="90" rx="8" fill="var(--chart-1)" opacity="0.85"></rect>
@@ -395,7 +401,9 @@
     <section id="lines" data-section="lines">
       <div class="section-head">
         <h2>Lines Of Interaction</h2>
+        <div class="feedback" data-feedback="lines"><button type="button" data-kind="emphasize">Emphasize</button><button type="button" data-kind="down">Thumbs down</button><button type="button" data-kind="needs-clarification">Clarification needed</button></div>
       </div>
+      <div class="feedback-panel" id="feedback-lines"><label for="feedback-lines-text">Section feedback</label><textarea id="feedback-lines-text"></textarea><button class="copy-button local-feedback" type="button">Compile Feedback YAML</button><textarea class="yaml-output local-yaml" readonly></textarea></div>
       <div class="cards-3">
         <div class="card"><h3>Line Of Interaction</h3><p>Buyer/user interacts with dashboard for prompt generation, editing, publishing, settings, response review, and export. Respondent/client interacts with the public form for link open, field completion, validation, bot challenge, and success message or redirect.</p></div>
         <div class="card"><h3>Line Of Visibility</h3><p>Buyer can see status, fields, settings, theme, public slug, responses, status labels, analytics, CSV export, and configured notification path. Respondent sees form, fields, help text, validation, Turnstile, and success state.</p></div>
@@ -409,7 +417,9 @@
     <section id="operational-gaps" data-section="operational-gaps">
       <div class="section-head">
         <h2>Operational Gap Analysis</h2>
+        <div class="feedback" data-feedback="operational-gaps"><button type="button" data-kind="emphasize">Emphasize</button><button type="button" data-kind="down">Thumbs down</button><button type="button" data-kind="needs-clarification">Clarification needed</button></div>
       </div>
+      <div class="feedback-panel" id="feedback-operational-gaps"><label for="feedback-operational-gaps-text">Section feedback</label><textarea id="feedback-operational-gaps-text"></textarea><button class="copy-button local-feedback" type="button">Compile Feedback YAML</button><textarea class="yaml-output local-yaml" readonly></textarea></div>
       <div class="table-wrap" data-tts-narrative="The highest severity gaps are missing customer evidence, response triage bottlenecks, and handoff from submitted answers into the user's real service delivery systems.">
         <table>
           <thead><tr><th>Gap Type</th><th>Stage</th><th>Description</th><th>Severity</th><th>Evidence</th></tr></thead>
@@ -431,7 +441,9 @@
     <section id="evidence-matrix" data-section="evidence-matrix">
       <div class="section-head">
         <h2>Evidence Matrix</h2>
+        <div class="feedback" data-feedback="evidence-matrix"><button type="button" data-kind="emphasize">Emphasize</button><button type="button" data-kind="down">Thumbs down</button><button type="button" data-kind="needs-clarification">Clarification needed</button></div>
       </div>
+      <div class="feedback-panel" id="feedback-evidence-matrix"><label for="feedback-evidence-matrix-text">Section feedback</label><textarea id="feedback-evidence-matrix-text"></textarea><button class="copy-button local-feedback" type="button">Compile Feedback YAML</button><textarea class="yaml-output local-yaml" readonly></textarea></div>
       <div class="table-wrap" data-tts-narrative="Most mechanics are high confidence because they are observed in code. The claim that handoff is the top service gap is medium-high confidence because it combines approved research with code absence.">
         <table>
           <thead><tr><th>Claim</th><th>Evidence Source</th><th>Evidence Type</th><th>Inference</th><th>Confidence</th><th>Decision Impact</th></tr></thead>
@@ -447,12 +459,24 @@
           </tbody>
         </table>
       </div>
+      <div class="question-block" data-gate="evidence-coverage">
+        <fieldset>
+          <legend>Required Gate: Evidence Coverage</legend>
+          <label class="option"><input type="radio" name="evidence-coverage" value="Approve evidence coverage for the service-blueprint intermediate." data-section="evidence-coverage" data-gate-type="evidence coverage"> Approve evidence coverage for the service-blueprint intermediate.</label>
+          <label class="option"><input type="radio" name="evidence-coverage" value="Approve with caveat that customer-feedback gaps must stay visible." data-section="evidence-coverage" data-gate-type="evidence coverage"> Approve with caveat that customer-feedback gaps must stay visible.</label>
+          <label class="option"><input type="radio" name="evidence-coverage" value="Other" data-section="evidence-coverage" data-gate-type="evidence coverage" data-status="other"> Other / None of the above</label>
+          <div class="option-notes"><textarea data-notes-for="evidence-coverage" placeholder="Enter the evidence coverage decision."></textarea></div>
+          <label class="option"><input type="radio" name="evidence-coverage" value="Need clarification" data-section="evidence-coverage" data-gate-type="evidence coverage" data-status="needs-clarification"> Need clarification</label>
+        </fieldset>
+      </div>
     </section>
 
     <section id="confidence" data-section="confidence">
       <div class="section-head">
         <h2>Assumptions And Confidence</h2>
+        <div class="feedback" data-feedback="confidence"><button type="button" data-kind="emphasize">Emphasize</button><button type="button" data-kind="down">Thumbs down</button><button type="button" data-kind="needs-clarification">Clarification needed</button></div>
       </div>
+      <div class="feedback-panel" id="feedback-confidence"><label for="feedback-confidence-text">Section feedback</label><textarea id="feedback-confidence-text"></textarea><button class="copy-button local-feedback" type="button">Compile Feedback YAML</button><textarea class="yaml-output local-yaml" readonly></textarea></div>
       <div class="table-wrap" data-tts-narrative="The strongest assumptions are the approved ICP and product-exists mode. The handoff and CSV sufficiency assumptions remain medium confidence until customer evidence exists.">
         <table>
           <thead><tr><th>Assumption</th><th>Status</th><th>Confidence</th><th>What Would Change It</th></tr></thead>
@@ -465,12 +489,24 @@
           </tbody>
         </table>
       </div>
+      <div class="question-block" data-gate="assumptions-confidence">
+        <fieldset>
+          <legend>Required Gate: Assumptions And Confidence</legend>
+          <label class="option"><input type="radio" name="assumptions-confidence" value="Approve the confidence levels and keep customer-feedback gaps visible." data-section="assumptions-confidence" data-gate-type="assumptions/confidence"> Approve the confidence levels and keep customer-feedback gaps visible.</label>
+          <label class="option"><input type="radio" name="assumptions-confidence" value="Approve but mark handoff conclusions as more provisional." data-section="assumptions-confidence" data-gate-type="assumptions/confidence"> Approve but mark handoff conclusions as more provisional.</label>
+          <label class="option"><input type="radio" name="assumptions-confidence" value="Other" data-section="assumptions-confidence" data-gate-type="assumptions/confidence" data-status="other"> Other / None of the above</label>
+          <div class="option-notes"><textarea data-notes-for="assumptions-confidence" placeholder="Enter the assumptions/confidence decision."></textarea></div>
+          <label class="option"><input type="radio" name="assumptions-confidence" value="Need clarification" data-section="assumptions-confidence" data-gate-type="assumptions/confidence" data-status="needs-clarification"> Need clarification</label>
+        </fieldset>
+      </div>
     </section>
 
     <section id="source-gaps" data-section="source-gaps">
       <div class="section-head">
         <h2>Source Coverage Gaps</h2>
+        <div class="feedback" data-feedback="source-gaps"><button type="button" data-kind="emphasize">Emphasize</button><button type="button" data-kind="down">Thumbs down</button><button type="button" data-kind="needs-clarification">Clarification needed</button></div>
       </div>
+      <div class="feedback-panel" id="feedback-source-gaps"><label for="feedback-source-gaps-text">Section feedback</label><textarea id="feedback-source-gaps-text"></textarea><button class="copy-button local-feedback" type="button">Compile Feedback YAML</button><textarea class="yaml-output local-yaml" readonly></textarea></div>
       <ul>
         <li>No real customer language beyond secondary/desk research.</li>
         <li>No observed onboarding analytics for first prompt, first publish, first response, or first export.</li>
@@ -482,17 +518,179 @@
 
     <section id="file-changes" data-section="file-changes">
       <div class="section-head">
-        <h2>Confirmed File Changes</h2>
+        <h2>Proposed File Changes After Approval</h2>
+        <div class="feedback" data-feedback="file-changes"><button type="button" data-kind="emphasize">Emphasize</button><button type="button" data-kind="down">Thumbs down</button><button type="button" data-kind="needs-clarification">Clarification needed</button></div>
       </div>
+      <div class="feedback-panel" id="feedback-file-changes"><label for="feedback-file-changes-text">Section feedback</label><textarea id="feedback-file-changes-text"></textarea><button class="copy-button local-feedback" type="button">Compile Feedback YAML</button><textarea class="yaml-output local-yaml" readonly></textarea></div>
       <ul>
-        <li>Wrote `research/journey-map-service-blueprint.md` with the approved canonical artifact rendered in this page and the working packet.</li>
-        <li>Archived `research/_working/preliminary-service-blueprint-research.md` under `docs/history/archive/2026-07-01/231406/`.</li>
-        <li>Archived the review page snapshot under `docs/history/archive/2026-07-01/231406/`.</li>
-        <li>Left `research/_working/journey-map-run.yaml` as selection-only state; completion is inferred by the new canonical intermediate existing.</li>
-        <li>Recalculated pending frameworks. The next pending framework is `user-story-map`.</li>
+        <li>Write `research/journey-map-service-blueprint.md` with the proposed canonical artifact rendered in this page and the working packet.</li>
+        <li>Archive `research/_working/preliminary-service-blueprint-research.md` after approval.</li>
+        <li>Archive the review page snapshot after approval.</li>
+        <li>Leave `research/_working/journey-map-run.yaml` as selection-only state; completion is inferred by the new canonical intermediate existing.</li>
+        <li>Recalculate pending frameworks. The next pending framework should be `user-story-map`.</li>
       </ul>
+      <div class="question-block" data-gate="proposed-file-changes">
+        <fieldset>
+          <legend>Required Gate: Proposed File Changes</legend>
+          <label class="option"><input type="radio" name="proposed-file-changes" value="Approve writing research/journey-map-service-blueprint.md after this review." data-section="proposed-file-changes" data-gate-type="proposed file changes" data-target-path="research/journey-map-service-blueprint.md"> Approve writing `research/journey-map-service-blueprint.md` after this review.</label>
+          <label class="option"><input type="radio" name="proposed-file-changes" value="Approve with edits noted in freeform feedback." data-section="proposed-file-changes" data-gate-type="proposed file changes" data-target-path="research/journey-map-service-blueprint.md"> Approve with edits noted in freeform feedback.</label>
+          <label class="option"><input type="radio" name="proposed-file-changes" value="Other" data-section="proposed-file-changes" data-gate-type="proposed file changes" data-target-path="research/journey-map-service-blueprint.md" data-status="other"> Other / None of the above</label>
+          <div class="option-notes"><textarea data-notes-for="proposed-file-changes" placeholder="Enter the proposed file changes decision."></textarea></div>
+          <label class="option"><input type="radio" name="proposed-file-changes" value="Need clarification" data-section="proposed-file-changes" data-gate-type="proposed file changes" data-status="needs-clarification"> Need clarification</label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section id="compile" class="compile-section">
+      <h2>Compile Responses</h2>
+      <p>Answer the required gates above, optionally add section feedback, then compile YAML for the next fresh `$journey-map` session.</p>
+      <button class="compile-button" id="compileButton" type="button">Compile Responses</button>
+      <button class="copy-button" id="copyButton" type="button">Copy YAML</button>
+      <div class="status" id="compileStatus"></div>
+      <textarea class="yaml-output" id="yamlOutput" readonly></textarea>
     </section>
   </main>
+  <script>
+    const alignmentPage = "alignment/journey-map-formforge.html";
+    const requiredGateNames = ["evidence-coverage", "assumptions-confidence", "proposed-file-changes"];
+    const routingYaml = [
+      "agent_routing:",
+      "  workflow: pattern-a-research-loop",
+      "  parent_skill: journey-map",
+      "  command: \"$journey-map\"",
+      "  gate_owner: parent-orchestrator",
+      "  gate_type: framework-findings",
+      "  framework_slug: service-blueprint",
+      "  framework_mode: inline-subskill",
+      "  run_manifest: research/_working/journey-map-run.yaml",
+      "  next_resolution: parent-resolves-from-yaml-and-filesystem"
+    ];
+    const yamlEscape = (value) => String(value ?? "").replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
+    const block = (value, indent = "  ") => {
+      const text = String(value ?? "").trim();
+      if (!text) return "\"\"";
+      return "|\\n" + text.split("\\n").map((line) => indent + line).join("\\n");
+    };
+    function selectedGates() {
+      return requiredGateNames.map((name) => {
+        const input = document.querySelector(`input[name="${name}"]:checked`);
+        if (!input) return null;
+        const notesEl = document.querySelector(`textarea[data-notes-for="${name}"]`);
+        const status = input.dataset.status || "answered";
+        const notes = notesEl && notesEl.closest(".option-notes")?.classList.contains("is-visible") ? notesEl.value.trim() : "";
+        return {
+          section: input.dataset.section,
+          gateType: input.dataset.gateType,
+          status,
+          answer: status === "other" && notes ? notes : input.value,
+          notes: status !== "other" ? notes : "",
+          targetPath: input.dataset.targetPath
+        };
+      }).filter(Boolean);
+    }
+    function selectedFeedback() {
+      return [...document.querySelectorAll(".feedback")].map((group) => {
+        const active = group.querySelector('button[aria-pressed="true"]');
+        if (!active) return null;
+        const section = group.dataset.feedback;
+        const textarea = document.querySelector(`#feedback-${section} textarea`);
+        const feedback = active.dataset.kind;
+        const action = feedback === "emphasize" ? "add-weight-to-section" : feedback === "down" ? "investigate-and-revise" : "clarify-before-approval";
+        return { section, feedback, notes: textarea?.value.trim() || "", requested_agent_action: action };
+      }).filter(Boolean);
+    }
+    function compileYaml(localSection) {
+      const gates = selectedGates();
+      const feedback = localSection ? [selectedFeedback().find((item) => item.section === localSection)].filter(Boolean) : selectedFeedback();
+      const answeredNames = new Set(gates.map((gate) => gate.section));
+      const unanswered = requiredGateNames.filter((name) => !answeredNames.has(name));
+      const hasNegative = gates.some((gate) => gate.status === "needs-clarification") || feedback.some((item) => item.feedback === "down" || item.feedback === "needs-clarification");
+      const complete = unanswered.length === 0;
+      const ready = complete && !hasNegative;
+      const lines = [
+        `alignment_page: ${alignmentPage}`,
+        `response_status: ${complete ? "complete" : "partial"}`,
+        `approval_status: ${ready ? "ready-for-agent-review" : "not-approved"}`,
+        `required_gate_status: ${complete ? "complete" : "incomplete"}`,
+        "unanswered_required_questions:",
+        ...unanswered.map((name) => `  - ${name}`)
+      ];
+      if (gates.length) {
+        lines.push("gate_answers:");
+        gates.forEach((gate) => {
+          lines.push(`  - section: ${gate.section}`);
+          lines.push(`    gate_type: ${gate.gateType}`);
+          lines.push(`    status: ${gate.status}`);
+          lines.push(`    answer: "${yamlEscape(gate.answer)}"`);
+          if (gate.notes) lines.push(`    notes: ${block(gate.notes, "      ")}`);
+          if (gate.targetPath) lines.push(`    target_path: ${gate.targetPath}`);
+        });
+      }
+      if (feedback.length) {
+        lines.push("section_feedback:");
+        feedback.forEach((item) => {
+          lines.push(`  - section: ${item.section}`);
+          lines.push(`    feedback: ${item.feedback}`);
+          lines.push(`    notes: ${block(item.notes, "      ")}`);
+          lines.push(`    requested_agent_action: ${item.requested_agent_action}`);
+        });
+      }
+      lines.push(...routingYaml);
+      return lines.join("\\n");
+    }
+    document.querySelectorAll(".feedback button").forEach((button) => {
+      button.setAttribute("aria-pressed", "false");
+      button.addEventListener("click", () => {
+        const group = button.closest(".feedback");
+        const section = group.dataset.feedback;
+        const panel = document.querySelector(`#feedback-${section}`);
+        const wasActive = button.getAttribute("aria-pressed") === "true";
+        group.querySelectorAll("button").forEach((candidate) => candidate.setAttribute("aria-pressed", "false"));
+        if (wasActive) {
+          panel?.classList.remove("is-visible");
+        } else {
+          button.setAttribute("aria-pressed", "true");
+          panel?.classList.add("is-visible");
+        }
+      });
+    });
+    document.querySelectorAll("input[type=radio]").forEach((input) => {
+      input.addEventListener("change", () => {
+        document.querySelectorAll(`input[name="${input.name}"]`).forEach((peer) => {
+          const notes = peer.closest("label")?.nextElementSibling;
+          if (notes?.classList.contains("option-notes")) notes.classList.remove("is-visible");
+        });
+        if (input.dataset.status === "other" || input.dataset.status === "needs-clarification") {
+          const notes = input.closest("label")?.nextElementSibling;
+          if (notes?.classList.contains("option-notes")) notes.classList.add("is-visible");
+        }
+      });
+    });
+    document.querySelectorAll(".local-feedback").forEach((button) => {
+      button.addEventListener("click", () => {
+        const panel = button.closest(".feedback-panel");
+        const section = panel.id.replace("feedback-", "");
+        const output = panel.querySelector(".local-yaml");
+        output.value = compileYaml(section);
+        output.focus();
+        output.select();
+      });
+    });
+    document.getElementById("compileButton").addEventListener("click", () => {
+      const yaml = compileYaml();
+      document.getElementById("yamlOutput").value = yaml;
+      const gates = selectedGates();
+      const feedback = selectedFeedback();
+      document.getElementById("compileStatus").textContent = gates.length || feedback.length ? "Compiled response YAML below." : "Answer a gate or select section feedback before sending YAML.";
+      navigator.clipboard?.writeText(yaml).catch(() => {});
+    });
+    document.getElementById("copyButton").addEventListener("click", () => {
+      const output = document.getElementById("yamlOutput");
+      output.focus();
+      output.select();
+      navigator.clipboard?.writeText(output.value).catch(() => {});
+    });
+  </script>
   <script src="../scripts/alignment-tts-kokoro.js"></script>
 </body>
 </html>

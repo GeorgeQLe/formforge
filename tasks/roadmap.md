@@ -1,3 +1,33 @@
+# FormForge Journey Map Synthesis Review Roadmap
+
+## Objective
+
+Synthesize the approved Service Blueprint and User Story Map intermediates into a review-stage unified journey map proposal, then stop for artifact approval before writing canonical `research/journey-map.md`.
+
+## Scope Basis
+
+- Active product path: flat `research/`
+- Run manifest: `research/_working/journey-map-run.yaml`
+- Completed intermediates: `research/journey-map-service-blueprint.md` and `research/journey-map-user-story-map.md`
+- Canonical synthesis absent: `research/journey-map.md`
+
+## Non-Goals
+
+- Do not write canonical `research/journey-map.md` before approval.
+- Do not archive the run manifest in this review-stage session.
+- Do not change product code, dependencies, lockfiles, `.agents/project.json`, or GitHub Actions.
+
+## Plan
+
+- [x] Resolve synthesis state from manifest and filesystem.
+- [x] Read approved ICP, competitive analysis, Service Blueprint, User Story Map, README, and progress manifest context.
+- [x] Write non-canonical synthesis working packet: `research/_working/preliminary-journey-map-research.md`.
+- [x] Build synthesis approval page: `alignment/journey-map-formforge.html`.
+- [x] Update central alignment index.
+- [x] Verify review artifacts, page script/includes, and git diff.
+
+---
+
 # FormForge Journey Map User Story Map Finalization Roadmap
 
 ## Objective

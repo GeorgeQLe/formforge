@@ -1,498 +1,487 @@
 <!doctype html>
-<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="confirmed">
+<html lang="en" data-alignment-category="research" data-visual-tier="visual" data-alignment-status="review">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FormForge Service Blueprint - Confirmed</title>
+  <title>FormForge Journey Map Synthesis - Review</title>
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #0d1117;
-      --surface: #161b22;
-      --surface-2: #1c2333;
-      --border: #30363d;
-      --text: #c9d1d9;
-      --text-muted: #8b949e;
-      --accent: #58a6ff;
-      --green: #3fb950;
-      --red: #f85149;
-      --orange: #d29922;
-      --purple: #bc8cff;
-      --chart-1: #58a6ff;
-      --chart-2: #3fb950;
-      --chart-3: #d29922;
-      --chart-4: #bc8cff;
-      --chart-5: #f85149;
-      --chart-6: #79c0ff;
-      --chart-7: #f0883e;
-      --chart-8: #a5d6ff;
+      color-scheme: light;
+      --ink: #18212f;
+      --muted: #5a6678;
+      --line: #d8dee8;
+      --paper: #fbfcfd;
+      --band: #eef4f8;
+      --panel: #ffffff;
+      --accent: #176b5b;
+      --accent-2: #2f6f9f;
+      --warn: #9a5b00;
+      --danger: #a33131;
+      --good: #236b3a;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
       line-height: 1.55;
     }
-    main {
-      width: min(1160px, calc(100% - 32px));
-      max-width: 100%;
-      margin: 0 auto;
-      padding: 40px 0 72px;
-      overflow-wrap: break-word;
-    }
-    h1, h2, h3 { color: #fff; line-height: 1.2; letter-spacing: 0; }
-    h1 { margin: 0 0 12px; font-size: 2.1rem; }
-    h2 { margin: 0 0 14px; font-size: 1.45rem; color: var(--accent); }
-    h3 { margin: 18px 0 10px; font-size: 1.05rem; }
+    main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 42px 0 76px; }
+    h1, h2, h3 { line-height: 1.2; letter-spacing: 0; }
+    h1 { margin: 0 0 10px; font-size: 34px; }
+    h2 { margin: 0 0 14px; font-size: 24px; color: var(--accent); }
+    h3 { margin: 18px 0 8px; font-size: 18px; }
     p { margin: 0 0 12px; }
-    a { color: var(--accent); }
+    a { color: #155fa0; }
     code {
+      border: 1px solid #dbe3ed;
+      border-radius: 5px;
+      background: #f4f7fa;
       padding: 2px 5px;
-      border-radius: 4px;
-      background: #0b1220;
-      color: #e6edf3;
+      color: #223044;
     }
-    ul { margin-top: 8px; padding-left: 22px; }
-    li { margin: 4px 0; }
+    ul, ol { padding-left: 24px; }
+    li { margin: 5px 0; }
     .hero, section, .toc {
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: 8px;
-      background: var(--surface);
+      background: var(--panel);
       padding: 22px;
       margin: 18px 0;
     }
     .hero {
-      border-left: 4px solid var(--purple);
-      background: linear-gradient(180deg, #161b22 0%, #101722 100%);
+      border-left: 5px solid var(--accent);
+      background: linear-gradient(180deg, #ffffff 0%, #f4faf7 100%);
     }
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
-    }
+    .lede { color: var(--muted); font-size: 17px; max-width: 880px; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
     .pill {
       display: inline-flex;
       align-items: center;
       min-height: 30px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: 999px;
+      background: var(--band);
       padding: 4px 10px;
-      background: #0b1220;
-      color: var(--text);
-      font-size: 0.9rem;
-      font-weight: 650;
+      font-size: 13px;
+      font-weight: 700;
     }
-    .pill.good { border-color: rgba(63, 185, 80, 0.5); color: var(--green); }
-    .pill.warn { border-color: rgba(210, 153, 34, 0.55); color: var(--orange); }
-    .pill.review { border-color: rgba(188, 140, 255, 0.55); color: var(--purple); }
-    .toc { background: #111827; }
-    .toc ul {
-      columns: 2;
-      gap: 32px;
-      margin-bottom: 0;
-    }
-    .section-head {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-    }
-    .feedback {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-    .feedback button, .compile-button, .copy-button {
-      min-height: 44px;
-      border: 1px solid var(--border);
+    .pill.review { color: var(--accent); border-color: #a8d1c5; background: #eaf7f1; }
+    .pill.warn { color: var(--warn); border-color: #ead29d; background: #fff8e6; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .card {
+      border: 1px solid var(--line);
       border-radius: 8px;
-      background: #0b1220;
-      color: var(--text);
-      padding: 10px 16px;
-      font: inherit;
-      cursor: pointer;
-    }
-    .feedback button[aria-pressed="true"][data-kind="emphasize"] { border-color: var(--green); color: var(--green); }
-    .feedback button[aria-pressed="true"][data-kind="down"] { border-color: var(--red); color: var(--red); }
-    .feedback button[aria-pressed="true"][data-kind="needs-clarification"] { border-color: var(--orange); color: var(--orange); }
-    .feedback-panel {
-      display: none;
-      margin-top: 12px;
-      padding: 14px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #0f1623;
-    }
-    .feedback-panel.is-visible { display: block; }
-    label { display: block; font-weight: 700; margin-bottom: 6px; }
-    textarea, input[type="text"] {
-      width: 100%;
-      min-height: 44px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #0b1220;
-      color: var(--text);
-      font: inherit;
-      padding: 10px 12px;
-    }
-    textarea { min-height: 108px; resize: vertical; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(min(260px, 100%), 1fr));
-      gap: 14px;
-    }
-    .cards-3 {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(min(220px, 100%), 1fr));
-      gap: 14px;
-    }
-    .card, .question-block, .notice {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #0f1623;
+      background: #fff;
       padding: 16px;
     }
-    .question-block {
+    .card h3 { margin-top: 0; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; margin-top: 12px; }
+    table { width: 100%; min-width: 760px; border-collapse: collapse; background: #fff; }
+    th, td { border-bottom: 1px solid var(--line); padding: 11px 12px; text-align: left; vertical-align: top; }
+    th { background: #eef4f8; }
+    tr:last-child td { border-bottom: 0; }
+    .lifecycle {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(160px, 1fr));
+      gap: 10px;
       margin-top: 14px;
-      background: var(--surface-2);
-      border-left: 4px solid var(--purple);
     }
-    .question-block fieldset {
-      border: 0;
-      padding: 0;
-      margin: 0;
+    .stage {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fbfd;
+      padding: 12px;
+      min-height: 112px;
     }
-    .question-block legend {
-      color: #fff;
-      font-weight: 800;
-      margin-bottom: 10px;
+    .stage strong { display: block; margin-bottom: 5px; color: var(--accent-2); }
+    .callout {
+      border: 1px solid #d7e5ee;
+      border-left: 5px solid var(--accent-2);
+      border-radius: 8px;
+      background: #f4f9fc;
+      padding: 16px;
+      margin: 14px 0;
     }
+    .question-block {
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--accent);
+      border-radius: 8px;
+      background: #f8fbfd;
+      padding: 16px;
+      margin-top: 14px;
+    }
+    fieldset { border: 0; padding: 0; margin: 0; }
+    legend { font-weight: 800; margin-bottom: 10px; }
     .option {
       display: grid;
       grid-template-columns: 22px minmax(0, 1fr);
-      gap: 10px;
+      gap: 8px;
       align-items: start;
-      min-height: 44px;
-      padding: 8px 0;
+      min-height: 38px;
+      margin: 7px 0;
     }
     .option input { margin-top: 4px; }
-    .option-notes { display: none; margin: 4px 0 12px 32px; }
-    .option-notes.is-visible { display: block; }
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      margin-top: 12px;
-    }
-    table {
+    textarea {
       width: 100%;
-      min-width: 760px;
-      border-collapse: collapse;
-    }
-    th, td {
-      border-bottom: 1px solid var(--border);
-      padding: 11px 12px;
-      text-align: left;
-      vertical-align: top;
-    }
-    th {
-      background: var(--surface);
-      color: #fff;
-    }
-    tr:last-child td { border-bottom: 0; }
-    .chart-container {
-      border: 1px solid var(--border);
+      min-height: 104px;
+      border: 1px solid var(--line);
       border-radius: 8px;
-      background: #0b1220;
+      padding: 10px 12px;
+      font: inherit;
+      resize: vertical;
+      background: #fff;
+      color: var(--ink);
+    }
+    .feedback-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .feedback-row button, .compile-button, .copy-button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      padding: 9px 14px;
+      font: inherit;
+      cursor: pointer;
+    }
+    .feedback-row button[aria-pressed="true"][data-kind="emphasize"] { border-color: var(--good); color: var(--good); }
+    .feedback-row button[aria-pressed="true"][data-kind="down"] { border-color: var(--danger); color: var(--danger); }
+    .feedback-row button[aria-pressed="true"][data-kind="needs-clarification"] { border-color: var(--warn); color: var(--warn); }
+    .feedback-panel { display: none; margin-top: 10px; }
+    .feedback-panel.is-visible { display: block; }
+    pre {
+      white-space: pre-wrap;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #101820;
+      color: #eff6ff;
       padding: 16px;
-      margin-top: 12px;
     }
-    svg { max-width: 100%; height: auto; display: block; }
-    .compile-section {
-      border-color: rgba(188, 140, 255, 0.6);
-      background: #111827;
-    }
-    .compile-button {
-      background: var(--purple);
-      color: #0d1117;
-      border-color: var(--purple);
-      font-weight: 800;
-    }
-    .copy-button { margin-left: 8px; }
-    .status {
-      min-height: 28px;
-      margin-top: 10px;
-      color: var(--text-muted);
-    }
-    .yaml-output {
-      margin-top: 12px;
-      min-height: 260px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      white-space: pre;
-    }
-    .muted { color: var(--text-muted); }
-    .warning { border-left: 4px solid var(--orange); background: #19150a; }
-    .success { border-left: 4px solid var(--green); }
-    @media (max-width: 860px) {
-      main { width: min(100% - 24px, 1160px); }
-      .toc ul { columns: 1; }
-      .cards-3 { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 560px) {
-      main { width: min(100% - 16px, 1160px); padding-top: 24px; }
-      .hero, section, .toc { padding: 16px; }
-      h1 { font-size: 1.65rem; }
+    .compile-output { min-height: 220px; }
+    @media (max-width: 840px) {
+      main { width: min(100% - 24px, 1180px); padding-top: 28px; }
+      h1 { font-size: 28px; }
+      .grid-2, .grid-3, .lifecycle { grid-template-columns: 1fr; }
+      table { min-width: 680px; }
     }
   </style>
 </head>
 <body>
   <main>
-    <header class="hero">
-      <p class="muted">Confirmed alignment record · journey-map parent orchestrator · service-blueprint framework</p>
-      <h1>FormForge Service Blueprint</h1>
-      <p>This page is the confirmed Stage 3 record for the approved service-blueprint intermediate. The canonical artifact is `research/journey-map-service-blueprint.md`; the unified journey map is not finalized yet.</p>
+    <div class="hero">
+      <h1>FormForge Journey Map Synthesis</h1>
+      <p class="lede">Review-stage synthesis for the active flat FormForge scope. This page proposes the canonical <code>research/journey-map.md</code> content from the approved Service Blueprint and User Story Map intermediates, then stops for compiled YAML approval.</p>
       <div class="meta-row">
-        <span class="pill good">alignment_status: confirmed</span>
-        <span class="pill">Findings date: 2026-06-20</span>
-        <span class="pill">Confirmed: 2026-07-01</span>
-        <span class="pill good">Required gate status: complete</span>
-        <span class="pill">Artifact: research/journey-map-service-blueprint.md</span>
+        <span class="pill review">Status: review</span>
+        <span class="pill">Gate: synthesis</span>
+        <span class="pill">Mode: product-exists, customer-feedback-limited</span>
+        <span class="pill warn">Canonical journey map not written yet</span>
       </div>
-    </header>
+    </div>
 
-    <nav class="toc" aria-label="Table of contents">
-      <h2>Table Of Contents</h2>
+    <section class="toc">
+      <h2>Review Checklist</h2>
       <ul>
-        <li><a href="#approval-context">Approval Context</a></li>
-        <li><a href="#scope-inputs">Scope And Inputs</a></li>
-        <li><a href="#summary">Summary</a></li>
-        <li><a href="#service-stages">Service Stages</a></li>
-        <li><a href="#lines">Lines Of Interaction</a></li>
-        <li><a href="#operational-gaps">Operational Gap Analysis</a></li>
-        <li><a href="#evidence-matrix">Evidence Matrix</a></li>
-        <li><a href="#confidence">Assumptions And Confidence</a></li>
-        <li><a href="#source-gaps">Source Coverage Gaps</a></li>
-        <li><a href="#file-changes">Confirmed File Changes</a></li>
+        <li>Confirm the proposed lifecycle and user journeys match the approved FormForge scope.</li>
+        <li>Confirm critical moments and evidence confidence are accurate enough for a canonical research artifact.</li>
+        <li>Choose whether the post-approval next step should emphasize lifecycle metrics before positioning.</li>
+        <li>Compile YAML from the bottom of this page and paste it into a fresh <code>$journey-map</code> session.</li>
       </ul>
-    </nav>
-
-    <section id="approval-context" data-section="approval-context">
-      <div class="section-head">
-        <h2>Approval Context</h2>
-      </div>
-      <div class="notice success">
-        <p><strong>Consumed YAML:</strong> The service-blueprint framework findings gate was approved with `response_status: complete`, `approval_status: ready-for-agent-review`, `required_gate_status: complete`, and no unanswered required questions.</p>
-        <p><strong>Gate answers:</strong> evidence coverage approved; assumptions/confidence approved with customer-feedback gaps visible; proposed file change approved for <code>research/journey-map-service-blueprint.md</code>.</p>
-        <p><strong>Archived review artifacts:</strong> <code>docs/history/archive/2026-07-01/231406/alignment/journey-map-formforge.html</code> and <code>docs/history/archive/2026-07-01/231406/research/_working/preliminary-service-blueprint-research.md</code>.</p>
-        <p><strong>State transition:</strong> The parent wrote the canonical service-blueprint intermediate. Completion is inferred from the artifact existence; the run manifest remains selection-only.</p>
-      </div>
-      <div class="table-wrap" data-tts-narrative="The approved loop selected two frameworks. Service blueprint is being reviewed first, and user story map remains pending after this approval.">
-        <table>
-          <thead><tr><th>Framework</th><th>Intermediate path</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td>service-blueprint</td><td><code>research/journey-map-service-blueprint.md</code></td><td>Confirmed canonical intermediate</td></tr>
-            <tr><td>user-story-map</td><td><code>research/journey-map-user-story-map.md</code></td><td>Pending future framework run</td></tr>
-          </tbody>
-        </table>
-      </div>
     </section>
 
-    <section id="scope-inputs" data-section="scope-inputs">
-      <div class="section-head">
-        <h2>Scope And Inputs</h2>
+    <section data-section-id="synthesis-summary">
+      <h2>Proposed Summary</h2>
+      <p>FormForge's unified customer journey centers on client-service intake: a consultant, coach, or small-agency operator needs a fast, polished way to collect the right client information before kickoff or delivery work. The current product loop already covers the walking skeleton from AI-assisted draft creation through public submission, response review, status triage, analytics, and CSV export.</p>
+      <p>The journey risk is not basic form creation. It is the post-submission transition from "a response arrived" to "this client is ready for kickoff or delivery." Both approved journey frameworks identify intake completeness, response readiness, and handoff into the user's real work system as the highest-leverage gaps.</p>
+      <div class="feedback-row" data-feedback-for="synthesis-summary">
+        <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+        <button type="button" data-kind="down" aria-pressed="false">Revise</button>
+        <button type="button" data-kind="needs-clarification" aria-pressed="false">Needs clarification</button>
       </div>
-      <p>This packet maps the FormForge client-intake service in flat `research/` mode for the approved ICP: client-service solo consultants, coaches, and small agencies doing client intake/onboarding.</p>
-      <div class="grid">
+      <div class="feedback-panel"><textarea placeholder="Optional notes for this section"></textarea></div>
+    </section>
+
+    <section data-section-id="user-journeys">
+      <h2>User Journeys</h2>
+      <div class="grid-3">
         <div class="card">
-          <h3>Research Sources</h3>
-          <ul>
-            <li><code>research/icp.md</code></li>
-            <li><code>research/competitive-analysis.md</code></li>
-            <li><code>README.md</code> and <code>CLAUDE.md</code></li>
-          </ul>
+          <h3>Owner-Operator Consultant / Coach</h3>
+          <p><strong>Entry:</strong> a new paid client, program, discovery call, audit, or package requires structured intake.</p>
+          <p><strong>Happy path:</strong> describe the intake need, edit generated fields, publish a credible public link, review the response, and move answers into delivery work.</p>
+          <p><strong>Failure modes:</strong> weak AI draft, incomplete answers, missed assets/access details, missed notification, or ongoing copy/paste after submission.</p>
         </div>
         <div class="card">
-          <h3>Code Sources</h3>
-          <ul>
-            <li><code>src/server/ai/generate-form.ts</code></li>
-            <li><code>src/server/db/schema.ts</code></li>
-            <li><code>src/server/trpc/routers/form.ts</code></li>
-            <li><code>src/server/trpc/routers/response.ts</code></li>
-            <li><code>src/app/api/submit/[slug]/route.ts</code></li>
-            <li><code>src/app/f/[slug]/client.tsx</code></li>
-            <li><code>src/server/responses/csv-export.ts</code></li>
-          </ul>
+          <h3>Agency / Operations Coordinator</h3>
+          <p><strong>Entry:</strong> repeated onboarding or project briefs across accounts.</p>
+          <p><strong>Happy path:</strong> standardize intake, tailor per client, collect responses, review readiness, and route answers into the agency operating system.</p>
+          <p><strong>Failure modes:</strong> submissions do not become delivery-ready artifacts, or broad integrations arrive before the key destination is validated.</p>
+        </div>
+        <div class="card">
+          <h3>External Client / Respondent</h3>
+          <p><strong>Entry:</strong> receives a public intake link.</p>
+          <p><strong>Happy path:</strong> completes relevant fields without an account, fixes validation errors, and gets clear success confirmation.</p>
+          <p><strong>Failure modes:</strong> unclear file requests, mobile friction, Turnstile/validation friction, or answers that pass validation but do not help kickoff.</p>
         </div>
       </div>
-      <div class="notice warning">
-        <p><strong>Primary source gap:</strong> No `research/customer-feedback.md` exists. The blueprint can ground product mechanics in code and buyer needs in approved research, but it cannot claim live customer success.</p>
+      <div class="feedback-row" data-feedback-for="user-journeys">
+        <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+        <button type="button" data-kind="down" aria-pressed="false">Revise</button>
+        <button type="button" data-kind="needs-clarification" aria-pressed="false">Needs clarification</button>
       </div>
+      <div class="feedback-panel"><textarea placeholder="Optional notes for this section"></textarea></div>
     </section>
 
-    <section id="summary" data-section="summary">
-      <div class="section-head">
-        <h2>Proposed Canonical Summary</h2>
+    <section data-section-id="customer-lifecycle">
+      <h2>Customer Lifecycle</h2>
+      <div class="lifecycle">
+        <div class="stage"><strong>Trigger</strong>New client, offer, cohort, audit, or project creates an intake need.</div>
+        <div class="stage"><strong>Discovery</strong>User compares free forms, polished builders, and client-service suites.</div>
+        <div class="stage"><strong>Evaluation</strong>User tests whether focused intake is faster and lighter than alternatives.</div>
+        <div class="stage"><strong>Onboarding</strong>User signs in and starts the first form.</div>
+        <div class="stage"><strong>Aha Moment</strong>Plain-language prompt becomes a good-enough first draft.</div>
+        <div class="stage"><strong>Configuration</strong>User edits fields, logic, settings, theme, notifications, and success behavior.</div>
+        <div class="stage"><strong>Publish</strong>User shares a stable public link backed by a version snapshot.</div>
+        <div class="stage"><strong>Client Completion</strong>Respondent submits without a FormForge account.</div>
+        <div class="stage"><strong>Review</strong>Provider reviews answers, statuses, stats, and analytics.</div>
+        <div class="stage"><strong>Handoff</strong>Answers move into project docs, CRM, Notion, Sheets, kickoff notes, or service workflow.</div>
+        <div class="stage"><strong>Retention</strong>User duplicates, regenerates, adapts, closes, monitors, and improves forms.</div>
+        <div class="stage"><strong>Recovery</strong>Errors, missed notifications, incomplete answers, and churn risks need visible recovery paths.</div>
       </div>
-      <p>FormForge's current service is strongest from "describe the needed intake form" through "publish a public link" and "receive structured submissions." The visible product loop already supports AI-generated fields, visual editing, conditional logic, immutable published snapshots, public submission, response review, basic response status, analytics, notification email, and CSV export.</p>
-      <p>The highest operational risk is after the respondent submits. ICP and competitive evidence both say the value of intake depends on reducing back-and-forth and moving answers into client work systems. The observed implementation currently provides response review, status labels, email notification, and CSV export, but no native Sheets/Notion/CRM/Zapier/Make/webhook/project-doc handoff. That makes post-submission routing the biggest service blueprint gap for the approved ICP.</p>
-    </section>
-
-    <section id="service-stages" data-section="service-stages">
-      <div class="section-head">
-        <h2>Service Stages</h2>
-      </div>
-      <div class="chart-container" data-tts-narrative="The service path starts with client-intake urgency, moves through AI draft, editing, publishing, respondent completion, response review, and ends at the weakest current stage: handoff into service delivery systems.">
-        <svg viewBox="0 0 1100 220" role="img" aria-label="Service blueprint stage flow with handoff marked as the highest gap">
-          <rect x="10" y="40" width="120" height="90" rx="8" fill="var(--chart-1)" opacity="0.85"></rect>
-          <rect x="150" y="40" width="120" height="90" rx="8" fill="var(--chart-2)" opacity="0.85"></rect>
-          <rect x="290" y="40" width="120" height="90" rx="8" fill="var(--chart-2)" opacity="0.85"></rect>
-          <rect x="430" y="40" width="120" height="90" rx="8" fill="var(--chart-2)" opacity="0.85"></rect>
-          <rect x="570" y="40" width="120" height="90" rx="8" fill="var(--chart-3)" opacity="0.85"></rect>
-          <rect x="710" y="40" width="120" height="90" rx="8" fill="var(--chart-4)" opacity="0.85"></rect>
-          <rect x="850" y="40" width="120" height="90" rx="8" fill="var(--chart-5)" opacity="0.9"></rect>
-          <text x="70" y="80" text-anchor="middle" fill="#0d1117" font-weight="700">Trigger</text>
-          <text x="210" y="80" text-anchor="middle" fill="#0d1117" font-weight="700">AI Draft</text>
-          <text x="350" y="80" text-anchor="middle" fill="#0d1117" font-weight="700">Edit</text>
-          <text x="490" y="80" text-anchor="middle" fill="#0d1117" font-weight="700">Publish</text>
-          <text x="630" y="80" text-anchor="middle" fill="#0d1117" font-weight="700">Submit</text>
-          <text x="770" y="80" text-anchor="middle" fill="#0d1117" font-weight="700">Review</text>
-          <text x="910" y="80" text-anchor="middle" fill="#0d1117" font-weight="700">Handoff</text>
-          <text x="910" y="104" text-anchor="middle" fill="#0d1117" font-size="13">highest gap</text>
-          <line x1="130" y1="85" x2="150" y2="85" stroke="var(--text)" stroke-width="2"></line>
-          <line x1="270" y1="85" x2="290" y2="85" stroke="var(--text)" stroke-width="2"></line>
-          <line x1="410" y1="85" x2="430" y2="85" stroke="var(--text)" stroke-width="2"></line>
-          <line x1="550" y1="85" x2="570" y2="85" stroke="var(--text)" stroke-width="2"></line>
-          <line x1="690" y1="85" x2="710" y2="85" stroke="var(--text)" stroke-width="2"></line>
-          <line x1="830" y1="85" x2="850" y2="85" stroke="var(--text)" stroke-width="2"></line>
-        </svg>
-      </div>
-      <div class="table-wrap" data-tts-narrative="The service-stage table maps customer actions, visible evidence, backstage actions, and support processes across the full FormForge loop.">
+      <div class="table-wrap">
         <table>
-          <thead><tr><th>Stage</th><th>Customer Action</th><th>Evidence/Touchpoint</th><th>Backstage Action</th><th>Support Process</th></tr></thead>
+          <thead><tr><th>Stage Cluster</th><th>Current Support</th><th>Main Risk</th><th>Confidence</th></tr></thead>
           <tbody>
-            <tr><td>Trigger and evaluation</td><td>Consultant, coach, or agency realizes they need a client intake form for a new client, service, cohort, or project.</td><td>ICP trigger events; competitive gap framed as deeper than generic builders but lighter than suites.</td><td>Make the first-use promise legible: describe, generate, edit, publish, submit, review/export.</td><td>Positioning and onboarding content are not represented in code evidence; demand signal is research-backed, not customer-validated.</td></tr>
-            <tr><td>Sign-up and workspace entry</td><td>User creates or accesses an account and enters dashboard.</td><td>Auth and dashboard routes exist.</td><td>Protected procedures associate forms with authenticated user.</td><td>User context, database ownership, plan-limit checks.</td></tr>
-            <tr><td>AI-assisted draft creation</td><td>User describes the intake form they need.</td><td>README core loop; AI generation accepts natural-language prompt.</td><td>OpenAI call parses JSON into form schema; generated form and fields are persisted as draft.</td><td>OpenAI API, schema validation, database writes, slug generation, plan-limit enforcement.</td></tr>
-            <tr><td>Visual edit and form configuration</td><td>User adjusts fields, required flags, conditional logic, settings, theme, and publication readiness.</td><td>Editor, field palette, conditional-logic builder, settings, and theme routes/components exist.</td><td>Field records, settings, themes, and AI regeneration update draft form.</td><td>Drizzle schema stores fields, validation, conditional logic, settings, theme, and status.</td></tr>
-            <tr><td>Publish and share</td><td>User publishes and sends link to external client/respondent.</td><td>Publish requires at least one field and creates a version snapshot; public route renders by slug.</td><td>Immutable form version snapshots preserve what respondents saw.</td><td>`formVersions` stores title, settings, theme, and fields snapshot.</td></tr>
-            <tr><td>Respondent completion</td><td>External client completes the intake without being buyer.</td><td>Public client renders form, theme, Turnstile, completion timing, success redirect.</td><td>Submit API validates and stores response; sends notification when configured.</td><td>Rate limiter, Turnstile, conditional logic, localized validation, database inserts, email service.</td></tr>
-            <tr><td>Response review and triage</td><td>User reviews answers, marks status, exports, and decides next step.</td><td>Response list/detail/stats/analytics/status/delete/export exist.</td><td>Dashboard queries aggregate response and field values.</td><td>Database relations, analytics builder, CSV export with 10,000-row cap.</td></tr>
-            <tr><td>Handoff into service delivery</td><td>User copies or exports answers into project docs, CRM, Notion, Sheets, kickoff notes, or client workspace.</td><td>ICP rates copy/paste pain high; competitive analysis says handoff is battleground.</td><td>Current product can export CSV and send email, but no native external work-system handoff is observed.</td><td>CSV builder, notification email, and manual user process.</td></tr>
-            <tr><td>Retention and reuse</td><td>User duplicates, edits, regenerates, reuses, and monitors forms across clients/offers.</td><td>Duplicate, regenerate, close, statuses, analytics, themes, response review exist.</td><td>Forms can be cloned or regenerated; response history is tied to forms and versions.</td><td>Ownership, versioning, analytics, plan limits, theme validation.</td></tr>
-            <tr><td>Billing and expansion</td><td>User may hit limits or choose paid features after repeated use.</td><td>Stripe billing and plan fields exist; README says defer billing until core loop validation.</td><td>Checkout/webhook updates customer/subscription metadata and plan state.</td><td>Stripe integration, webhook handling, user plan records.</td></tr>
-            <tr><td>Support and failure recovery</td><td>User or respondent encounters validation, bot, limit, version, or submission errors.</td><td>Submit route returns localized error states; dashboard error route exists.</td><td>Errors are localized; internal submission errors are logged.</td><td>i18n utilities, validation, rate limit, Turnstile, server logging. No support workflow evidence.</td></tr>
+            <tr><td>Draft to publish</td><td>AI generation, visual editing, settings, themes, publish snapshots.</td><td>Generated forms may not be complete enough for service-specific intake.</td><td>Medium-high</td></tr>
+            <tr><td>Submit to review</td><td>Public form, validation, Turnstile, response storage, status labels, analytics.</td><td>Field-level validity may not equal kickoff readiness.</td><td>Medium-high</td></tr>
+            <tr><td>Review to handoff</td><td>Email notification and CSV export.</td><td>Manual copy/paste remains the highest-value unresolved stage.</td><td>Medium-high</td></tr>
+            <tr><td>Reuse to expansion</td><td>Duplicate, regenerate, close, monitor, billing exists but deferred.</td><td>Expansion surfaces should not outrun core-loop validation.</td><td>Medium</td></tr>
           </tbody>
         </table>
       </div>
+      <div class="feedback-row" data-feedback-for="customer-lifecycle">
+        <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+        <button type="button" data-kind="down" aria-pressed="false">Revise</button>
+        <button type="button" data-kind="needs-clarification" aria-pressed="false">Needs clarification</button>
+      </div>
+      <div class="feedback-panel"><textarea placeholder="Optional notes for this section"></textarea></div>
     </section>
 
-    <section id="lines" data-section="lines">
-      <div class="section-head">
-        <h2>Lines Of Interaction</h2>
-      </div>
-      <div class="cards-3">
-        <div class="card"><h3>Line Of Interaction</h3><p>Buyer/user interacts with dashboard for prompt generation, editing, publishing, settings, response review, and export. Respondent/client interacts with the public form for link open, field completion, validation, bot challenge, and success message or redirect.</p></div>
-        <div class="card"><h3>Line Of Visibility</h3><p>Buyer can see status, fields, settings, theme, public slug, responses, status labels, analytics, CSV export, and configured notification path. Respondent sees form, fields, help text, validation, Turnstile, and success state.</p></div>
-        <div class="card"><h3>Weak Visibility</h3><p>The product does not clearly show whether submitted answers are kickoff-ready, whether all assets are complete, whether exported answers reached the actual work system, or whether follow-up has happened.</p></div>
-      </div>
-      <h3>Internal And Implementation Lines</h3>
-      <p>Backstage processes depend on AI generation, database ownership, plan-limit enforcement, field persistence, version snapshots, public submission validation, email dispatch, analytics, and CSV export. The main internal handoff is from published form snapshot to response records; the missing internal handoff is from response records into external client-work systems.</p>
-      <p>Implementation infrastructure includes Next.js App Router, tRPC, PostgreSQL through Drizzle ORM, OpenAI, authenticated user context, Cloudflare Turnstile, email notification, and Stripe billing records. Deferred or absent infrastructure includes durable provider integrations, webhooks/API handoff, CRM/project-management routing, and customer-feedback/support lifecycle.</p>
-    </section>
-
-    <section id="operational-gaps" data-section="operational-gaps">
-      <div class="section-head">
-        <h2>Operational Gap Analysis</h2>
-      </div>
-      <div class="table-wrap" data-tts-narrative="The highest severity gaps are missing customer evidence, response triage bottlenecks, and handoff from submitted answers into the user's real service delivery systems.">
+    <section data-section-id="critical-moments">
+      <h2>Critical Moments</h2>
+      <div class="table-wrap">
         <table>
-          <thead><tr><th>Gap Type</th><th>Stage</th><th>Description</th><th>Severity</th><th>Evidence</th></tr></thead>
+          <thead><tr><th>Moment</th><th>Why It Wins Or Loses</th><th>Evidence</th><th>Confidence</th></tr></thead>
           <tbody>
-            <tr><td>Evidence gap</td><td>Trigger and evaluation</td><td>The repo has strong desk research and product code but no direct customer-feedback file, interviews, win/loss notes, analytics, or support tickets.</td><td>High</td><td>Missing `research/customer-feedback.md`; ICP and competitive analysis both flag customer-validation gaps.</td></tr>
-            <tr><td>Fail point</td><td>AI-assisted draft creation</td><td>AI-generated forms may omit service-specific intake details, ask weak questions, or produce conditional logic that needs human correction.</td><td>Medium</td><td>`generate-form.ts` uses schema validation and conditional-logic hints, but there is no customer-quality evidence for generated intake forms.</td></tr>
-            <tr><td>Fail point</td><td>Publish and share</td><td>Publishing checks non-empty fields and snapshots, but not whether the intake is complete enough for kickoff.</td><td>Medium</td><td>ICP pain is missing details/assets, not only missing fields.</td></tr>
-            <tr><td>Wait point</td><td>Respondent completion</td><td>Turnstile, required fields, file-upload expectations, conditional logic, or validation can slow completion.</td><td>Medium</td><td>Public submit path validates Turnstile, visible fields, rules, limits, and close date; ICP says respondent friction matters.</td></tr>
-            <tr><td>Bottleneck</td><td>Response review and triage</td><td>The owner-operator still has to inspect new submissions and decide whether they are ready for kickoff.</td><td>High</td><td>Response statuses exist, but no automated completeness scoring, missing-asset workflow, or follow-up loop is observed.</td></tr>
-            <tr><td>Handoff gap</td><td>Handoff into service delivery</td><td>CSV export and notification email do not by themselves move answers into project docs, CRM, Notion, Sheets, kickoff notes, or task systems.</td><td>High</td><td>ICP rates manual copy/paste high; competitive analysis calls integrations and handoff a battleground; README defers integrations and webhooks.</td></tr>
-            <tr><td>Evidence gap</td><td>Handoff into service delivery</td><td>The service does not expose status that a submission has been transferred, assigned, reconciled, or used in kickoff.</td><td>High</td><td>Schema tracks response status only as new/read/starred/archived; no downstream sync state is visible.</td></tr>
-            <tr><td>Fail point</td><td>Notification and support</td><td>Notification email is fire-and-forget and a missed notification may not be surfaced to the user.</td><td>Medium</td><td>Submit route sends notification asynchronously and catches errors with `console.error`; no retry/support path observed.</td></tr>
-            <tr><td>Bottleneck</td><td>Billing and expansion</td><td>Premature billing emphasis could distract from journey validation.</td><td>Low-medium</td><td>README says defer Stripe billing until core loop validation.</td></tr>
+            <tr><td>First useful AI draft</td><td>Beats blank-page setup if the generated form is close enough; loses if output feels generic.</td><td>ICP blank-page pain; AI generation implementation; User Story Map draft activity.</td><td>Medium-high</td></tr>
+            <tr><td>Pre-publish confidence</td><td>User must trust the form captures the right service-specific details before sending it to a client.</td><td>Service Blueprint publish quality gap; User Story Map completeness stories.</td><td>Medium</td></tr>
+            <tr><td>Respondent completion</td><td>External client must complete the form without account friction, validation confusion, or unclear asset requests.</td><td>Public form/submit route; ICP respondent friction; complete-intake stories.</td><td>Medium-high</td></tr>
+            <tr><td>Response readiness</td><td>Provider must know whether the answer set is complete enough for kickoff or delivery.</td><td>Service Blueprint review bottleneck; readiness-signal stories.</td><td>Medium-high</td></tr>
+            <tr><td>Handoff into real work</td><td>Value compounds only when answers reach the user's actual work system.</td><td>ICP manual copy/paste pain; competitive integrations; both journey frameworks.</td><td>Medium-high</td></tr>
           </tbody>
         </table>
       </div>
+      <div class="feedback-row" data-feedback-for="critical-moments">
+        <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+        <button type="button" data-kind="down" aria-pressed="false">Revise</button>
+        <button type="button" data-kind="needs-clarification" aria-pressed="false">Needs clarification</button>
+      </div>
+      <div class="feedback-panel"><textarea placeholder="Optional notes for this section"></textarea></div>
     </section>
 
-    <section id="evidence-matrix" data-section="evidence-matrix">
-      <div class="section-head">
-        <h2>Evidence Matrix</h2>
-      </div>
-      <div class="table-wrap" data-tts-narrative="Most mechanics are high confidence because they are observed in code. The claim that handoff is the top service gap is medium-high confidence because it combines approved research with code absence.">
+    <section data-section-id="evidence-matrix">
+      <h2>Evidence Matrix</h2>
+      <div class="table-wrap">
         <table>
-          <thead><tr><th>Claim</th><th>Evidence Source</th><th>Evidence Type</th><th>Inference</th><th>Confidence</th><th>Decision Impact</th></tr></thead>
+          <thead><tr><th>Claim</th><th>Supporting Framework(s)</th><th>Evidence</th><th>Confidence</th></tr></thead>
           <tbody>
-            <tr><td>The active ICP needs client intake/onboarding, not generic form creation.</td><td>`research/icp.md` primary ICP and trigger events.</td><td>Approved research</td><td>Blueprint should center client-service intake stages.</td><td>High</td><td>Approve scope unless ICP has changed.</td></tr>
-            <tr><td>Current product loop covers describe, generate, edit, publish, submit, review, and export.</td><td>README; observed routes and routers.</td><td>Observed plus stated product boundary</td><td>Service can be mapped as a functioning product loop.</td><td>High</td><td>Approve product-exists framing.</td></tr>
-            <tr><td>AI generation creates structured form definitions.</td><td>`src/server/ai/generate-form.ts`.</td><td>Observed code</td><td>AI draft is a real backstage service step.</td><td>High</td><td>Preserve in canonical intermediate.</td></tr>
-            <tr><td>Published forms use immutable snapshots.</td><td>Form router, schema, submit route.</td><td>Observed code</td><td>Response interpretation is protected after edits.</td><td>High</td><td>Include as operational strength.</td></tr>
-            <tr><td>Public submission has reliability controls.</td><td>Submit route.</td><td>Observed code</td><td>Failure controls exist, though they can add completion friction.</td><td>High</td><td>Frame as both support process and possible wait point.</td></tr>
-            <tr><td>Response review exists but downstream workflow handoff is thin.</td><td>Response router, README deferred integrations, absent native CRM/Sheets/Notion/Zapier/Make routing.</td><td>Observed code plus product boundary</td><td>The service may still leave the buyer with manual post-submission work.</td><td>High</td><td>Approve as top operational gap if accurate.</td></tr>
-            <tr><td>Handoff is the most important service gap for the ICP.</td><td>ICP pain map; competitive analysis handoff battleground.</td><td>Approved research plus inference</td><td>Value depends on intake data reaching client work systems.</td><td>Medium-high</td><td>Should shape later user-story-map and synthesis.</td></tr>
-            <tr><td>Customer success and generated-form quality remain unvalidated.</td><td>Missing customer feedback and usage evidence.</td><td>Source absence</td><td>Blueprint findings should keep confidence limits visible.</td><td>High</td><td>Do not overclaim adoption or quality.</td></tr>
+            <tr><td>The journey should focus on client-service intake/onboarding.</td><td>Service Blueprint, User Story Map</td><td>Approved ICP and both framework summaries center on consultants, coaches, and small agencies.</td><td>High</td></tr>
+            <tr><td>The walking skeleton from draft to public submission and CSV export exists.</td><td>Service Blueprint, User Story Map</td><td>README core loop; AI generation, editor, publish snapshots, public submit, response router, export.</td><td>High</td></tr>
+            <tr><td>AI drafting is useful but not durable differentiation by itself.</td><td>User Story Map</td><td>ICP blank-page pain plus competitive analysis showing AI creation across incumbents.</td><td>High</td></tr>
+            <tr><td>Intake completeness and response readiness are core journey risks.</td><td>Service Blueprint, User Story Map</td><td>Gaps around pre-publish checks, completeness scoring, and follow-up needs.</td><td>Medium-high</td></tr>
+            <tr><td>Post-submission handoff is the highest-value unresolved stage.</td><td>Service Blueprint, User Story Map</td><td>ICP manual copy/paste pain; competitive integration battleground; CSV/email-only current boundary.</td><td>Medium-high</td></tr>
+            <tr><td>Direct customer evidence is still the largest confidence gap.</td><td>Service Blueprint, User Story Map</td><td>No customer-feedback file, interviews, analytics, support tickets, or win/loss notes.</td><td>High</td></tr>
           </tbody>
         </table>
       </div>
+      <div class="feedback-row" data-feedback-for="evidence-matrix">
+        <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+        <button type="button" data-kind="down" aria-pressed="false">Revise</button>
+        <button type="button" data-kind="needs-clarification" aria-pressed="false">Needs clarification</button>
+      </div>
+      <div class="feedback-panel"><textarea placeholder="Optional notes for this section"></textarea></div>
     </section>
 
-    <section id="confidence" data-section="confidence">
-      <div class="section-head">
-        <h2>Assumptions And Confidence</h2>
-      </div>
-      <div class="table-wrap" data-tts-narrative="The strongest assumptions are the approved ICP and product-exists mode. The handoff and CSV sufficiency assumptions remain medium confidence until customer evidence exists.">
+    <section data-section-id="journey-gaps">
+      <h2>Journey Gaps</h2>
+      <div class="table-wrap">
         <table>
-          <thead><tr><th>Assumption</th><th>Status</th><th>Confidence</th><th>What Would Change It</th></tr></thead>
+          <thead><tr><th>Gap</th><th>Why It Matters</th><th>Potential Owner After Approval</th></tr></thead>
           <tbody>
-            <tr><td>Product-exists mode is appropriate.</td><td>Approved in YAML and supported by code evidence.</td><td>High</td><td>User changes mode or product boundary.</td></tr>
-            <tr><td>Highest-value journey is client intake for consultants, coaches, and small agencies.</td><td>Approved ICP.</td><td>High</td><td>New ICP approval or customer evidence contradicting Candidate A.</td></tr>
-            <tr><td>Post-submission handoff is more operationally important than billing for the first validated loop.</td><td>Inferred from ICP, competitive analysis, and README deferral note.</td><td>Medium-high</td><td>Interviews showing paid conversion fails before handoff matters, or usage showing exports are enough.</td></tr>
-            <tr><td>CSV/email notification is enough for initial validation but not durable differentiation.</td><td>Inferred from current product boundary and competitor integration breadth.</td><td>Medium</td><td>Buyers validate CSV/email as sufficient for repeated paid use.</td></tr>
-            <tr><td>AI-generated first drafts reduce blank-page work but need human review.</td><td>Supported by code and ICP pain, but not customer validated.</td><td>Medium</td><td>Usability tests show generated output is consistently ready-to-send, or often unusable.</td></tr>
+            <tr><td>Direct customer evidence</td><td>Current confidence is research/code-backed, not interview or usage-backed.</td><td>Customer feedback/discovery before hardening roadmap assumptions.</td></tr>
+            <tr><td>First-success instrumentation</td><td>The journey cannot yet prove first prompt, first publish, first response, first export, repeat use, or handoff behavior.</td><td><code>$lifecycle-metrics</code> if measurement must precede product-loop decisions.</td></tr>
+            <tr><td>Intake completeness criteria</td><td>Field validation does not prove the response is useful enough for kickoff or delivery.</td><td><code>$onboarding-map</code> if activation/first-success criteria need sharper definition.</td></tr>
+            <tr><td>Handoff destination priority</td><td>Evidence says handoff matters, but not which destination comes first.</td><td>Customer interviews, conversion/retention research, or lifecycle metrics depending on the blocker.</td></tr>
+            <tr><td>Notification/support recovery</td><td>Missed notifications, failed submissions, and incomplete responses lack a visible recovery workflow.</td><td><code>$lifecycle-metrics</code> or support research if reliability risk blocks validation.</td></tr>
           </tbody>
         </table>
       </div>
+      <div class="callout">
+        <p><strong>Product path implication:</strong> the active flat FormForge path remains appropriate. The journey evidence does not promote deferred product paths for lead/quote forms, event registration, nonprofit volunteer forms, or HR operations.</p>
+      </div>
+      <div class="feedback-row" data-feedback-for="journey-gaps">
+        <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+        <button type="button" data-kind="down" aria-pressed="false">Revise</button>
+        <button type="button" data-kind="needs-clarification" aria-pressed="false">Needs clarification</button>
+      </div>
+      <div class="feedback-panel"><textarea placeholder="Optional notes for this section"></textarea></div>
     </section>
 
-    <section id="source-gaps" data-section="source-gaps">
-      <div class="section-head">
-        <h2>Source Coverage Gaps</h2>
-      </div>
+    <section data-section-id="file-changes">
+      <h2>Proposed File Changes After Approval</h2>
       <ul>
-        <li>No real customer language beyond secondary/desk research.</li>
-        <li>No observed onboarding analytics for first prompt, first publish, first response, or first export.</li>
-        <li>No failed-submission telemetry, notification-delivery data, or support cases.</li>
-        <li>No hands-on competitor trial comparing actual intake setup and handoff time.</li>
-        <li>No proof that external clients complete FormForge forms at higher rates or with better completeness than Google Forms, Tally, Typeform, or manual questionnaires.</li>
+        <li>Write canonical <code>research/journey-map.md</code> with the approved synthesis.</li>
+        <li>Archive <code>research/_working/preliminary-journey-map-research.md</code>.</li>
+        <li>Archive consumed <code>research/_working/journey-map-run.yaml</code>.</li>
+        <li>Remove active working packet and run manifest after archive.</li>
+        <li>Update <code>research/.progress.yaml</code> active FormForge <code>pipeline_stage</code> to <code>journey-map</code>.</li>
+        <li>Convert this page to confirmed with the approval record preserved.</li>
       </ul>
+      <div class="feedback-row" data-feedback-for="file-changes">
+        <button type="button" data-kind="emphasize" aria-pressed="false">Emphasize</button>
+        <button type="button" data-kind="down" aria-pressed="false">Revise</button>
+        <button type="button" data-kind="needs-clarification" aria-pressed="false">Needs clarification</button>
+      </div>
+      <div class="feedback-panel"><textarea placeholder="Optional notes for this section"></textarea></div>
     </section>
 
-    <section id="file-changes" data-section="file-changes">
-      <div class="section-head">
-        <h2>Confirmed File Changes</h2>
+    <section>
+      <h2>Approval Gates</h2>
+      <div class="question-block" data-question-id="synthesis_decision">
+        <fieldset>
+          <legend>1. Synthesis decision</legend>
+          <label class="option"><input type="radio" name="synthesis_decision" value="approve_synthesis"> Approve the proposed journey-map synthesis for canonical write.</label>
+          <label class="option"><input type="radio" name="synthesis_decision" value="revise_before_write"> Revise before canonical write.</label>
+          <label class="option"><input type="radio" name="synthesis_decision" value="needs_clarification"> Needs clarification before approval.</label>
+        </fieldset>
       </div>
-      <ul>
-        <li>Wrote `research/journey-map-service-blueprint.md` with the approved canonical artifact rendered in this page and the working packet.</li>
-        <li>Archived `research/_working/preliminary-service-blueprint-research.md` under `docs/history/archive/2026-07-01/231406/`.</li>
-        <li>Archived the review page snapshot under `docs/history/archive/2026-07-01/231406/`.</li>
-        <li>Left `research/_working/journey-map-run.yaml` as selection-only state; completion is inferred by the new canonical intermediate existing.</li>
-        <li>Recalculated pending frameworks. The next pending framework is `user-story-map`.</li>
-      </ul>
+      <div class="question-block" data-question-id="evidence_coverage">
+        <fieldset>
+          <legend>2. Evidence coverage</legend>
+          <label class="option"><input type="radio" name="evidence_coverage" value="sufficient_with_gaps"> Evidence is sufficient with the listed gaps preserved.</label>
+          <label class="option"><input type="radio" name="evidence_coverage" value="insufficient"> Evidence is insufficient; revise or gather more context.</label>
+          <label class="option"><input type="radio" name="evidence_coverage" value="needs_clarification"> Needs clarification.</label>
+        </fieldset>
+      </div>
+      <div class="question-block" data-question-id="artifact_destination">
+        <fieldset>
+          <legend>3. Artifact destination</legend>
+          <label class="option"><input type="radio" name="artifact_destination" value="write_research_journey_map"> Write <code>research/journey-map.md</code> after approval.</label>
+          <label class="option"><input type="radio" name="artifact_destination" value="change_destination"> Change destination or scope.</label>
+          <label class="option"><input type="radio" name="artifact_destination" value="needs_clarification"> Needs clarification.</label>
+        </fieldset>
+      </div>
+      <div class="question-block" data-question-id="post_approval_route">
+        <fieldset>
+          <legend>4. Post-approval route</legend>
+          <label class="option"><input type="radio" name="post_approval_route" value="lifecycle_metrics_first"> Approve lifecycle metrics as the likely next blocker after canonical write.</label>
+          <label class="option"><input type="radio" name="post_approval_route" value="positioning_first"> Prefer positioning next if no blocker is accepted.</label>
+          <label class="option"><input type="radio" name="post_approval_route" value="needs_clarification"> Needs clarification.</label>
+        </fieldset>
+      </div>
+      <label for="global_notes">Overall notes or required edits</label>
+      <textarea id="global_notes" placeholder="Optional overall notes for the next agent"></textarea>
+    </section>
+
+    <section>
+      <h2>Compiled YAML</h2>
+      <p>Use this local compiler, then paste the YAML into a fresh Codex session with <code>$journey-map</code>. The next agent will consume it and either finalize the canonical artifact or update this review page.</p>
+      <button type="button" class="compile-button" id="compile">Compile YAML</button>
+      <button type="button" class="copy-button" id="copy">Copy YAML</button>
+      <pre class="compile-output" id="output">Click "Compile YAML" after selecting the approval gates.</pre>
     </section>
   </main>
-  <script src="../scripts/alignment-tts-kokoro.js"></script>
+
+  <script>
+    const feedback = {};
+
+    function yamlEscape(value) {
+      return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n");
+    }
+
+    document.querySelectorAll(".feedback-row button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const row = button.closest(".feedback-row");
+        row.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", "false"));
+        button.setAttribute("aria-pressed", "true");
+        const section = row.closest("section");
+        const panel = section.querySelector(".feedback-panel");
+        if (panel) panel.classList.add("is-visible");
+        feedback[row.dataset.feedbackFor] = button.dataset.kind;
+      });
+    });
+
+    function selected(name) {
+      const node = document.querySelector(`input[name="${name}"]:checked`);
+      return node ? node.value : "unanswered";
+    }
+
+    function compileYaml() {
+      const status = [
+        selected("synthesis_decision"),
+        selected("evidence_coverage"),
+        selected("artifact_destination"),
+        selected("post_approval_route")
+      ].some((value) => value === "unanswered" || value === "revise_before_write" || value === "insufficient" || value === "needs_clarification")
+        ? "not-approved"
+        : "ready-for-agent-review";
+
+      const lines = [
+        "command: \"$journey-map\"",
+        `approval_status: ${status}`,
+        "gate_type: synthesis",
+        "alignment_page: alignment/journey-map-formforge.html",
+        "working_packet: research/_working/preliminary-journey-map-research.md",
+        "canonical_target: research/journey-map.md",
+        "decisions:",
+        `  synthesis_decision: ${selected("synthesis_decision")}`,
+        `  evidence_coverage: ${selected("evidence_coverage")}`,
+        `  artifact_destination: ${selected("artifact_destination")}`,
+        `  post_approval_route: ${selected("post_approval_route")}`,
+        "section_feedback:"
+      ];
+
+      document.querySelectorAll("[data-section-id]").forEach((section) => {
+        const id = section.dataset.sectionId;
+        const notes = section.querySelector(".feedback-panel textarea")?.value || "";
+        lines.push(`  ${id}:`);
+        lines.push(`    vote: ${feedback[id] || "none"}`);
+        lines.push(`    notes: "${yamlEscape(notes)}"`);
+      });
+
+      lines.push(`global_notes: "${yamlEscape(document.getElementById("global_notes").value)}"`);
+      lines.push("agent_routing:");
+      lines.push("  workflow: pattern-a-research-loop");
+      lines.push("  parent_skill: journey-map");
+      lines.push("  command: \"$journey-map\"");
+      lines.push("  gate_owner: parent-orchestrator");
+      lines.push("  gate_type: synthesis");
+      lines.push("  run_manifest: research/_working/journey-map-run.yaml");
+      lines.push("  next_resolution: parent-resolves-from-yaml-and-filesystem");
+      return lines.join("\n");
+    }
+
+    document.getElementById("compile").addEventListener("click", () => {
+      document.getElementById("output").textContent = compileYaml();
+    });
+
+    document.getElementById("copy").addEventListener("click", async () => {
+      const text = document.getElementById("output").textContent;
+      if (!text || text.startsWith("Click")) return;
+      await navigator.clipboard.writeText(text);
+    });
+  </script>
 </body>
 </html>

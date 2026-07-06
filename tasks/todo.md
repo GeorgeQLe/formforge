@@ -1,3 +1,22 @@
+# Active Journey Map Synthesis Review
+
+- [x] Resolve synthesis state from `research/_working/journey-map-run.yaml`.
+- [x] Read approved framework intermediates and source context.
+- [x] Write non-canonical working packet: `research/_working/preliminary-journey-map-research.md`.
+- [x] Build synthesis approval page: `alignment/journey-map-formforge.html`.
+- [x] Update central alignment index.
+- [x] Verify review artifacts and git diff.
+
+### Review
+
+- State B synthesis review drafted on 2026-07-06 from completed manifest-selected intermediates: `service-blueprint` and `user-story-map`.
+- Non-canonical review artifacts are `research/_working/preliminary-journey-map-research.md` and `alignment/journey-map-formforge.html`; canonical `research/journey-map.md` remains unwritten pending final compiled YAML approval.
+- The synthesis frames the lifecycle around client-service intake, with critical moments at first useful AI draft, pre-publish confidence, respondent completion, response readiness, and handoff into real work.
+- The main unresolved journey gaps are direct customer evidence, first-success instrumentation, intake completeness criteria, handoff destination priority, and notification/support recovery.
+- Verification: page reports `data-alignment-status="review"` and synthesis `agent_routing`; inline page script parses; working packet exists; canonical `research/journey-map.md` remains absent; `git diff --check` passed.
+
+---
+
 # Active Journey Map User Story Map Finalization
 
 - [x] Reconcile approval YAML with the active user-story-map working packet and manifest.

@@ -1,11 +1,13 @@
 {
   "project_type": "business-app",
   "enabled_packs": [
-    "business-research"
+    "business-research",
+    "customer-lifecycle"
   ],
   "skill_pack_version": 1,
   "enabled_skills": {
     "compile-central-alignment": "alignment-page-admin",
-    "ship-end": "exec-loop"
+    "ship-end": "exec-loop",
+    "afps-status": "base"
   }
 }

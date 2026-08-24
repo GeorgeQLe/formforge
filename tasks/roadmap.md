@@ -559,3 +559,23 @@ The user approved the Stage 1 scope gates on 2026-06-15:
 - [ ] Update `alignment/index.html` if needed.
 - [ ] Verify files render and no canonical research files changed.
 - [ ] Commit and push the intended tracked changes if verification passes.
+
+---
+
+# FormForge Product-Path Retirement Roadmap — 2026-08-24
+
+## Objective
+
+Archive the active FormForge research product path after the owner concluded
+that standalone deployment is not economically justified relative to the
+integration, compliance, infrastructure, billing, deliverability, and customer
+support burden.
+
+## Plan
+
+- [x] Preserve the flat `research/` evidence directory and all evidence refs.
+- [x] Remove FormForge from `active_paths` and mark the main path archived.
+- [x] Record the dated archive rationale and a high-bar revisit condition.
+- [x] Leave materially different deferred/revisit candidates unchanged.
+- [x] Validate YAML structure and diff hygiene.
+- [x] Commit and push the manifest and task record.

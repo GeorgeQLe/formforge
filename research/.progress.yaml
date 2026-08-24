@@ -1,22 +1,21 @@
-active_paths:
-  - research/
+active_paths: []
 product_paths:
   - id: formforge
     label: FormForge current flat scope
     source_skill: icp
     scope_path: research/
-    status: active
+    status: archived
     reason: Approved primary ICP is client-service consultants, coaches, and small agencies doing client intake/onboarding within the current flat FormForge product boundary.
-    archive_reason: null
-    archived_at: null
+    archive_reason: Commodity form-builder economics and weak differentiation do not justify the compliance, integration, infrastructure, billing, deliverability, and customer-support burden of deployment.
+    archived_at: "2026-08-24"
     promoted_at: "2026-06-15"
     evidence_refs:
       - alignment/icp-formforge.html
       - research/icp.md
       - research/icp-search-log.md
-    revisit_trigger: Continue downstream research and validation for the approved primary ICP.
-    next_skill: journey-map
-    last_touched: "2026-06-19"
+    revisit_trigger: Revisit only with direct evidence that a narrow workflow has urgent demand and willingness to pay high enough to cover the operating and support burden.
+    next_skill: null
+    last_touched: "2026-08-24"
     pipeline_stage: competitive-analysis
     competitive_analysis_refs:
       - alignment/competitive-analysis-synthesis-formforge.html

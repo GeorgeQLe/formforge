@@ -695,6 +695,29 @@ FormForge is an AI-powered form builder that lets users describe forms in natura
   - Validation: run `pnpm test`, `pnpm lint`, and `pnpm build` with required public build env available. If build is blocked by missing public env vars or network font fetches, record the exact blocker.
 - [ ] **Partial responses / save & resume:** Allow respondents to save progress on long forms
 
+---
+
+# FormForge Product-Path Retirement — 2026-08-24
+
+- [x] Preserve all existing research evidence in the flat `research/` scope.
+- [x] Set `active_paths: []`.
+- [x] Mark the primary FormForge path `archived` with the owner-approved
+  economics and support-burden rationale.
+- [x] Replace automatic downstream routing with an explicit evidence-based
+  revisit condition.
+- [x] Validate YAML structure and `git diff --check`.
+- [x] Commit and push the retirement record.
+
+### Review
+
+- Archived the primary FormForge path in place and cleared `active_paths`; all
+  five product-path records and every existing research artifact remain.
+- Preserved the four materially different deferred/revisit candidates.
+- Added a dated archive rationale and a high-bar evidence-based revisit trigger;
+  downstream skill routing is now cleared.
+- Verification passed: Ruby/Psych parsed the YAML and confirmed the archived
+  primary path plus empty active set; `git diff --check` passed.
+
 ### Cleanup / Tech Debt
 - [ ] Replace boilerplate README with project-specific documentation
 - [ ] Add `.env.example` with all required variables from `src/env.ts`

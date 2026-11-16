@@ -1,67 +1,23 @@
-# FormForge Agent Guide
+# FormForge agent instructions
 
-## Workflow Orchestration
+## Workflow
 
-### 1. Plan Mode Default
-- Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
-- If something goes sideways, STOP and re-plan immediately - don't keep pushing
-- Verification is mandatory, but routine no-op verification runs inside the active execution/shipping step. Enter plan mode for non-trivial remediation or new work discovered by verification, not for validation that already has clear commands and no expected source changes.
-- Write detailed specs upfront to reduce ambiguity
-- In Codex: use `update_plan` in Default mode and `request_user_input` only when already in Plan mode
-- Do not assume a Claude-style clear-context-on-accept flow or related JSON setting exists
+Global rules in `~/AGENTS.md` apply (subagent use, CI, secrets, storage); this section adds repo workflow only.
 
-### 2. Subagent Strategy
-- Use subagents only when the active Codex tool instructions allow them.
-- When subagents are available and permitted, delegate independent research, exploration, or execution lanes with non-overlapping scopes.
-- One task per subagent for focused execution.
-- Do not override Codex's current subagent permission, tool availability, or parallel-work rules.
-- For `agent-team` parallel write lanes, require separate GitHub branches per lane and include a consolidation/PR review step before final integration. This is the explicit exception to direct-to-primary work.
+- Plan before non-trivial work (3+ steps or architectural decisions). If something goes sideways, stop and re-plan.
+- Subagents: only for independent work, with one complete brief each. Run batch work as a script, not a long-lived agent.
+- Verify before calling work done: run the tests, check logs, show it works. Routine verification runs inside the current step.
+- Prefer the simplest change that fixes the root cause; touch only what is needed. For non-trivial changes, ask whether there is a cleaner way.
+- Given a bug report, investigate the logs and failing tests and fix it without hand-holding.
+- Revision feedback: move the artifact to the requested final state; do not re-add rejected framing.
+- Commit sequential work directly on the primary branch unless asked for a branch; parallel agent write lanes use separate branches and a review step before landing. Commit and push finished tracked changes unless told not to.
 
-### 3. Self-Improvement Loop
-- After ANY correction from the user: update `tasks/lessons.md` with the pattern
-- Write rules for yourself that prevent the same mistake
-- Ruthlessly iterate on these lessons until mistake rate drops
-- Review lessons at session start for relevant project
+## Parallel work in the monorepo
 
-### 4. Verification Before Done
-- Never mark a task complete without proving it works
-- Diff your behavior between main and your changes when relevant
-- Ask yourself: "Would a staff engineer approve this?"
-- Run tests, check logs, demonstrate correctness
+- When running as one of several parallel agents, never run a command that changes the shared lockfile (`pnpm install`, `pnpm add`, `npm install`, `yarn add`). Stage dependency changes in one serial session before parallel work starts; if you need a new dependency mid-task, stop and ask for it centrally.
+- Parallel agents write only inside their own package directory; check that planned scopes do not overlap before launching them.
 
-### 5. Demand Elegance (Balanced)
-- For non-trivial changes: pause and ask "is there a more elegant way?"
-- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
-- Skip this for simple, obvious fixes - don't over-engineer
-- Challenge your own work before presenting it
+## Tasks
 
-### 6. Autonomous Bug Fixing
-- When given a bug report: just fix it. Don't ask for hand-holding
-- Point at logs, errors, failing tests - then resolve them
-- Zero context switching required from the user
-- Go fix failing tests without being told how
-
-### 7. Monorepo Parallel-Work Safety
-- NEVER run `pnpm install`, `pnpm add`, `npm install`, `yarn add`, or any command that modifies a shared lockfile (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`) when running as one of multiple parallel agents in a monorepo
-- All dependency changes must be pre-staged in a single serial session before parallel work begins
-- Parallel agents must only write files within their own package directory (e.g. `packages/<name>/src/`)
-- Before launching parallel agents, verify their planned work scopes do not overlap on any shared files
-- Parallel `agent-team` write lanes must use separate GitHub branches with deterministic names, push those branches, and return branch/commit/PR evidence for consolidation review
-- If you need a new dependency mid-task, stop and request it be added centrally rather than running the package manager yourself
-
-## Task Management
-
-1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items
-2. **Verify Plan**: Check in before starting implementation
-3. **Track Progress**: Mark items complete as you go
-4. **Explain Changes**: High-level summary at each step
-5. **Document Results**: Add review section to `tasks/todo.md`
-6. **Capture Lessons**: Update `tasks/lessons.md` after corrections
-
-## Core Principles
-- **Simplicity First**: Make every change as simple as possible. Impact minimal code.
-- **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
-- **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
-- **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
-- **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Do not leave a dirty tracked tree or unpushed commits behind.
-- **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
+- Full plan in `tasks/roadmap.md`, current phase in `tasks/todo.md` with checkable items; mark progress as you go and add a short review section when done.
+- After a correction from George, record the pattern in `tasks/lessons.md`; review it at session start.
